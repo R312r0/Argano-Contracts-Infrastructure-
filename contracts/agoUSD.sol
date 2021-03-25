@@ -261,9 +261,23 @@ contract ARGANO is ERC20, ERC20Detailed, Ownable {
     using SafeERC20 for IERC20;
     using Address for address;
     using SafeMath for uint256;
+    address pegger = address(0);
 
+    modifier onlyPegger() {
+        require(msg.sender == pegger);
+        _;
+    }
 
-    constructor() ERC20Detailed("Argano", "AGO", 18) {
-        _mint(owner , 1 ether);//distribution
+    constructor() ERC20Detailed("ArganoUSD", "agoUSD", 18) {
+        pegger = msg.sender;
+        //TODO: create liq pool on uniswap, add liquidity and minted amount of token to create price $1
+    }
+
+    function mint(address receiver, uint256 amount) external onlyPegger{
+         _mint(receiver , amount);
+    }
+
+    function burn(address holder, uint256 amount) external onlyPegger{
+         _burn(holder , amount);
     }
 }
