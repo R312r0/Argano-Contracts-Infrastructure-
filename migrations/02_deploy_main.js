@@ -17,6 +17,7 @@ const timelockDelay = 12 * 60 * 60
 const startTime = Math.floor(new Date('2021-02-25T09:00:00.000+00:00').getTime() / 1000);
 
 module.exports = async (deployer, network, accounts) => {
+    return
     const devFund = accounts[0]
     const timelock_admin = accounts[0]
     const creator = accounts[0]
