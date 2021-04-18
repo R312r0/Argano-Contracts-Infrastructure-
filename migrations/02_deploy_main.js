@@ -14,10 +14,9 @@ const DollarOracle = artifacts.require('DollarOracle.sol')
 const ShareOracle = artifacts.require('ShareOracle.sol')
 
 const timelockDelay = 12 * 60 * 60
-const startTime = Math.floor(new Date('2021-02-25T09:00:00.000+00:00').getTime() / 1000);
+const startTime = Math.floor(new Date('2021-02-25T09:00:00.000+00:00').getTime() / 1000)
 
 module.exports = async (deployer, network, accounts) => {
-    return
     const devFund = accounts[0]
     const timelock_admin = accounts[0]
     const creator = accounts[0]
@@ -38,8 +37,16 @@ module.exports = async (deployer, network, accounts) => {
     await ShareInstance.initialize(devFund, creator, startTime)
     
     //collateral
-    const mockUSDT_instance = await deployer.deploy(MockCollateral, creator, 'USDT', 18)
-    const mockWETH_instance = await deployer.deploy(MockCollateral, creator, 'WETH', 18)
+
+    const ONE_THOUSAND = BigNumber.from('1000000000000000000000').toHexString()
+    
+    const mockUSDT_instance = await deployer.deploy(MockCollateral, devFund, 'USDT', 18)
+    await mockUSDT_instance.mint(devFund, ONE_THOUSAND)
+    console.log(await mockUSDT_instance.balanceOf(devFund))
+
+    const mockWETH_instance = await deployer.deploy(MockCollateral, devFund, 'WETH', 18)
+    await mockWETH_instance.mint(devFund, ONE_THOUSAND)
+    console.log(await mockWETH_instance.balanceOf(devFund))
     
     //pool
     const poolUSDT_instance = await deployer.deploy(Pool, 
@@ -74,18 +81,18 @@ module.exports = async (deployer, network, accounts) => {
     await mock_agoShare_WETH_instance.update();
 
 
-    console.log(`truffle run verify ${Object.keys({ShareOracle})[0]}@${ShareOracleinstance.address} --network rinkeby`)
-    console.log(`truffle run verify ${Object.keys({DollarOracle})[0]}@${DollarOracleinstance.address} --network rinkeby`)
-    console.log(`truffle run verify ${Object.keys({BusdOracle})[0]}@${USDT_oracle_instance.address} --network rinkeby`)
-    console.log(`truffle run verify ${Object.keys({MockChainlinkAggregator})[0]}@${mock_chainLink_priceFeed_WETH_USD_instance.address} --network rinkeby`)
-    console.log(`truffle run verify ${Object.keys({MockChainlinkAggregator})[0]}@${mock_chainLink_priceFeed_USDT_USD_instance.address} --network rinkeby`)
-    console.log(`truffle run verify ${Object.keys({MockPairOracle})[0]}@${mock_agoShare_WETH_instance.address} --network rinkeby`)
-    console.log(`truffle run verify ${Object.keys({MockPairOracle})[0]}@${mock_agoUSD_USDT_instance.address} --network rinkeby`)
-    console.log(`truffle run verify ${Object.keys({Pool})[0]}@${poolUSDT_instance.address} --network rinkeby`)
-    console.log(`truffle run verify ${Object.keys({MockCollateral})[0]}@${mockWETH_instance.address} --network rinkeby`)
-    console.log(`truffle run verify ${Object.keys({MockCollateral})[0]}@${mockUSDT_instance.address} --network rinkeby`)
-    console.log(`truffle run verify ${Object.keys({Share})[0]}@${ShareInstance.address} --network rinkeby`)
-    console.log(`truffle run verify ${Object.keys({Dollar})[0]}@${DollarInstance.address} --network rinkeby`)
-    console.log(`truffle run verify ${Object.keys({Timelock})[0]}@${TimelockInstance.address} --network rinkeby`)
-    console.log(`truffle run verify ${Object.keys({Treasury})[0]}@${TreasuryInstance.address} --network rinkeby`)
+    // console.log(`truffle run verify ${Object.keys({ShareOracle})[0]}@${ShareOracleinstance.address} --network rinkeby`)
+    // console.log(`truffle run verify ${Object.keys({DollarOracle})[0]}@${DollarOracleinstance.address} --network rinkeby`)
+    // console.log(`truffle run verify ${Object.keys({BusdOracle})[0]}@${USDT_oracle_instance.address} --network rinkeby`)
+    // console.log(`truffle run verify ${Object.keys({MockChainlinkAggregator})[0]}@${mock_chainLink_priceFeed_WETH_USD_instance.address} --network rinkeby`)
+    // console.log(`truffle run verify ${Object.keys({MockChainlinkAggregator})[0]}@${mock_chainLink_priceFeed_USDT_USD_instance.address} --network rinkeby`)
+    // console.log(`truffle run verify ${Object.keys({MockPairOracle})[0]}@${mock_agoShare_WETH_instance.address} --network rinkeby`)
+    // console.log(`truffle run verify ${Object.keys({MockPairOracle})[0]}@${mock_agoUSD_USDT_instance.address} --network rinkeby`)
+    // console.log(`truffle run verify ${Object.keys({Pool})[0]}@${poolUSDT_instance.address} --network rinkeby`)
+    // console.log(`truffle run verify ${Object.keys({MockCollateral})[0]}@${mockWETH_instance.address} --network rinkeby`)
+    // console.log(`truffle run verify ${Object.keys({MockCollateral})[0]}@${mockUSDT_instance.address} --network rinkeby`)
+    // console.log(`truffle run verify ${Object.keys({Share})[0]}@${ShareInstance.address} --network rinkeby`)
+    // console.log(`truffle run verify ${Object.keys({Dollar})[0]}@${DollarInstance.address} --network rinkeby`)
+    // console.log(`truffle run verify ${Object.keys({Timelock})[0]}@${TimelockInstance.address} --network rinkeby`)
+    // console.log(`truffle run verify ${Object.keys({Treasury})[0]}@${TreasuryInstance.address} --network rinkeby`)
 }
