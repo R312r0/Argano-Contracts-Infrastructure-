@@ -4,6 +4,7 @@ body{
   grid-template-columns: 1fr 1fr;
 }
 
+
 .inputRow{
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
@@ -21,10 +22,16 @@ body{
 input {
   padding: 1px !important;
   margin: 1px !important;
+  
+
+  
 }
 
 
 button {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   padding: 1px !important;
   margin: 1px !important;
 }

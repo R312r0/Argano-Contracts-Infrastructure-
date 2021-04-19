@@ -27,6 +27,7 @@ const options = {
 }
 
 const drizzle = new Drizzle(options)
+// drizzle.web3?.eth?.handleRevert = true
 
 ReactDOM.render(
   <React.StrictMode>
