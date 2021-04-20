@@ -8,7 +8,7 @@ import "../openZeppelin/SafeMath.sol";
 import "../Operator.sol";
 import "../interfaces/IOracle.sol";
 
-contract BusdOracle is Operator, IOracle {
+contract USDTOracle is Operator, IOracle {
     using SafeMath for uint256;
     address public chainlinkBusdUsd;
 

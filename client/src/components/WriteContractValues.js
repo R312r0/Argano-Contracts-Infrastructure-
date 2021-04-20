@@ -33,27 +33,27 @@ const RenderWriteString = props => {
         setInputValues(inputValues)
     }
 
-    const sendMessage = () => {
+    const sendMessage = async () => {
         const params = Object.keys(inputValues).map(field => inputValues[field])
-        console.log(`send ${props.method} on ${props.contract} with ${params} `)
-        
-        setStackID(props.drizzle.contracts[props.contract].methods[props.method](...params).send({
-            from: props.drizzleState.accounts[0]
-        }))
+        console.log(`send ${props.method} on ${props.contract} with ${params}`)
+        if (!stackId)
+            setStackID(props.drizzle.contracts[props.contract].methods[props.method].cacheSend(...params))
     }
 
-    const getTxStatus = async () => {
-        const tx = stackId && await stackId
+    const getTxStatus = () => {
+        const { transactions, transactionStack } = props.drizzleState
+        const txHash = transactionStack[stackId]
 
-        console.log(tx.status)
-        return tx.status
+        if (!txHash) return null
+        console.log(transactions[txHash])
+        return `Transaction status: ${transactions[txHash] && transactions[txHash].status}`
     }
 
     return <div className='inputRow'>
         <Button 
             color='black'
             textAlign='left'
-            backgroundColor='magenta'
+            backgroundColor='rgb(255,128,126)'
             onClick={sendMessage} 
         >
             {props.method}

@@ -19,8 +19,9 @@ const App = props => {
 
 	return (
 		drizzleReadinessState.loading ? "Loading Drizzle..." :
-
+		<><span>Active account:  <b>{drizzleReadinessState.drizzleState.accounts[0]}</b></span>
 		<div className='main'> 
+			
 			<Contract
 				drizzle={drizzle}
 				drizzleState={drizzleReadinessState.drizzleState}
@@ -30,9 +31,17 @@ const App = props => {
 					'balanceOf': {
 						'owner': drizzleReadinessState.drizzleState.accounts[0]
 					},
+					'allowance': {
+						'owner': drizzleReadinessState.drizzleState.accounts[0],
+						'spender': drizzleReadinessState.drizzleState.accounts[0]
+					}
 				}}
 				sendMethods={{
-					'claimDevFundRewards': {}
+					'claimDevFundRewards': {},
+					'approve':{
+						'spender': drizzleReadinessState.drizzleState.accounts[0],
+						'amount': 0
+					}
 				}}
 			/>
 
@@ -51,6 +60,10 @@ const App = props => {
 					}
 				}}
 				sendMethods={{
+					'approve':{
+						'spender': drizzleReadinessState.drizzleState.accounts[0],
+						'amount': 0
+					}
 				}}
 			/>
 
@@ -77,14 +90,20 @@ const App = props => {
 				drizzleState={drizzleReadinessState.drizzleState}
 				contract='MockCollateral' 
 				callMethods={{
-					'_symbol':{},
 					'totalSupply': {},
 					'balanceOf': {
 						'owner': drizzleReadinessState.drizzleState.accounts[0]
 					},
+					'allowance': {
+						'owner': drizzleReadinessState.drizzleState.accounts[0],
+						'spender': drizzleReadinessState.drizzleState.accounts[0]
+					}
 				}}
 				sendMethods={{
-					
+					'approve':{
+						'spender': drizzleReadinessState.drizzleState.accounts[0],
+						'amount': 0
+					}
 				}}
 			/> 
 
@@ -93,9 +112,6 @@ const App = props => {
 				drizzleState={drizzleReadinessState.drizzleState}
 				contract='Pool' 
 				callMethods={{
-					'mint_paused': {},
-					'redeem_paused': {},
-					'migrated': {},
 					'collateralDollarBalance': {},
 					'getCollateralPrice': {},
 					'getCollateralToken': {},
@@ -111,11 +127,35 @@ const App = props => {
 						'_share_out_min' : 0,
 						'_collateral_out_min' : 0,
 					},
+					'transferCollateralToTreasury':{
+						'amount': 0
+					},
 					'collectRedemption':{}
 				}}
 			/> 
-		</div>
 
+			< Contract 
+				drizzle={drizzle}
+				drizzleState={drizzleReadinessState.drizzleState}
+				contract='Treasury' 
+				callMethods={{
+					'last_refresh_cr_timestamp': {},
+					'target_collateral_ratio': {},
+					'effective_collateral_ratio': {},
+					'globalCollateralValue': {},
+					'calcEffectiveCollateralRatio': {},
+					'ratio_step': {},
+					'price_target': {},
+					'price_band': {},
+					'dollarPrice': {},
+					'sharePrice': {},
+				}}
+				sendMethods={{
+					'refreshCollateralRatio':{}
+				}}
+			/> 
+		</div>
+	</>				
   )
 }
 

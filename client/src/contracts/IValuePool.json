@@ -26,7 +26,7 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.3+commit.8d00100c\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"tokenIn\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"tokenOut\",\"type\":\"address\"}],\"name\":\"getSpotPriceSansFee\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"spotPrice\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/home/kali/Documents/project_AGO/contracts/interfaces/IValuePool.sol\":\"IValuePool\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":1000},\"remappings\":[]},\"sources\":{\"/home/kali/Documents/project_AGO/contracts/interfaces/IValuePool.sol\":{\"keccak256\":\"0x2f14c3815469ec51f3378f3c5bb592533f0aa6fa38c530a1cdbaf72f41574aa7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b713ac247f6816d2a42b0221d542e8678d9b3cd1b8e7036d5081556c18677772\",\"dweb:/ipfs/QmSHqnmf6Y7MkvRRLPG7iuxMn1uBNv2EcT9sPBtY5sQ3uv\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.3+commit.8d00100c\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"tokenIn\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"tokenOut\",\"type\":\"address\"}],\"name\":\"getSpotPriceSansFee\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"spotPrice\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IValuePool.sol\":\"IValuePool\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":1000},\"remappings\":[]},\"sources\":{\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IValuePool.sol\":{\"keccak256\":\"0x5bfe4ee02f60195b7e5dc0883042c53ed7e55837a37585686e3e8c8af92976ea\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fd65b217a39709bbb060981f6f7557d64ae96e486780a675b7e467f7a89a85f1\",\"dweb:/ipfs/Qmcq8pN4a4Jp4WsKSpp81g5GUPATgMPpbBJwcex8bbvmFq\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -34,21 +34,21 @@
   "deployedGeneratedSources": [],
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.0;\npragma experimental ABIEncoderV2;\n\ninterface IValuePool {\n    function getSpotPriceSansFee(address tokenIn, address tokenOut) external view returns (uint spotPrice);\n}\n",
-  "sourcePath": "/home/kali/Documents/project_AGO/contracts/interfaces/IValuePool.sol",
+  "source": "// SPDX-License-Identifier: MIT\r\n\r\npragma solidity ^0.8.0;\r\npragma experimental ABIEncoderV2;\r\n\r\ninterface IValuePool {\r\n    function getSpotPriceSansFee(address tokenIn, address tokenOut) external view returns (uint spotPrice);\r\n}\r\n",
+  "sourcePath": "C:/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IValuePool.sol",
   "ast": {
-    "absolutePath": "/home/kali/Documents/project_AGO/contracts/interfaces/IValuePool.sol",
+    "absolutePath": "/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IValuePool.sol",
     "exportedSymbols": {
       "IValuePool": [
-        7186
+        7691
       ]
     },
-    "id": 7187,
+    "id": 7692,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 7175,
+        "id": 7680,
         "literals": [
           "solidity",
           "^",
@@ -56,16 +56,16 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "33:23:26"
+        "src": "35:23:27"
       },
       {
-        "id": 7176,
+        "id": 7681,
         "literals": [
           "experimental",
           "ABIEncoderV2"
         ],
         "nodeType": "PragmaDirective",
-        "src": "57:33:26"
+        "src": "60:33:27"
       },
       {
         "abstract": false,
@@ -73,36 +73,36 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 7186,
+        "id": 7691,
         "linearizedBaseContracts": [
-          7186
+          7691
         ],
         "name": "IValuePool",
-        "nameLocation": "102:10:26",
+        "nameLocation": "107:10:27",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "functionSelector": "1446a7ff",
-            "id": 7185,
+            "id": 7690,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getSpotPriceSansFee",
-            "nameLocation": "128:19:26",
+            "nameLocation": "134:19:27",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 7181,
+              "id": 7686,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 7178,
+                  "id": 7683,
                   "mutability": "mutable",
                   "name": "tokenIn",
-                  "nameLocation": "156:7:26",
+                  "nameLocation": "162:7:27",
                   "nodeType": "VariableDeclaration",
-                  "scope": 7185,
-                  "src": "148:15:26",
+                  "scope": 7690,
+                  "src": "154:15:27",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -110,10 +110,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 7177,
+                    "id": 7682,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "148:7:26",
+                    "src": "154:7:27",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -124,13 +124,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 7180,
+                  "id": 7685,
                   "mutability": "mutable",
                   "name": "tokenOut",
-                  "nameLocation": "173:8:26",
+                  "nameLocation": "179:8:27",
                   "nodeType": "VariableDeclaration",
-                  "scope": 7185,
-                  "src": "165:16:26",
+                  "scope": 7690,
+                  "src": "171:16:27",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -138,10 +138,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 7179,
+                    "id": 7684,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "165:7:26",
+                    "src": "171:7:27",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -151,21 +151,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "147:35:26"
+              "src": "153:35:27"
             },
             "returnParameters": {
-              "id": 7184,
+              "id": 7689,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 7183,
+                  "id": 7688,
                   "mutability": "mutable",
                   "name": "spotPrice",
-                  "nameLocation": "211:9:26",
+                  "nameLocation": "217:9:27",
                   "nodeType": "VariableDeclaration",
-                  "scope": 7185,
-                  "src": "206:14:26",
+                  "scope": 7690,
+                  "src": "212:14:27",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -173,10 +173,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 7182,
+                    "id": 7687,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
-                    "src": "206:4:26",
+                    "src": "212:4:27",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -185,34 +185,34 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "205:16:26"
+              "src": "211:16:27"
             },
-            "scope": 7186,
-            "src": "119:103:26",
+            "scope": 7691,
+            "src": "125:103:27",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 7187,
-        "src": "92:132:26"
+        "scope": 7692,
+        "src": "97:134:27"
       }
     ],
-    "src": "33:192:26"
+    "src": "35:198:27"
   },
   "legacyAST": {
-    "absolutePath": "/home/kali/Documents/project_AGO/contracts/interfaces/IValuePool.sol",
+    "absolutePath": "/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IValuePool.sol",
     "exportedSymbols": {
       "IValuePool": [
-        7186
+        7691
       ]
     },
-    "id": 7187,
+    "id": 7692,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 7175,
+        "id": 7680,
         "literals": [
           "solidity",
           "^",
@@ -220,16 +220,16 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "33:23:26"
+        "src": "35:23:27"
       },
       {
-        "id": 7176,
+        "id": 7681,
         "literals": [
           "experimental",
           "ABIEncoderV2"
         ],
         "nodeType": "PragmaDirective",
-        "src": "57:33:26"
+        "src": "60:33:27"
       },
       {
         "abstract": false,
@@ -237,36 +237,36 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 7186,
+        "id": 7691,
         "linearizedBaseContracts": [
-          7186
+          7691
         ],
         "name": "IValuePool",
-        "nameLocation": "102:10:26",
+        "nameLocation": "107:10:27",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "functionSelector": "1446a7ff",
-            "id": 7185,
+            "id": 7690,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getSpotPriceSansFee",
-            "nameLocation": "128:19:26",
+            "nameLocation": "134:19:27",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 7181,
+              "id": 7686,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 7178,
+                  "id": 7683,
                   "mutability": "mutable",
                   "name": "tokenIn",
-                  "nameLocation": "156:7:26",
+                  "nameLocation": "162:7:27",
                   "nodeType": "VariableDeclaration",
-                  "scope": 7185,
-                  "src": "148:15:26",
+                  "scope": 7690,
+                  "src": "154:15:27",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -274,10 +274,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 7177,
+                    "id": 7682,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "148:7:26",
+                    "src": "154:7:27",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -288,13 +288,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 7180,
+                  "id": 7685,
                   "mutability": "mutable",
                   "name": "tokenOut",
-                  "nameLocation": "173:8:26",
+                  "nameLocation": "179:8:27",
                   "nodeType": "VariableDeclaration",
-                  "scope": 7185,
-                  "src": "165:16:26",
+                  "scope": 7690,
+                  "src": "171:16:27",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -302,10 +302,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 7179,
+                    "id": 7684,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "165:7:26",
+                    "src": "171:7:27",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -315,21 +315,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "147:35:26"
+              "src": "153:35:27"
             },
             "returnParameters": {
-              "id": 7184,
+              "id": 7689,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 7183,
+                  "id": 7688,
                   "mutability": "mutable",
                   "name": "spotPrice",
-                  "nameLocation": "211:9:26",
+                  "nameLocation": "217:9:27",
                   "nodeType": "VariableDeclaration",
-                  "scope": 7185,
-                  "src": "206:14:26",
+                  "scope": 7690,
+                  "src": "212:14:27",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -337,10 +337,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 7182,
+                    "id": 7687,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
-                    "src": "206:4:26",
+                    "src": "212:4:27",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -349,20 +349,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "205:16:26"
+              "src": "211:16:27"
             },
-            "scope": 7186,
-            "src": "119:103:26",
+            "scope": 7691,
+            "src": "125:103:27",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 7187,
-        "src": "92:132:26"
+        "scope": 7692,
+        "src": "97:134:27"
       }
     ],
-    "src": "33:192:26"
+    "src": "35:198:27"
   },
   "compiler": {
     "name": "solc",
@@ -370,7 +370,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-04-14T15:10:13.913Z",
+  "updatedAt": "2021-04-20T16:09:57.856Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

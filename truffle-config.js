@@ -22,7 +22,7 @@ module.exports = {
     networks: {
         development: {
           host: "127.0.0.1",
-          port: 7545,
+          port: 8545,
           network_id: "*"
         },
         rinkeby: {
@@ -33,7 +33,7 @@ module.exports = {
             network_id: 4,
             skipDryRun: true,
             gas: 10 * 1e6, // rinkeby has a lower block limit than mainnet
-            gasPrice: 140 * 1e9,
+            gasPrice: 100 * 1e9,
         }
         // main: {
         //     gas: 7900000,

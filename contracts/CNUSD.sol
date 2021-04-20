@@ -11,7 +11,7 @@ import "./ERC20Custom.sol";
 import "./interfaces/ITreasury.sol";
 import "./Operator.sol";
 
-contract Share is ERC20Custom, Operator {
+contract CNUSD is ERC20Custom, Operator {
     using SafeMath for uint256;
 
     /* ========== STATE VARIABLES ========== */

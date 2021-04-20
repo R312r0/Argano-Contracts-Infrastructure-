@@ -1,9 +1,13 @@
 body{
-  display: grid;
-  place-items: left;
-  grid-template-columns: 1fr 1fr;
+  font-size: .8em;
+
 }
 
+.main {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
 
 .inputRow{
   display: grid;
@@ -11,20 +15,14 @@ body{
 }
 
 .inputs{
-  display: grid;
-  grid-template-columns: repeat(1fr);
-}
-
-.main{
-  width: 1280px;
+  display: flex;
 }
 
 input {
   padding: 1px !important;
   margin: 1px !important;
-  
-
-  
+  border-radius: 4px !important;
+  border-color: grey !important;
 }
 
 
@@ -41,6 +39,5 @@ button:hover {
 }
 
 button:active {
-  box-shadow: 1px rgb(158, 169, 204);
-  transform: translateY(1px);
+  transform: translateY(.4px);
 }

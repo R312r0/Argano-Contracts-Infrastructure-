@@ -8,11 +8,11 @@ pragma experimental ABIEncoderV2;
 
 import "./ERC20Custom.sol";
 import "./Operator.sol";
-import "./Share.sol";
+import "./CNUSD.sol";
 import "./interfaces/ITreasury.sol";
 import "./interfaces/IDollar.sol";
 
-contract Dollar is ERC20Custom, IDollar, Operator {
+contract AGOBTC is ERC20Custom, IDollar, Operator {
     using SafeMath for uint256;
 
     // ERC20

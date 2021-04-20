@@ -15,7 +15,7 @@ import "./interfaces/IOracle.sol";
 import "./interfaces/IPool.sol";
 import "./Operator.sol";
 
-contract Pool is Operator, ReentrancyGuard, IPool {
+contract PoolAGOUSD is Operator, ReentrancyGuard, IPool {
     using SafeMath for uint256;
     using SafeERC20 for ERC20;
 

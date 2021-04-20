@@ -15,18 +15,17 @@ const options = {
     require("./contracts/Dollar.json"),
     require("./contracts/MockPairOracle.json"),
     require("./contracts/MockCollateral.json"),
-    // contract='MockCollateral' 
-
   ],
   web3: {
     fallback: {
       type: "ws",
-      url: "ws://127.0.0.1:7545",
+      url: "ws://127.0.0.1:8545",
     },
   },
 }
 
 const drizzle = new Drizzle(options)
+
 // drizzle.web3?.eth?.handleRevert = true
 
 ReactDOM.render(

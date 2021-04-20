@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-contract MockCollateral {
+contract Mock_USDT {
     string public _name;
     string public _symbol;
     uint8 public _decimals;

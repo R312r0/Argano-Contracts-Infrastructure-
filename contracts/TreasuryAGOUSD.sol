@@ -17,15 +17,15 @@ import "./interfaces/IFoundry.sol";
 import "./interfaces/IValueLiquidRouter.sol";
 import "./Operator.sol";
 
-contract Treasury is ITreasury, Operator, ReentrancyGuard {
+contract TreasuryAGOUSD is ITreasury, Operator, ReentrancyGuard {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
     address public oracleDollar;
     address public oracleShare;
 
-    address public dollar;
-    address public share;
+    address public AGOUSD;
+    address public CNUSD;
     address public strategist;
 
     bool public migrated = false;
@@ -48,7 +48,7 @@ contract Treasury is ITreasury, Operator, ReentrancyGuard {
     uint256 public effective_collateral_ratio; // 6 decimals of precision
     uint256 public refresh_cooldown; // Seconds to wait before being able to run refreshCollateralRatio() again
     uint256 public ratio_step; // Amount to change the collateralization ratio by upon refreshCollateralRatio()
-    uint256 public price_target; // The price of DOLLAR at which the collateral ratio will respond to; this value is only used for the collateral ratio mechanism and not for minting and redeeming which are hardcoded at $1
+    uint256 public price_target; // The price of AGOUSD at which the collateral ratio will respond to; this value is only used for the collateral ratio mechanism and not for minting and redeeming which are hardcoded at $1
     uint256 public price_band; // The bound above and below the price target at which the Collateral ratio is allowed to drop
     bool public collateral_ratio_paused = true; // during bootstraping phase, collateral_ratio will be fixed at 100%
     bool public using_effective_collateral_ratio = false; // toggle the effective collateral ratio usage
@@ -181,7 +181,7 @@ contract Treasury is ITreasury, Operator, ReentrancyGuard {
             uint256
         )
     {
-        return (dollarPrice(), sharePrice(), IERC20(dollar).totalSupply(), target_collateral_ratio, effective_collateral_ratio, globalCollateralValue(), minting_fee, redemption_fee);
+        return (dollarPrice(), sharePrice(), IERC20(AGOUSD).totalSupply(), target_collateral_ratio, effective_collateral_ratio, globalCollateralValue(), minting_fee, redemption_fee);
     }
 
     function epochInfo()
@@ -215,7 +215,7 @@ contract Treasury is ITreasury, Operator, ReentrancyGuard {
             return target_collateral_ratio;
         }
         uint256 total_collateral_value = globalCollateralValue();
-        uint256 total_supply_dollar = IERC20(dollar).totalSupply();
+        uint256 total_supply_dollar = IERC20(AGOUSD).totalSupply();
         uint256 ecr = total_collateral_value.mul(PRICE_PRECISION).div(total_supply_dollar);
         if (ecr > COLLATERAL_RATIO_MAX) {
             return COLLATERAL_RATIO_MAX;
@@ -264,7 +264,7 @@ contract Treasury is ITreasury, Operator, ReentrancyGuard {
     // Check if the protocol is over- or under-collateralized, by how much
     function calcCollateralBalance() public view returns (uint256 _collateral_value, bool _exceeded) {
         uint256 total_collateral_value = globalCollateralValue();
-        uint256 target_collateral_value = IERC20(dollar).totalSupply().mul(target_collateral_ratio).div(PRICE_PRECISION);
+        uint256 target_collateral_value = IERC20(AGOUSD).totalSupply().mul(target_collateral_ratio).div(PRICE_PRECISION);
         if (total_collateral_value >= target_collateral_value) {
             _collateral_value = total_collateral_value.sub(target_collateral_value);
             _exceeded = true;
@@ -286,7 +286,7 @@ contract Treasury is ITreasury, Operator, ReentrancyGuard {
         require(vswap_router != address(0) && vswap_pair_share_bnb != address(0) && vswap_pair_bnb_busd != address(0), "!vswap");
         if (_input_amount == 0) return 0;
         address[] memory _path = new address[](2);
-        if (_input_token == share) {
+        if (_input_token == CNUSD) {
             _path[0] = vswap_pair_share_bnb;
             _path[1] = vswap_pair_bnb_busd;
         } else {
@@ -332,7 +332,7 @@ contract Treasury is ITreasury, Operator, ReentrancyGuard {
         uint256 _collateral_amount_sell = _collateral_value.mul(PRICE_PRECISION).div(_collateral_price);
         require(IERC20(rebalancing_pool_collateral).balanceOf(rebalancing_pool) > _collateral_amount_sell, "insufficentPoolBalance");
         IPool(rebalancing_pool).transferCollateralToTreasury(_collateral_amount_sell); // Transfer collateral from pool to treasury
-        uint256 out_share_amount = _swap(rebalancing_pool_collateral, share, _collateral_amount_sell, _min_share_amount);
+        uint256 out_share_amount = _swap(rebalancing_pool_collateral, CNUSD, _collateral_amount_sell, _min_share_amount);
         emit BoughtBack(_collateral_value, _collateral_amount_sell, out_share_amount);
     }
 
@@ -342,9 +342,9 @@ contract Treasury is ITreasury, Operator, ReentrancyGuard {
         (uint256 _deficit_collateral_value, bool _exceeded) = calcCollateralBalance();
         require(!_exceeded && _deficit_collateral_value > 0, "exceeded");
         require(_min_collateral_amount <= _deficit_collateral_value, ">deficit");
-        uint256 _share_balance = IERC20(share).balanceOf(address(this));
+        uint256 _share_balance = IERC20(CNUSD).balanceOf(address(this));
         require(_share_amount <= _share_balance, ">shareBalance");
-        uint256 out_collateral_amount = _swap(share, rebalancing_pool_collateral, _share_amount, _min_collateral_amount);
+        uint256 out_collateral_amount = _swap(CNUSD, rebalancing_pool_collateral, _share_amount, _min_collateral_amount);
         uint256 _collateral_balance = IERC20(rebalancing_pool_collateral).balanceOf(address(this));
         if (_collateral_balance > 0) {
             IERC20(rebalancing_pool_collateral).safeTransfer(rebalancing_pool, _collateral_balance); // Transfer collateral from Treasury to Pool
@@ -370,9 +370,9 @@ contract Treasury is ITreasury, Operator, ReentrancyGuard {
 
     function migrate(address _new_treasury) external onlyOperator notMigrated {
         migrated = true;
-        uint256 _share_balance = IERC20(share).balanceOf(address(this));
+        uint256 _share_balance = IERC20(CNUSD).balanceOf(address(this));
         if (_share_balance > 0) {
-            IERC20(share).safeTransfer(_new_treasury, _share_balance);
+            IERC20(CNUSD).safeTransfer(_new_treasury, _share_balance);
         }
         if (rebalancing_pool_collateral != address(0)) {
             uint256 _collateral_balance = IERC20(rebalancing_pool_collateral).balanceOf(address(this));
@@ -422,12 +422,12 @@ contract Treasury is ITreasury, Operator, ReentrancyGuard {
         oracleShare = _oracleShare;
     }
 
-    function setDollarAddress(address _dollar) public onlyOperator {
-        dollar = _dollar;
+    function setDollarAddress(address _AGOUSD) public onlyOperator {
+        AGOUSD = _AGOUSD;
     }
 
-    function setShareAddress(address _share) public onlyOperator {
-        share = _share;
+    function setShareAddress(address _CNUSD) public onlyOperator {
+        CNUSD = _CNUSD;
     }
 
     function setStrategist(address _strategist) external onlyOperator {
