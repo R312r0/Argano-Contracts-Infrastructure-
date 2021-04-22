@@ -1,7 +1,4 @@
 import React, {useState, useEffect} from "react"
-import {Input} from '@rebass/forms'
-import {Button} from "rebass"
-import useDeepCompareEffect from 'use-deep-compare-effect'
 
 
 const ReadContractValues = props => {
@@ -32,7 +29,7 @@ const RenderReadString = props => {
     useEffect(() => {
         if (!Object.keys(props.callMethods[props.method]).length) setDataKey(props.drizzle.contracts[props.contract].methods[props.method].cacheCall())
             
-    }, [props.drizzleState, props.drizzle.contracts[props.contract]])
+    }, [props.drizzleState])
 
     const handleClick = e => {
         const params = Object.keys(props.callMethods[props.method]).map(field => inputValues[field])
@@ -44,18 +41,20 @@ const RenderReadString = props => {
     return Object.keys(props.callMethods[props.method]).length 
     ?
         <div className='inputRow'>                    
-            <Button 
-                color='white'
-                textAlign='left'
-                backgroundColor='blue'
+            <button 
+                style={{
+                    color: 'white',
+                    textAlign:'left',
+                    backgroundColor:'blue'
+                }}
                 onClick={handleClick} 
             >
                 {props.method}
-            </Button>
+            </button>
 
             <div className='inputs'>
                 {Object.keys(props.callMethods[props.method]).map(inputField => 
-                    <Input 
+                    <input 
                         placeholder={inputField}
                         name={inputField}
                         onChange={handleInputChange}
@@ -63,35 +62,39 @@ const RenderReadString = props => {
                 )}
             </div>
 
-            <Button
-                color='black'
-                textAlign='right'
-                backgroundColor='white'
+            <button
+                style={{
+                    color: 'black',
+                    textAlign:'right',
+                    backgroundColor:'white'
+                }}
+                onClick={(e) => {navigator.clipboard.writeText(e.target.innerText)}}
             >
                 {'' + props.drizzleState.contracts[props.contract][props.method][dataKey]?.value}
-            </Button>
+            </button>
         </div>
     :
-        <div className='inputRow'>
-            <Button 
-                color='black'
-                textAlign='left'
-                backgroundColor='lightgrey'
+        <div className='inputRowGrey'>
+            <button 
+                style={{
+                    color: 'black',
+                    textAlign:'left',
+                    backgroundColor:'lightgrey'
+                }}
             >
                 {props.method}
-            </Button>
+            </button>
 
-            <div className='inputs'>
-                {/* <Input placeholder={undefined}/>  */}
-            </div>
-
-            <Button
-                color='black'
-                textAlign='right'
-                backgroundColor='white'
+            <button
+                 style={{
+                    color: 'black',
+                    textAlign:'right',
+                    backgroundColor:'white'
+                }}
+                onClick={(e) => {navigator.clipboard.writeText(e.target.innerText)}}
             >
                 {'' + props.drizzleState.contracts[props.contract][props.method][dataKey]?.value}
-            </Button>
+            </button>
         </div>
     
 }

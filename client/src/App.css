@@ -1,6 +1,12 @@
 body{
-  font-size: .8em;
-
+  font-size: .9em;
+  /* font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif ; */
+  font-family: Consolas, 'Courier New',
+    monospace;
+  background: rgba(199, 187, 120, 0.5);
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .main {
@@ -14,24 +20,35 @@ body{
   grid-template-columns: 1fr 2fr 1fr;
 }
 
-.inputs{
-  display: flex;
-}
-
-input {
-  padding: 1px !important;
-  margin: 1px !important;
-  border-radius: 4px !important;
-  border-color: grey !important;
+.inputRowGrey{
+  display: grid;
+  grid-template-columns: 1fr 3fr;
 }
 
 
-button {
+.card{
+  /* font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif ; */
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 30px rgba(0,0,0,0.6)  ;
+  min-width: 500px ;
+  width: 45% ;
+  padding: 10px ;
+  margin: 5px ;
+}
+
+.inputs {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+
+button, input {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 1px !important;
-  margin: 1px !important;
+  border: none;
+  margin: 1px ;
 }
 
 button:hover {

@@ -19,13 +19,16 @@ const App = props => {
 
 	return (
 		drizzleReadinessState.loading ? "Loading Drizzle..." :
-		<><span>Active account:  <b>{drizzleReadinessState.drizzleState.accounts[0]}</b></span>
+		<><span>Active account:</span>
+		<button onClick={(e) => {navigator.clipboard.writeText(e.target.innerText)}}>
+			<b>{drizzleReadinessState.drizzleState.accounts[0]}</b>
+        </button>
 		<div className='main'> 
 			
 			<Contract
 				drizzle={drizzle}
 				drizzleState={drizzleReadinessState.drizzleState}
-				contract='Share' 
+				contract='CNUSD' 
 				callMethods={{
 					'totalSupply': {},
 					'balanceOf': {
@@ -48,7 +51,7 @@ const App = props => {
 			< Contract 
 				drizzle={drizzle}
 				drizzleState={drizzleReadinessState.drizzleState}
-				contract='Dollar' 
+				contract='AGOUSD' 
 				callMethods={{
 					'totalSupply': {},
 					'balanceOf': {
@@ -88,7 +91,7 @@ const App = props => {
 			< Contract 
 				drizzle={drizzle}
 				drizzleState={drizzleReadinessState.drizzleState}
-				contract='MockCollateral' 
+				contract='Mock_USDT' 
 				callMethods={{
 					'totalSupply': {},
 					'balanceOf': {
@@ -103,6 +106,10 @@ const App = props => {
 					'approve':{
 						'spender': drizzleReadinessState.drizzleState.accounts[0],
 						'amount': 0
+					},
+					'mint':{
+						'dst': drizzleReadinessState.drizzleState.accounts[0],
+						'amt': 0
 					}
 				}}
 			/> 
@@ -110,7 +117,7 @@ const App = props => {
 			< Contract 
 				drizzle={drizzle}
 				drizzleState={drizzleReadinessState.drizzleState}
-				contract='Pool' 
+				contract='PoolAGOUSD' 
 				callMethods={{
 					'collateralDollarBalance': {},
 					'getCollateralPrice': {},
@@ -137,7 +144,7 @@ const App = props => {
 			< Contract 
 				drizzle={drizzle}
 				drizzleState={drizzleReadinessState.drizzleState}
-				contract='Treasury' 
+				contract='TreasuryAGOUSD' 
 				callMethods={{
 					'last_refresh_cr_timestamp': {},
 					'target_collateral_ratio': {},
@@ -151,7 +158,7 @@ const App = props => {
 					'sharePrice': {},
 				}}
 				sendMethods={{
-					'refreshCollateralRatio':{}
+					'refreshCollateralRatio': {}
 				}}
 			/> 
 		</div>

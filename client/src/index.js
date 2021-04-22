@@ -9,12 +9,12 @@ import {Drizzle} from "@drizzle/store"
 // let drizzle know what contracts we want and how to access our test blockchain
 const options = {
   contracts: [
-    require("./contracts/Pool.json"),
-    require("./contracts/Treasury.json"),
-    require("./contracts/Share.json"),
-    require("./contracts/Dollar.json"),
+    require("./contracts/PoolAGOUSD.json"),
+    require("./contracts/TreasuryAGOUSD.json"),
+    require("./contracts/CNUSD.json"),
+    require("./contracts/AGOUSD.json"),
     require("./contracts/MockPairOracle.json"),
-    require("./contracts/MockCollateral.json"),
+    require("./contracts/Mock_USDT.json"),
   ],
   web3: {
     fallback: {
