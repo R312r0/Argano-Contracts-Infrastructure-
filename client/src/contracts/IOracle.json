@@ -15,7 +15,7 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.3+commit.8d00100c\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"consult\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IOracle.sol\":\"IOracle\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":1000},\"remappings\":[]},\"sources\":{\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IOracle.sol\":{\"keccak256\":\"0x7d0e967335efab0d4dff17e241f9979db6f59a798688c1010cffdea7f5d42ef5\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a940dda611a1d615f17bdb5b3e8f3171ade7d4a39c27bcbf5131167c8168793f\",\"dweb:/ipfs/QmVypJG8UeYtHRvfDXm9vqWyoDsPtrrmim6SZv33WwCoog\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.4+commit.c7e474f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"consult\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IOracle.sol\":\"IOracle\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":1000},\"remappings\":[]},\"sources\":{\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IOracle.sol\":{\"keccak256\":\"0x7d0e967335efab0d4dff17e241f9979db6f59a798688c1010cffdea7f5d42ef5\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a940dda611a1d615f17bdb5b3e8f3171ade7d4a39c27bcbf5131167c8168793f\",\"dweb:/ipfs/QmVypJG8UeYtHRvfDXm9vqWyoDsPtrrmim6SZv33WwCoog\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -29,15 +29,15 @@
     "absolutePath": "/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IOracle.sol",
     "exportedSymbols": {
       "IOracle": [
-        2157
+        1147
       ]
     },
-    "id": 2158,
+    "id": 1148,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2150,
+        "id": 1140,
         "literals": [
           "solidity",
           "^",
@@ -45,16 +45,16 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "35:23:9"
+        "src": "35:23:7"
       },
       {
-        "id": 2151,
+        "id": 1141,
         "literals": [
           "experimental",
           "ABIEncoderV2"
         ],
         "nodeType": "PragmaDirective",
-        "src": "60:33:9"
+        "src": "60:33:7"
       },
       {
         "abstract": false,
@@ -62,42 +62,42 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 2157,
+        "id": 1147,
         "linearizedBaseContracts": [
-          2157
+          1147
         ],
         "name": "IOracle",
-        "nameLocation": "107:7:9",
+        "nameLocation": "107:7:7",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "functionSelector": "7eeda703",
-            "id": 2156,
+            "id": 1146,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "consult",
-            "nameLocation": "131:7:9",
+            "nameLocation": "131:7:7",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2152,
+              "id": 1142,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "138:2:9"
+              "src": "138:2:7"
             },
             "returnParameters": {
-              "id": 2155,
+              "id": 1145,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2154,
+                  "id": 1144,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2156,
-                  "src": "164:7:9",
+                  "scope": 1146,
+                  "src": "164:7:7",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -105,10 +105,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 2153,
+                    "id": 1143,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "164:7:9",
+                    "src": "164:7:7",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -117,34 +117,35 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "163:9:9"
+              "src": "163:9:7"
             },
-            "scope": 2157,
-            "src": "122:51:9",
+            "scope": 1147,
+            "src": "122:51:7",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 2158,
-        "src": "97:79:9"
+        "scope": 1148,
+        "src": "97:79:7",
+        "usedErrors": []
       }
     ],
-    "src": "35:143:9"
+    "src": "35:143:7"
   },
   "legacyAST": {
     "absolutePath": "/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IOracle.sol",
     "exportedSymbols": {
       "IOracle": [
-        2157
+        1147
       ]
     },
-    "id": 2158,
+    "id": 1148,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2150,
+        "id": 1140,
         "literals": [
           "solidity",
           "^",
@@ -152,16 +153,16 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "35:23:9"
+        "src": "35:23:7"
       },
       {
-        "id": 2151,
+        "id": 1141,
         "literals": [
           "experimental",
           "ABIEncoderV2"
         ],
         "nodeType": "PragmaDirective",
-        "src": "60:33:9"
+        "src": "60:33:7"
       },
       {
         "abstract": false,
@@ -169,42 +170,42 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 2157,
+        "id": 1147,
         "linearizedBaseContracts": [
-          2157
+          1147
         ],
         "name": "IOracle",
-        "nameLocation": "107:7:9",
+        "nameLocation": "107:7:7",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "functionSelector": "7eeda703",
-            "id": 2156,
+            "id": 1146,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "consult",
-            "nameLocation": "131:7:9",
+            "nameLocation": "131:7:7",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2152,
+              "id": 1142,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "138:2:9"
+              "src": "138:2:7"
             },
             "returnParameters": {
-              "id": 2155,
+              "id": 1145,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2154,
+                  "id": 1144,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2156,
-                  "src": "164:7:9",
+                  "scope": 1146,
+                  "src": "164:7:7",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -212,10 +213,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 2153,
+                    "id": 1143,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "164:7:9",
+                    "src": "164:7:7",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -224,28 +225,29 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "163:9:9"
+              "src": "163:9:7"
             },
-            "scope": 2157,
-            "src": "122:51:9",
+            "scope": 1147,
+            "src": "122:51:7",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 2158,
-        "src": "97:79:9"
+        "scope": 1148,
+        "src": "97:79:7",
+        "usedErrors": []
       }
     ],
-    "src": "35:143:9"
+    "src": "35:143:7"
   },
   "compiler": {
     "name": "solc",
-    "version": "0.8.3+commit.8d00100c.Emscripten.clang"
+    "version": "0.8.4+commit.c7e474f2.Emscripten.clang"
   },
   "networks": {},
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-04-20T16:13:11.844Z",
+  "updatedAt": "2021-04-22T19:29:50.518Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

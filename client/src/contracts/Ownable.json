@@ -54,7 +54,7 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.3+commit.8d00100c\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/openZeppelin/Ownable.sol\":\"Ownable\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":1000},\"remappings\":[]},\"sources\":{\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/openZeppelin/Context.sol\":{\"keccak256\":\"0x1b65f2e575656fe3f22b6af3948d6a8be533edbeb7ad7a6137be38dcf1ae07b8\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://2a927a8dc1ade84c50e9f26887aed7be2da05045ae384298936a544ab0c3cfbd\",\"dweb:/ipfs/Qma9WafoFkFRS5cai8nEEnC7GKsRzfc6PsFofxf2PsijYL\"]},\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/openZeppelin/Ownable.sol\":{\"keccak256\":\"0xdf28ee9ad512ab0a7c5dc3318de11c3c4315a1421098a69511491648652e2c62\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://ddad7cc06ef4ed14421d3aaac4c08b01bebb804880a924545b7982ed86ae9786\",\"dweb:/ipfs/Qmbagkqsy4WUt9KkSdYfjgmfVrG3BS4h5p3iWKDjjtohY1\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.4+commit.c7e474f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/openZeppelin/Ownable.sol\":\"Ownable\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":1000},\"remappings\":[]},\"sources\":{\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/openZeppelin/Context.sol\":{\"keccak256\":\"0x1b65f2e575656fe3f22b6af3948d6a8be533edbeb7ad7a6137be38dcf1ae07b8\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://2a927a8dc1ade84c50e9f26887aed7be2da05045ae384298936a544ab0c3cfbd\",\"dweb:/ipfs/Qma9WafoFkFRS5cai8nEEnC7GKsRzfc6PsFofxf2PsijYL\"]},\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/openZeppelin/Ownable.sol\":{\"keccak256\":\"0xdf28ee9ad512ab0a7c5dc3318de11c3c4315a1421098a69511491648652e2c62\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://ddad7cc06ef4ed14421d3aaac4c08b01bebb804880a924545b7982ed86ae9786\",\"dweb:/ipfs/Qmbagkqsy4WUt9KkSdYfjgmfVrG3BS4h5p3iWKDjjtohY1\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -117,9 +117,7 @@
             "src": "118:7:3"
           }
         ],
-        "contractDependencies": [
-          35
-        ],
+        "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
         "id": 223,
@@ -1344,7 +1342,8 @@
           }
         ],
         "scope": 224,
-        "src": "89:953:3"
+        "src": "89:953:3",
+        "usedErrors": []
       }
     ],
     "src": "35:1007:3"
@@ -1402,9 +1401,7 @@
             "src": "118:7:3"
           }
         ],
-        "contractDependencies": [
-          35
-        ],
+        "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
         "id": 223,
@@ -2629,18 +2626,19 @@
           }
         ],
         "scope": 224,
-        "src": "89:953:3"
+        "src": "89:953:3",
+        "usedErrors": []
       }
     ],
     "src": "35:1007:3"
   },
   "compiler": {
     "name": "solc",
-    "version": "0.8.3+commit.8d00100c.Emscripten.clang"
+    "version": "0.8.4+commit.c7e474f2.Emscripten.clang"
   },
   "networks": {},
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-04-20T17:00:06.951Z",
+  "updatedAt": "2021-04-22T19:31:56.124Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

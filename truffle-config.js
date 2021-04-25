@@ -33,7 +33,7 @@ module.exports = {
             network_id: 4,
             skipDryRun: true,
             gas: 10 * 1e6, // rinkeby has a lower block limit than mainnet
-            gasPrice: 100 * 1e9,
+            gasPrice: 50 * 1e9,
         }
         // main: {
         //     gas: 7900000,

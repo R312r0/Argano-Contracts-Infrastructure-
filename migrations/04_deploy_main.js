@@ -29,6 +29,7 @@ const startTime = Math.floor(new Date('2021-04-21T09:00:00.000+00:00').getTime()
 const ONE_THOUSAND = BigNumber.from('1000000000000000000000').toHexString()
 
 module.exports = async (deployer, network, accounts) => {
+    return
     const devFund           = accounts[0]
     const timelock_admin    = accounts[0]
     const creator           = accounts[0]

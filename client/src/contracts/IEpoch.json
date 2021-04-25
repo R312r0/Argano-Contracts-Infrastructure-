@@ -28,7 +28,7 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.3+commit.8d00100c\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"epoch\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"nextEpochPoint\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IEpoch.sol\":\"IEpoch\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":1000},\"remappings\":[]},\"sources\":{\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IEpoch.sol\":{\"keccak256\":\"0xe5fa8ca80ec7875fcb4c60823093fd2ae064ce5f81d1aa6a0069705bbbe059f6\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6db83fcea90b9e4faef86d29c15d1db1033b0d4bd552702fede4b1ac0a2bcdfb\",\"dweb:/ipfs/QmZVE3AtKHxbqV1TSCzGJ8Wtm4TLDoMgoeLMFqbm33Dhum\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.4+commit.c7e474f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"epoch\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"nextEpochPoint\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IEpoch.sol\":\"IEpoch\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":1000},\"remappings\":[]},\"sources\":{\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IEpoch.sol\":{\"keccak256\":\"0xe5fa8ca80ec7875fcb4c60823093fd2ae064ce5f81d1aa6a0069705bbbe059f6\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6db83fcea90b9e4faef86d29c15d1db1033b0d4bd552702fede4b1ac0a2bcdfb\",\"dweb:/ipfs/QmZVE3AtKHxbqV1TSCzGJ8Wtm4TLDoMgoeLMFqbm33Dhum\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -186,7 +186,8 @@
           }
         ],
         "scope": 13,
-        "src": "62:142:0"
+        "src": "62:142:0",
+        "usedErrors": []
       }
     ],
     "src": "35:171:0"
@@ -339,18 +340,19 @@
           }
         ],
         "scope": 13,
-        "src": "62:142:0"
+        "src": "62:142:0",
+        "usedErrors": []
       }
     ],
     "src": "35:171:0"
   },
   "compiler": {
     "name": "solc",
-    "version": "0.8.3+commit.8d00100c.Emscripten.clang"
+    "version": "0.8.4+commit.c7e474f2.Emscripten.clang"
   },
   "networks": {},
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-04-20T17:00:06.944Z",
+  "updatedAt": "2021-04-22T19:31:56.118Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

@@ -1,7 +1,5 @@
-// const MockChainlinkAggregator = artifacts.require('MockChainlinkAggregator.sol')
-const MockCollateral = artifacts.require('MockCollateral.sol')
+const Migrations = artifacts.require("Migrations")
 
-module.exports = async (deployer, network, accounts) => {
-   return
-
+module.exports = function (deployer) {
+  deployer.deploy(Migrations)
 }

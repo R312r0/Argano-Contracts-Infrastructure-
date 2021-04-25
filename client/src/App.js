@@ -19,7 +19,8 @@ const App = props => {
 
 	return (
 		drizzleReadinessState.loading ? "Loading Drizzle..." :
-		<><span>Active account:</span>
+	<>
+		<span>Active account:</span>
 		<button onClick={(e) => {navigator.clipboard.writeText(e.target.innerText)}}>
 			<b>{drizzleReadinessState.drizzleState.accounts[0]}</b>
         </button>
@@ -70,23 +71,28 @@ const App = props => {
 				}}
 			/>
 
-			{/* < Contract 
+			< Contract 
 				drizzle={drizzle}
 				drizzleState={drizzleReadinessState.drizzleState}
-				contract='MockPairOracle' 
+				contract='USDTOracle' 
 				callMethods={{
-					'mockPrice': {},
-					'consult': {
-						'token': drizzleReadinessState.drizzleState.accounts[0],
-						'amountIn': 0
-					}
+					'consult': {}
+				}}
+				sendMethods={{}}
+			/> 
+
+			< Contract 
+				drizzle={drizzle}
+				drizzleState={drizzleReadinessState.drizzleState}
+				contract='MockChainlinkAggregator_USDTUSD' 
+				callMethods={{
 				}}
 				sendMethods={{
-					'mock': {
-						'newPrice' : 0
+					'setLatestPrice':{
+						'_mock_price': 0
 					}
 				}}
-			/>  */}
+			/> 
 
 			< Contract 
 				drizzle={drizzle}
@@ -119,9 +125,10 @@ const App = props => {
 				drizzleState={drizzleReadinessState.drizzleState}
 				contract='PoolAGOUSD' 
 				callMethods={{
-					'collateralDollarBalance': {},
-					'getCollateralPrice': {},
+					'unclaimed_pool_share': {},
 					'getCollateralToken': {},
+					'pool_ceiling': {},
+					'unclaimed_pool_collateral': {},
 				}}
 				sendMethods={{
 					'mint': {
@@ -158,7 +165,8 @@ const App = props => {
 					'sharePrice': {},
 				}}
 				sendMethods={{
-					'refreshCollateralRatio': {}
+					'refreshCollateralRatio': {},
+					'toggleCollateralRatio': {},
 				}}
 			/> 
 		</div>

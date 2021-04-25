@@ -3,7 +3,7 @@
 pragma solidity ^0.8.0;
 pragma experimental ABIEncoderV2;
 
-contract MockChainlinkAggregator {
+contract MockChainlinkAggregator_WETHUSD {
     uint256 public mock_price;
     uint8 public mock_decimals;
 
