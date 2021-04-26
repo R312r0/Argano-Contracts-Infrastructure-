@@ -28,7 +28,6 @@ const RenderReadString = props => {
 
     useEffect(() => {
         if (!Object.keys(props.callMethods[props.method]).length) setDataKey(props.drizzle.contracts[props.contract].methods[props.method].cacheCall())
-            
     }, [props.drizzleState])
 
     const handleClick = e => {
@@ -91,7 +90,7 @@ const RenderReadString = props => {
                     textAlign:'right',
                     backgroundColor:'white'
                 }}
-                onClick={(e) => {navigator.clipboard.writeText(e.target.innerText)}}
+                onClick={ e => navigator.clipboard.writeText(e.target.innerText) }
             >
                 {'' + props.drizzleState.contracts[props.contract][props.method][dataKey]?.value}
             </button>

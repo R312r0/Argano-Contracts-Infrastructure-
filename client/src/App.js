@@ -153,6 +153,10 @@ const App = props => {
 				drizzleState={drizzleReadinessState.drizzleState}
 				contract='TreasuryAGOUSD' 
 				callMethods={{
+					'calcCollateralBalance': {},
+					'strategist': {},
+					'using_effective_collateral_ratio': {},
+					'collateral_ratio_paused': {},
 					'last_refresh_cr_timestamp': {},
 					'target_collateral_ratio': {},
 					'effective_collateral_ratio': {},
@@ -163,10 +167,31 @@ const App = props => {
 					'price_band': {},
 					'dollarPrice': {},
 					'sharePrice': {},
+					'oracleDollar': {},
+					'oracleShare': {},
+					'AGOUSD': {},
+					'CNUSD': {},
 				}}
 				sendMethods={{
+					'toggleEffectiveCollateralRatio': {},
 					'refreshCollateralRatio': {},
 					'toggleCollateralRatio': {},
+					'setStrategist': {
+						'_newStrategist': 0
+					},
+					'setUniswapParams': {
+						'_uniswap_router' : 0,
+						'_uniswap_pair_CNUSD_WETH' : 0,
+						'_uniswap_pair_WETH_USDT' : 0
+					},
+					'buyback': {
+						'_collateral_value' : 0,
+						'_min_share_amount' : 0
+					},
+					'recollateralize': {
+						'_share_amount' : 0,
+						'_min_collateral_amount' : 0
+					}
 				}}
 			/> 
 		</div>

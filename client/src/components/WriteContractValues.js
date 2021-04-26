@@ -19,8 +19,19 @@ const RenderWriteString = props => {
         const params = Object.keys(inputValues).map(field => inputValues[field])
         console.log(`send ${props.method} on ${props.contract} with ${params}`)
 
-        props.drizzle.contracts[props.contract].methods[props.method](...params).send()
+        props.drizzle.contracts[props.contract].methods[props.method](...params).send().catch(handleRevert)
+        // console.log(props.drizzle.contracts[props.contract].methods[props.method](...params).estimateGas())
+
     }
+    function handleRevert( transactionObject ) {
+        props.drizzle.web3.eth.call( transactionObject, function( err, result ) {
+          if ( ! err ) {
+            console.log( 'result ' + result )
+          }
+          console.log( 'err ' +  err)
+          //return response.json( 'Error: Returned error: execution reverted' )
+        })
+      }
 
 
     return <div className='inputRow'>

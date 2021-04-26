@@ -55,15 +55,15 @@
     "absolutePath": "/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IShareDevFund.sol",
     "exportedSymbols": {
       "IShareDevFund": [
-        10065
+        10151
       ]
     },
-    "id": 10066,
+    "id": 10152,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 10048,
+        "id": 10134,
         "literals": [
           "solidity",
           "^",
@@ -71,16 +71,16 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "35:23:26"
+        "src": "35:23:27"
       },
       {
-        "id": 10049,
+        "id": 10135,
         "literals": [
           "experimental",
           "ABIEncoderV2"
         ],
         "nodeType": "PragmaDirective",
-        "src": "60:33:26"
+        "src": "60:33:27"
       },
       {
         "abstract": false,
@@ -88,36 +88,36 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 10065,
+        "id": 10151,
         "linearizedBaseContracts": [
-          10065
+          10151
         ],
         "name": "IShareDevFund",
-        "nameLocation": "107:13:26",
+        "nameLocation": "107:13:27",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "functionSelector": "e817a414",
-            "id": 10054,
+            "id": 10140,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "claimDevFundRewards",
-            "nameLocation": "137:19:26",
+            "nameLocation": "137:19:27",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 10052,
+              "id": 10138,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 10051,
+                  "id": 10137,
                   "mutability": "mutable",
                   "name": "_amount",
-                  "nameLocation": "165:7:26",
+                  "nameLocation": "165:7:27",
                   "nodeType": "VariableDeclaration",
-                  "scope": 10054,
-                  "src": "157:15:26",
+                  "scope": 10140,
+                  "src": "157:15:27",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -125,10 +125,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 10050,
+                    "id": 10136,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "157:7:26",
+                    "src": "157:7:27",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -137,48 +137,48 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "156:17:26"
+              "src": "156:17:27"
             },
             "returnParameters": {
-              "id": 10053,
+              "id": 10139,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "182:0:26"
+              "src": "182:0:27"
             },
-            "scope": 10065,
-            "src": "128:55:26",
+            "scope": 10151,
+            "src": "128:55:27",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
             "functionSelector": "2c07a624",
-            "id": 10059,
+            "id": 10145,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "unclaimedDevFund",
-            "nameLocation": "200:16:26",
+            "nameLocation": "200:16:27",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 10055,
+              "id": 10141,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "216:2:26"
+              "src": "216:2:27"
             },
             "returnParameters": {
-              "id": 10058,
+              "id": 10144,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 10057,
+                  "id": 10143,
                   "mutability": "mutable",
                   "name": "_pending",
-                  "nameLocation": "250:8:26",
+                  "nameLocation": "250:8:27",
                   "nodeType": "VariableDeclaration",
-                  "scope": 10059,
-                  "src": "242:16:26",
+                  "scope": 10145,
+                  "src": "242:16:27",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -186,10 +186,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 10056,
+                    "id": 10142,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "242:7:26",
+                    "src": "242:7:27",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -198,36 +198,36 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "241:18:26"
+              "src": "241:18:27"
             },
-            "scope": 10065,
-            "src": "191:69:26",
+            "scope": 10151,
+            "src": "191:69:27",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           },
           {
             "functionSelector": "ae4db919",
-            "id": 10064,
+            "id": 10150,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "setDevFund",
-            "nameLocation": "277:10:26",
+            "nameLocation": "277:10:27",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 10062,
+              "id": 10148,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 10061,
+                  "id": 10147,
                   "mutability": "mutable",
                   "name": "_devFund",
-                  "nameLocation": "296:8:26",
+                  "nameLocation": "296:8:27",
                   "nodeType": "VariableDeclaration",
-                  "scope": 10064,
-                  "src": "288:16:26",
+                  "scope": 10150,
+                  "src": "288:16:27",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -235,10 +235,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 10060,
+                    "id": 10146,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "288:7:26",
+                    "src": "288:7:27",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -248,41 +248,41 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "287:18:26"
+              "src": "287:18:27"
             },
             "returnParameters": {
-              "id": 10063,
+              "id": 10149,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "314:0:26"
+              "src": "314:0:27"
             },
-            "scope": 10065,
-            "src": "268:47:26",
+            "scope": 10151,
+            "src": "268:47:27",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 10066,
-        "src": "97:221:26",
+        "scope": 10152,
+        "src": "97:221:27",
         "usedErrors": []
       }
     ],
-    "src": "35:285:26"
+    "src": "35:285:27"
   },
   "legacyAST": {
     "absolutePath": "/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IShareDevFund.sol",
     "exportedSymbols": {
       "IShareDevFund": [
-        10065
+        10151
       ]
     },
-    "id": 10066,
+    "id": 10152,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 10048,
+        "id": 10134,
         "literals": [
           "solidity",
           "^",
@@ -290,16 +290,16 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "35:23:26"
+        "src": "35:23:27"
       },
       {
-        "id": 10049,
+        "id": 10135,
         "literals": [
           "experimental",
           "ABIEncoderV2"
         ],
         "nodeType": "PragmaDirective",
-        "src": "60:33:26"
+        "src": "60:33:27"
       },
       {
         "abstract": false,
@@ -307,36 +307,36 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 10065,
+        "id": 10151,
         "linearizedBaseContracts": [
-          10065
+          10151
         ],
         "name": "IShareDevFund",
-        "nameLocation": "107:13:26",
+        "nameLocation": "107:13:27",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "functionSelector": "e817a414",
-            "id": 10054,
+            "id": 10140,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "claimDevFundRewards",
-            "nameLocation": "137:19:26",
+            "nameLocation": "137:19:27",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 10052,
+              "id": 10138,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 10051,
+                  "id": 10137,
                   "mutability": "mutable",
                   "name": "_amount",
-                  "nameLocation": "165:7:26",
+                  "nameLocation": "165:7:27",
                   "nodeType": "VariableDeclaration",
-                  "scope": 10054,
-                  "src": "157:15:26",
+                  "scope": 10140,
+                  "src": "157:15:27",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -344,10 +344,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 10050,
+                    "id": 10136,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "157:7:26",
+                    "src": "157:7:27",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -356,48 +356,48 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "156:17:26"
+              "src": "156:17:27"
             },
             "returnParameters": {
-              "id": 10053,
+              "id": 10139,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "182:0:26"
+              "src": "182:0:27"
             },
-            "scope": 10065,
-            "src": "128:55:26",
+            "scope": 10151,
+            "src": "128:55:27",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
             "functionSelector": "2c07a624",
-            "id": 10059,
+            "id": 10145,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "unclaimedDevFund",
-            "nameLocation": "200:16:26",
+            "nameLocation": "200:16:27",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 10055,
+              "id": 10141,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "216:2:26"
+              "src": "216:2:27"
             },
             "returnParameters": {
-              "id": 10058,
+              "id": 10144,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 10057,
+                  "id": 10143,
                   "mutability": "mutable",
                   "name": "_pending",
-                  "nameLocation": "250:8:26",
+                  "nameLocation": "250:8:27",
                   "nodeType": "VariableDeclaration",
-                  "scope": 10059,
-                  "src": "242:16:26",
+                  "scope": 10145,
+                  "src": "242:16:27",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -405,10 +405,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 10056,
+                    "id": 10142,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "242:7:26",
+                    "src": "242:7:27",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -417,36 +417,36 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "241:18:26"
+              "src": "241:18:27"
             },
-            "scope": 10065,
-            "src": "191:69:26",
+            "scope": 10151,
+            "src": "191:69:27",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           },
           {
             "functionSelector": "ae4db919",
-            "id": 10064,
+            "id": 10150,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "setDevFund",
-            "nameLocation": "277:10:26",
+            "nameLocation": "277:10:27",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 10062,
+              "id": 10148,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 10061,
+                  "id": 10147,
                   "mutability": "mutable",
                   "name": "_devFund",
-                  "nameLocation": "296:8:26",
+                  "nameLocation": "296:8:27",
                   "nodeType": "VariableDeclaration",
-                  "scope": 10064,
-                  "src": "288:16:26",
+                  "scope": 10150,
+                  "src": "288:16:27",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -454,10 +454,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 10060,
+                    "id": 10146,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "288:7:26",
+                    "src": "288:7:27",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -467,27 +467,27 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "287:18:26"
+              "src": "287:18:27"
             },
             "returnParameters": {
-              "id": 10063,
+              "id": 10149,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "314:0:26"
+              "src": "314:0:27"
             },
-            "scope": 10065,
-            "src": "268:47:26",
+            "scope": 10151,
+            "src": "268:47:27",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 10066,
-        "src": "97:221:26",
+        "scope": 10152,
+        "src": "97:221:27",
         "usedErrors": []
       }
     ],
-    "src": "35:285:26"
+    "src": "35:285:27"
   },
   "compiler": {
     "name": "solc",
@@ -495,7 +495,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-04-22T18:58:02.653Z",
+  "updatedAt": "2021-04-26T15:17:49.604Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},
