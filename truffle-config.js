@@ -21,27 +21,27 @@ module.exports = {
     },
     networks: {
         development: {
-          host: "127.0.0.1",
-          port: 8545,
-          network_id: "*"
+            host: "127.0.0.1",
+            port: 8545,
+            network_id: "*"
         },
         rinkeby: {
-            provider: () => new HDWalletProvider(
+            provider: new HDWalletProvider(
                 process.env.RINKEBY_PRIVATE_KEY,
                 process.env.RINKEBY_INFURA
             ),
             network_id: 4,
+            skipDryRun: true
+        },
+        polygon: {
+            provider: new HDWalletProvider(
+                process.env.RINKEBY_PRIVATE_KEY,
+                'https://rpc-mainnet.maticvigil.com/v1/64b99315d4c64be57564944e982966a4e5a17d17'
+            ),
+            network_id: 137,
             skipDryRun: true,
-            gas: 10 * 1e6, // rinkeby has a lower block limit than mainnet
-            gasPrice: 50 * 1e9,
+            networkCheckTimeout: 5000
         }
-        // main: {
-        //     gas: 7900000,
-        //     provider: MainProvider,
-        //     from: MainProvider.address,
-        //     gasPrice: 2000000000,
-        //     network_id: 1 // Ethereum public network
-        // }
     },
     plugins: [
         'truffle-plugin-verify'

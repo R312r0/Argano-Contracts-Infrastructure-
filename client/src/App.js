@@ -45,7 +45,12 @@ const App = props => {
 					'approve':{
 						'spender': drizzleReadinessState.drizzleState.accounts[0],
 						'amount': 0
+					},
+					'transfer':{
+						'_dst': drizzleReadinessState.drizzleState.accounts[0],
+						'_amt': 0
 					}
+
 				}}
 			/>
 
@@ -67,6 +72,10 @@ const App = props => {
 					'approve':{
 						'spender': drizzleReadinessState.drizzleState.accounts[0],
 						'amount': 0
+					},
+					'transfer':{
+						'_dst': drizzleReadinessState.drizzleState.accounts[0],
+						'_amt': 0
 					}
 				}}
 			/>
@@ -126,9 +135,9 @@ const App = props => {
 				contract='PoolAGOUSD' 
 				callMethods={{
 					'unclaimed_pool_share': {},
+					'unclaimed_pool_collateral': {},
 					'getCollateralToken': {},
 					'pool_ceiling': {},
-					'unclaimed_pool_collateral': {},
 				}}
 				sendMethods={{
 					'mint': {
@@ -173,6 +182,12 @@ const App = props => {
 					'CNUSD': {},
 				}}
 				sendMethods={{
+					'setRefreshCooldown': {
+						'_newCD': 0
+					},
+					'setRatioStep':{
+						'_ratio_step' :0
+					},
 					'toggleEffectiveCollateralRatio': {},
 					'refreshCollateralRatio': {},
 					'toggleCollateralRatio': {},

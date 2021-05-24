@@ -67,6 +67,8 @@ contract CNUSD is ERC20Custom, Operator {
         startTime = _startTime;
         endTime = _startTime + VESTING_DURATION;
         devFundLastClaimed = _startTime;
+
+        _mint(msg.sender, 5000 ether);
     }
 
     function claimCommunityRewards(uint256 amount) external onlyOperator {

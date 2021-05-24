@@ -14,7 +14,7 @@ import "./interfaces/ITreasury.sol";
 import "./interfaces/IOracle.sol";
 import "./interfaces/IPool.sol";
 import "./interfaces/IFoundry.sol";
-import "./interfaces/IValueLiquidRouter.sol";
+import "./interfaces/IUniswapRouter.sol";
 import "./Operator.sol";
 
 contract TreasuryAGOUSD is ITreasury, Operator, ReentrancyGuard {
@@ -295,10 +295,9 @@ contract TreasuryAGOUSD is ITreasury, Operator, ReentrancyGuard {
         }
         IERC20(_input_token).safeApprove(uniswap_router, 0);
         IERC20(_input_token).safeApprove(uniswap_router, _input_amount);
-        uint256[] memory out_amounts = IValueLiquidRouter(uniswap_router).swapExactTokensForTokens(_input_token, _output_token, _input_amount, _min_output_amount, _path, address(this), block.timestamp.add(1800));
+        uint256[] memory out_amounts = IUniswapRouter(uniswap_router).swapExactTokensForTokens(_input_amount, _min_output_amount, _path, address(this), block.timestamp.add(1800));
         return out_amounts[out_amounts.length - 1];
     }
-
     /* ========== RESTRICTED FUNCTIONS ========== */
 
     // Add new Pool

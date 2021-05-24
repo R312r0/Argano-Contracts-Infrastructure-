@@ -18,8 +18,7 @@ const getDateAsText = (_date = new Date()) =>
 
 const appendZeroToLength = (_value, _length) => `${_value}`.padStart(_length, 0)
 
-module.exports.writeAddress = async _instance => {
-    await _instance.deployed()
+module.exports.writeAddress = _instance => {
     let prev = undefined
     try {prev = require('./lastDeployedAddresses.json')}catch (e) {prev = {}}
     prev[_instance.constructor._json.contractName] = _instance.address

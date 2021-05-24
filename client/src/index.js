@@ -7,6 +7,7 @@ import {Drizzle} from "@drizzle/store"
 
 
 // let drizzle know what contracts we want and how to access our test blockchain
+
 const options = {
   contracts: [
     require("./contracts/CNUSD.json"),

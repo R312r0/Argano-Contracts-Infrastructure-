@@ -114,11 +114,7 @@ contract Foundry is ShareWrapper, ReentrancyGuard, Operator {
 
     /* ========== GOVERNANCE ========== */
 
-    function initialize(
-        address _collateral,
-        address _share,
-        address _treasury
-    ) public notInitialized {
+    function initialize(address _collateral, address _share, address _treasury) public notInitialized {
         collateral = _collateral;
         share = _share;
         treasury = _treasury;
@@ -141,18 +137,7 @@ contract Foundry is ShareWrapper, ReentrancyGuard, Operator {
 
     /* ========== VIEW FUNCTIONS ========== */
 
-    function info()
-        public
-        view
-        returns (
-            uint256,
-            uint256,
-            uint256,
-            uint256,
-            uint256,
-            uint256
-        )
-    {
+    function info() public view returns (uint256,uint256,uint256,uint256, uint256,uint256){
         (uint256 _epoch, uint256 _nextEpochPoint, uint256 _epoch_length, uint256 _utilizationRatio) = ITreasury(treasury).epochInfo();
         return (
             _epoch, // current epoch

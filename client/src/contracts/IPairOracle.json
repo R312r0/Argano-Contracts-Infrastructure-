@@ -33,7 +33,7 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.4+commit.c7e474f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amountIn\",\"type\":\"uint256\"}],\"name\":\"consult\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"amountOut\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"update\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IPairOracle.sol\":\"IPairOracle\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":1000},\"remappings\":[]},\"sources\":{\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IPairOracle.sol\":{\"keccak256\":\"0xeb926dc25b3ad6af2b981471bbdddc9eedd76000af795187acd7e5d5884acae7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://7129c127cf83682868135afd0f1581396124f697346581b0fc3ded24478c5295\",\"dweb:/ipfs/QmTsFZuAFUZtBmTboPMZVJYmRhJieSNvjiRL4AfGiVwgMj\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.4+commit.c7e474f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amountIn\",\"type\":\"uint256\"}],\"name\":\"consult\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"amountOut\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"update\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IPairOracle.sol\":\"IPairOracle\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":1000},\"remappings\":[]},\"sources\":{\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IPairOracle.sol\":{\"keccak256\":\"0x98e2cce875f11fad9bf4c0cecee7830116207fc89364a10115f74114c30864c1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://61728a8620bdfde0d3156a735f0f155d807f1e91820a8f3efbc2a9cec5053ad9\",\"dweb:/ipfs/QmW7R4c1MazrVFKBcMvCgZbctpppYr82Wg2FrtPQgtGj6D\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -41,21 +41,21 @@
   "deployedGeneratedSources": [],
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "// SPDX-License-Identifier: MIT\r\n\r\npragma solidity ^0.8.0;\r\npragma experimental ABIEncoderV2;\r\n\r\ninterface IPairOracle {\r\n    function consult(address token, uint256 amountIn) external view returns (uint256 amountOut);\r\n\r\n    function update() external;\r\n}\r\n",
+  "source": "// SPDX-License-Identifier: MIT\r\n\r\npragma solidity ^0.8.0;\r\npragma experimental ABIEncoderV2;\r\n\r\ninterface IPairOracle {\r\n    function consult(address token, uint256 amountIn) external view returns (uint256 amountOut);\r\n    function update() external;\r\n}\r\n",
   "sourcePath": "C:/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IPairOracle.sol",
   "ast": {
     "absolutePath": "/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IPairOracle.sol",
     "exportedSymbols": {
       "IPairOracle": [
-        1163
+        1169
       ]
     },
-    "id": 1164,
+    "id": 1170,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1149,
+        "id": 1155,
         "literals": [
           "solidity",
           "^",
@@ -66,7 +66,7 @@
         "src": "35:23:8"
       },
       {
-        "id": 1150,
+        "id": 1156,
         "literals": [
           "experimental",
           "ABIEncoderV2"
@@ -80,9 +80,9 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 1163,
+        "id": 1169,
         "linearizedBaseContracts": [
-          1163
+          1169
         ],
         "name": "IPairOracle",
         "nameLocation": "107:11:8",
@@ -90,7 +90,7 @@
         "nodes": [
           {
             "functionSelector": "3ddac953",
-            "id": 1159,
+            "id": 1165,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
@@ -98,17 +98,17 @@
             "nameLocation": "135:7:8",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1155,
+              "id": 1161,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1152,
+                  "id": 1158,
                   "mutability": "mutable",
                   "name": "token",
                   "nameLocation": "151:5:8",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1159,
+                  "scope": 1165,
                   "src": "143:13:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -117,7 +117,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 1151,
+                    "id": 1157,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "143:7:8",
@@ -131,12 +131,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 1154,
+                  "id": 1160,
                   "mutability": "mutable",
                   "name": "amountIn",
                   "nameLocation": "166:8:8",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1159,
+                  "scope": 1165,
                   "src": "158:16:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -145,7 +145,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1153,
+                    "id": 1159,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "158:7:8",
@@ -160,17 +160,17 @@
               "src": "142:33:8"
             },
             "returnParameters": {
-              "id": 1158,
+              "id": 1164,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1157,
+                  "id": 1163,
                   "mutability": "mutable",
                   "name": "amountOut",
                   "nameLocation": "207:9:8",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1159,
+                  "scope": 1165,
                   "src": "199:17:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -179,7 +179,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1156,
+                    "id": 1162,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "199:7:8",
@@ -193,7 +193,7 @@
               ],
               "src": "198:19:8"
             },
-            "scope": 1163,
+            "scope": 1169,
             "src": "126:92:8",
             "stateMutability": "view",
             "virtual": false,
@@ -201,52 +201,52 @@
           },
           {
             "functionSelector": "a2e62045",
-            "id": 1162,
+            "id": 1168,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "update",
-            "nameLocation": "235:6:8",
+            "nameLocation": "233:6:8",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1160,
+              "id": 1166,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "241:2:8"
+              "src": "239:2:8"
             },
             "returnParameters": {
-              "id": 1161,
+              "id": 1167,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "252:0:8"
+              "src": "250:0:8"
             },
-            "scope": 1163,
-            "src": "226:27:8",
+            "scope": 1169,
+            "src": "224:27:8",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 1164,
-        "src": "97:159:8",
+        "scope": 1170,
+        "src": "97:157:8",
         "usedErrors": []
       }
     ],
-    "src": "35:223:8"
+    "src": "35:221:8"
   },
   "legacyAST": {
     "absolutePath": "/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IPairOracle.sol",
     "exportedSymbols": {
       "IPairOracle": [
-        1163
+        1169
       ]
     },
-    "id": 1164,
+    "id": 1170,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1149,
+        "id": 1155,
         "literals": [
           "solidity",
           "^",
@@ -257,7 +257,7 @@
         "src": "35:23:8"
       },
       {
-        "id": 1150,
+        "id": 1156,
         "literals": [
           "experimental",
           "ABIEncoderV2"
@@ -271,9 +271,9 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 1163,
+        "id": 1169,
         "linearizedBaseContracts": [
-          1163
+          1169
         ],
         "name": "IPairOracle",
         "nameLocation": "107:11:8",
@@ -281,7 +281,7 @@
         "nodes": [
           {
             "functionSelector": "3ddac953",
-            "id": 1159,
+            "id": 1165,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
@@ -289,17 +289,17 @@
             "nameLocation": "135:7:8",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1155,
+              "id": 1161,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1152,
+                  "id": 1158,
                   "mutability": "mutable",
                   "name": "token",
                   "nameLocation": "151:5:8",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1159,
+                  "scope": 1165,
                   "src": "143:13:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -308,7 +308,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 1151,
+                    "id": 1157,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "143:7:8",
@@ -322,12 +322,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 1154,
+                  "id": 1160,
                   "mutability": "mutable",
                   "name": "amountIn",
                   "nameLocation": "166:8:8",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1159,
+                  "scope": 1165,
                   "src": "158:16:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -336,7 +336,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1153,
+                    "id": 1159,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "158:7:8",
@@ -351,17 +351,17 @@
               "src": "142:33:8"
             },
             "returnParameters": {
-              "id": 1158,
+              "id": 1164,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1157,
+                  "id": 1163,
                   "mutability": "mutable",
                   "name": "amountOut",
                   "nameLocation": "207:9:8",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1159,
+                  "scope": 1165,
                   "src": "199:17:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -370,7 +370,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1156,
+                    "id": 1162,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "199:7:8",
@@ -384,7 +384,7 @@
               ],
               "src": "198:19:8"
             },
-            "scope": 1163,
+            "scope": 1169,
             "src": "126:92:8",
             "stateMutability": "view",
             "virtual": false,
@@ -392,46 +392,46 @@
           },
           {
             "functionSelector": "a2e62045",
-            "id": 1162,
+            "id": 1168,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "update",
-            "nameLocation": "235:6:8",
+            "nameLocation": "233:6:8",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1160,
+              "id": 1166,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "241:2:8"
+              "src": "239:2:8"
             },
             "returnParameters": {
-              "id": 1161,
+              "id": 1167,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "252:0:8"
+              "src": "250:0:8"
             },
-            "scope": 1163,
-            "src": "226:27:8",
+            "scope": 1169,
+            "src": "224:27:8",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 1164,
-        "src": "97:159:8",
+        "scope": 1170,
+        "src": "97:157:8",
         "usedErrors": []
       }
     ],
-    "src": "35:223:8"
+    "src": "35:221:8"
   },
   "compiler": {
     "name": "solc",
     "version": "0.8.4+commit.c7e474f2.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.3.4",
-  "updatedAt": "2021-04-26T15:35:50.550Z",
+  "schemaVersion": "3.4.1",
+  "updatedAt": "2021-05-16T17:08:39.884Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},
