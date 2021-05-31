@@ -1,6 +1,6 @@
 require('dotenv').config()
 const path = require("path")
-const HDWalletProvider = require("truffle-hdwallet-provider")
+const HDWalletProvider = require('@truffle/hdwallet-provider')
 
 // const MainProvider = new HDWalletProvider(process.env["MAIN_NET_PRIVATE_KEY"], "https://mainnet.infura.io/v3/73901322e10c4355bc3f9afac9a3be29");
 // const RinkebyProvider = new HDWalletProvider(process.env.RINKEBY_PRIVATE_KEY, process.env.RINKEBY_INFURA)
@@ -14,7 +14,7 @@ module.exports = {
             settings: {
                 optimizer: {
                     enabled: true,
-                    runs: 1000
+                    runs: 200
                 },
             }
         }
@@ -40,7 +40,8 @@ module.exports = {
             ),
             network_id: 137,
             skipDryRun: true,
-            networkCheckTimeout: 5000
+            networkCheckTimeout: 5000,
+            gas: 20000000
         }
     },
     plugins: [

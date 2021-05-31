@@ -31,6 +31,7 @@ const factory = new web3.eth.Contract(factoryABI, factoryAddress)
 const router = new web3.eth.Contract(routerABI, routerAddress)
 const usdt = new web3.eth.Contract(usdtABI, '0xc2132D05D31c914a87C6611C10748AEb04B58e8F')
 const wmatic = new web3.eth.Contract(wmaticABI, '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270')
+const wmatic_chainlinkAggregator = '0xAB594600376Ec9fD91F8e885dADF0CE036862dE0'
 
 module.exports = async (_deployer, _network, _accounts) => {
     const owner = _accounts[0]   
@@ -48,8 +49,8 @@ module.exports = async (_deployer, _network, _accounts) => {
     await _CNUSD_ins.initialize(owner, owner, startTime)
     await _TreasuryAGOUSD_ins.setShareAddress(_CNUSD_ins.address)
 
-    const _USDTOracle_ins = writeAddress(await _deployer.deploy(USDTOracle))
-    const _WETHOracle_ins = writeAddress(await _deployer.deploy(WETHOracle))
+    const _USDTOracle_ins = writeAddress(await _deployer.deploy(USDTOracle))//all ok
+    // const _WETHOracle_ins = writeAddress(await _deployer.deploy(WETHOracle))
 
     console.log(`sleept for ${(9e4/1000).toFixed(3)} sec...`);await sleep(9e4)
 
@@ -73,12 +74,12 @@ module.exports = async (_deployer, _network, _accounts) => {
 
     await _AGOUSD_ins.approve(routerAddress, _ONE_HUNDRED_THOUSAND_)
     await usdt.methods.approve(routerAddress, _ONE_HUNDRED_THOUSAND_).send({from: owner})
-    await router.methods.addLiquidity(_AGOUSD_ins.address, usdt._address, _ONE_, 1000000, 0, 0, owner, Date.now() + 1000).send({from: owner})
+    await router.methods.addLiquidity(_AGOUSD_ins.address, usdt._address, _ONE_, 2000000, 0, 0, owner, Date.now() + 1000).send({from: owner})
     const agousdUsdtPair = await factory.methods.getPair(_AGOUSD_ins.address, usdt._address).call()
 
     await _CNUSD_ins.approve(routerAddress, _ONE_HUNDRED_THOUSAND_)
     await wmatic.methods.approve(routerAddress, _ONE_HUNDRED_THOUSAND_).send({from: owner})
-    await router.methods.addLiquidity(_CNUSD_ins.address, wmatic._address, _ONE_, _ONE_, 0, 0, owner, Date.now() + 1000).send({from: owner})
+    await router.methods.addLiquidity(_CNUSD_ins.address, wmatic._address, _ONE_, _ONE_.mul(2), 0, 0, owner, Date.now() + 1000).send({from: owner})
     const cnusdWmaticPair = await factory.methods.getPair(_CNUSD_ins.address, wmatic._address).call()
 
     // console.log(c.c.c)
@@ -88,7 +89,7 @@ module.exports = async (_deployer, _network, _accounts) => {
     const _CNUSD_MATIC_ins = writeAddress(await _deployer.deploy(CNUSDWMATICPairOracle, cnusdWmaticPair))
 
     const _AGOUSDOracle_ins = writeAddress(await _deployer.deploy(DollarOracle, _AGOUSD_ins.address, _AGOUSD_USDT_ins.address, _USDTOracle_ins.address))
-    const _CNUSDOracle_ins = writeAddress(await _deployer.deploy(ShareOracle, _CNUSD_ins.address, _CNUSD_MATIC_ins.address, '0xAB594600376Ec9fD91F8e885dADF0CE036862dE0'))
+    const _CNUSDOracle_ins = writeAddress(await _deployer.deploy(ShareOracle, _CNUSD_ins.address, _CNUSD_MATIC_ins.address, wmatic_chainlinkAggregator))
 
     console.log(`sleept for ${(9e4/1000).toFixed(2)} sec...`)
     await sleep(9e4)
@@ -100,6 +101,9 @@ module.exports = async (_deployer, _network, _accounts) => {
     await _TreasuryAGOUSD_ins.toggleEffectiveCollateralRatio()
     await _TreasuryAGOUSD_ins.toggleCollateralRatio()
     await _TreasuryAGOUSD_ins.refreshCollateralRatio()
+
+    // await _AGOUSD_USDT_ins.update()
+    // await _CNUSD_MATIC_ins.update()
 }
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))

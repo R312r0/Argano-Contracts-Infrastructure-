@@ -14,7 +14,7 @@ const router = new web3.eth.Contract(routerABI, routerAddress)
 const lastDeployedAddresses = require('../lastDeployedAddresses.json')
 
 module.exports = async (_deployer, _network, _accounts) => {
-    const collaterall                       = lastDeployedAddresses['Mock_USDT']
+    const collaterall                       = lastDeployedAddresses['USDT']
     const CNUSD                             = lastDeployedAddresses['CNUSD']
     const TreasuryAGOUSD                    = lastDeployedAddresses['TreasuryAGOUSD']
     const USDTOracle                        = lastDeployedAddresses['USDTOracle']

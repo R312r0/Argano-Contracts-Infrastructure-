@@ -11,33 +11,29 @@ import "../interfaces/IPairOracle.sol";
 
 contract DollarOracle is Operator, IOracle {
     using SafeMath for uint256;
-    address public oracleDollarBusd;
-    address public oracleBusdUsd;
+    address public oracleDollarUsdt;
+    address public oracleUsdtUsd;
     address public dollar;
 
     uint256 private constant PRICE_PRECISION = 1e6;
 
-    constructor(
-        address _dollar,
-        address _oracleDollarBusd,
-        address _oracleBusdUsd
-    ){
+    constructor(address _dollar, address _oracleDollarUsdt, address _oracleUsdtUsd){
         dollar = _dollar;
-        oracleBusdUsd = _oracleBusdUsd;
-        oracleDollarBusd = _oracleDollarBusd;
+        oracleUsdtUsd = _oracleUsdtUsd;
+        oracleDollarUsdt = _oracleDollarUsdt;
     }
 
     function consult() external view override returns (uint256) {
-        uint256 _priceBusdUsd = IOracle(oracleBusdUsd).consult();
-        uint256 _priceDollarBusd = IPairOracle(oracleDollarBusd).consult(dollar, PRICE_PRECISION);
-        return _priceBusdUsd.mul(_priceDollarBusd).div(PRICE_PRECISION);
+        uint256 _priceUsdtUsd = IOracle(oracleUsdtUsd).consult();
+        uint256 _priceDollarUsdt = IPairOracle(oracleDollarUsdt).consult(dollar, PRICE_PRECISION);
+        return _priceUsdtUsd.mul(_priceDollarUsdt).div(PRICE_PRECISION);
     }
 
-    function setOracleBusdUsd(address _oracleBusdUsd) external onlyOperator {
-        oracleBusdUsd = _oracleBusdUsd;
+    function setOracleUsdtUsd(address _oracleUsdtUsd) external onlyOperator {
+        oracleUsdtUsd = _oracleUsdtUsd;
     }
 
-    function setOracleDollarBusd(address _oracleDollarBusd) external onlyOperator {
-        oracleDollarBusd = _oracleDollarBusd;
+    function setOracleDollarUsdt(address _oracleDollarUsdt) external onlyOperator {
+        oracleDollarUsdt = _oracleDollarUsdt;
     }
 }

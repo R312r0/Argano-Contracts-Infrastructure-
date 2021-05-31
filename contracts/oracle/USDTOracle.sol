@@ -21,7 +21,7 @@ contract USDTOracle is Operator, IOracle {
         return uint256(_price).mul(PRICE_PRECISION).div(uint256(10)**_decimals);
     }
 
-    function setChainlinkBusdUsd(address _chainlinkUSDTUsd) external onlyOperator {
+    function setChainlinkUsdtUsd(address _chainlinkUSDTUsd) external onlyOperator {
         chainlinkUSDTUsd = _chainlinkUSDTUsd;
     }
 }
