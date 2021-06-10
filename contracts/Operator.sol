@@ -1,5 +1,4 @@
 // SPDX-License-Identifier: MIT
-
 pragma solidity ^0.8.0;
 
 import "./openZeppelin/Context.sol";
@@ -7,7 +6,6 @@ import "./openZeppelin/Ownable.sol";
 
 abstract contract Operator is Context, Ownable {
     address private _operator;
-
     event OperatorTransferred(address indexed previousOperator, address indexed newOperator);
 
     constructor(){

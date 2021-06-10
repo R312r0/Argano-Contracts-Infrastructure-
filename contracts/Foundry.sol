@@ -1,17 +1,335 @@
 // SPDX-License-Identifier: MIT
-
-pragma solidity ^0.8.0;
+pragma solidity 0.8.4;
 pragma experimental ABIEncoderV2;
 
-import "./openZeppelin/IERC20.sol";
-import "./openZeppelin/SafeERC20.sol";
-import "./openZeppelin/ReentrancyGuard.sol";
-import "./openZeppelin/Address.sol";
+library Address {
+    function isContract(address account) internal view returns (bool) {
+        uint256 size;
+        assembly { size := extcodesize(account) }
+        return size > 0;
+    }
 
+    function sendValue(address payable recipient, uint256 amount) internal {
+        require(address(this).balance >= amount, "Address: insufficient balance");
+        (bool success, ) = recipient.call{ value: amount }("");
+        require(success, "Address: unable to send value, recipient may have reverted");
+    }
 
-import "./interfaces/ITreasury.sol";
-import "./interfaces/IOracle.sol";
-import "./Operator.sol";
+    function functionCall(address target, bytes memory data) internal returns (bytes memory) {
+      return functionCall(target, data, "Address: low-level call failed");
+    }
+
+    function functionCall(address target, bytes memory data, string memory errorMessage) internal returns (bytes memory) {
+        return functionCallWithValue(target, data, 0, errorMessage);
+    }
+
+    function functionCallWithValue(address target, bytes memory data, uint256 value) internal returns (bytes memory) {
+        return functionCallWithValue(target, data, value, "Address: low-level call with value failed");
+    }
+
+    function functionCallWithValue(address target, bytes memory data, uint256 value, string memory errorMessage) internal returns (bytes memory) {
+        require(address(this).balance >= value, "Address: insufficient balance for call");
+        require(isContract(target), "Address: call to non-contract");
+        (bool success, bytes memory returndata) = target.call{ value: value }(data);
+        return _verifyCallResult(success, returndata, errorMessage);
+    }
+
+    function functionStaticCall(address target, bytes memory data) internal view returns (bytes memory) {
+        return functionStaticCall(target, data, "Address: low-level static call failed");
+    }
+
+    function functionStaticCall(address target, bytes memory data, string memory errorMessage) internal view returns (bytes memory) {
+        require(isContract(target), "Address: static call to non-contract");
+        (bool success, bytes memory returndata) = target.staticcall(data);
+        return _verifyCallResult(success, returndata, errorMessage);
+    }
+
+    function functionDelegateCall(address target, bytes memory data) internal returns (bytes memory) {
+        return functionDelegateCall(target, data, "Address: low-level delegate call failed");
+    }
+
+    function functionDelegateCall(address target, bytes memory data, string memory errorMessage) internal returns (bytes memory) {
+        require(isContract(target), "Address: delegate call to non-contract");
+        (bool success, bytes memory returndata) = target.delegatecall(data);
+        return _verifyCallResult(success, returndata, errorMessage);
+    }
+
+    function _verifyCallResult(bool success, bytes memory returndata, string memory errorMessage) private pure returns(bytes memory) {
+        if (success) {
+            return returndata;
+        } else {
+            if (returndata.length > 0) {
+                assembly {
+                    let returndata_size := mload(returndata)
+                    revert(add(32, returndata), returndata_size)
+                }
+            } else {
+                revert(errorMessage);
+            }
+        }
+    }
+}
+
+library SafeERC20 {
+  function safeTransfer(IERC20 token, address to, uint256 value) internal{
+    require(token.transfer(to, value));
+  }
+
+  function safeTransferFrom(IERC20 token, address from, address to, uint256 value) internal{
+    require(token.transferFrom(from, to, value));
+  }
+
+  function safeApprove( IERC20 token, address spender, uint256 value) internal{
+    require(token.approve(spender, value));
+  }
+}
+
+library SafeMath {
+  function mul(uint256 a, uint256 b) internal pure returns (uint256 c) {
+    if (a == 0) {return 0;}
+    c = a * b;
+    assert(c / a == b);
+    return c;
+  }
+
+  function div(uint256 a, uint256 b) internal pure returns (uint256) {
+    return a / b;
+  }
+
+  function sub(uint256 a, uint256 b) internal pure returns (uint256) {
+    assert(b <= a);
+    return a - b;
+  }
+
+  function add(uint256 a, uint256 b) internal pure returns (uint256 c) {
+    c = a + b;
+    assert(c >= a);
+    return c;
+  }
+}
+
+interface IOracle {
+    function consult() external view returns (uint256);
+}
+
+interface IEpoch {
+    function epoch() external view returns (uint256);
+
+    function nextEpochPoint() external view returns (uint256);
+}
+
+interface ITreasury is IEpoch {
+    function hasPool(address _address) external view returns (bool);
+
+    function info()
+        external
+        view
+        returns (
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256
+        );
+
+    function epochInfo()
+        external
+        view
+        returns (
+            uint256,
+            uint256,
+            uint256,
+            uint256
+        );
+}
+
+interface IERC20 {
+    function totalSupply() external view returns (uint256);
+    function balanceOf(address account) external view returns (uint256);
+    function transfer(address recipient, uint256 amount) external returns (bool);
+    function allowance(address owner, address spender) external view returns (uint256);
+    function approve(address spender, uint256 amount) external returns (bool);
+    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+    
+    function name() external view returns (string memory);
+    function symbol() external view returns (string memory);
+    function decimals() external view returns (uint8);
+}
+
+abstract contract Context {
+    function _msgSender() internal view virtual returns (address) {
+        return msg.sender;
+    }
+
+    function _msgData() internal view virtual returns (bytes calldata) {
+        this;
+        return msg.data;
+    }
+}
+
+abstract contract Ownable is Context {
+    address private _owner;
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+
+    constructor () {
+        address msgSender = _msgSender();
+        _owner = msgSender;
+        emit OwnershipTransferred(address(0), msgSender);
+    }
+
+    function owner() public view virtual returns (address) {
+        return _owner;
+    }
+
+    modifier onlyOwner() {
+        require(owner() == _msgSender(), "Ownable: caller is not the owner");
+        _;
+    }
+
+    function renounceOwnership() public virtual onlyOwner {
+        emit OwnershipTransferred(_owner, address(0));
+        _owner = address(0);
+    }
+
+    function transferOwnership(address newOwner) public virtual onlyOwner {
+        require(newOwner != address(0), "Ownable: new owner is the zero address");
+        emit OwnershipTransferred(_owner, newOwner);
+        _owner = newOwner;
+    }
+}
+
+abstract contract Operator is Context, Ownable {
+    address private _operator;
+
+    event OperatorTransferred(address indexed previousOperator, address indexed newOperator);
+
+    constructor(){
+        _operator = _msgSender();
+        emit OperatorTransferred(address(0), _operator);
+    }
+
+    function operator() public view returns (address) {
+        return _operator;
+    }
+
+    modifier onlyOperator() {
+        require(_operator == msg.sender, "operator: caller is not the operator");
+        _;
+    }
+
+    function isOperator() public view returns (bool) {
+        return _msgSender() == _operator;
+    }
+
+    function transferOperator(address newOperator_) public onlyOwner {
+        _transferOperator(newOperator_);
+    }
+
+    function _transferOperator(address newOperator_) internal {
+        require(newOperator_ != address(0), "operator: zero address given for new operator");
+        emit OperatorTransferred(address(0), newOperator_);
+        _operator = newOperator_;
+    }
+}
+
+abstract contract ERC20 is IERC20 {
+    using SafeMath for uint256;
+    
+    mapping (address => uint256) private _balances;
+    mapping (address => mapping (address => uint256)) private _allowed;
+    uint256 private _totalSupply;
+
+    function totalSupply() public view override returns (uint256) {
+        return _totalSupply;
+    }
+
+    function balanceOf(address owner) public view override returns (uint256) {
+        return _balances[owner];
+    }
+
+    function allowance(address owner, address spender) public view override returns (uint256){
+        return _allowed[owner][spender];
+    }
+
+    function transfer(address to, uint256 value) public override returns (bool) {
+        require(value <= _balances[msg.sender]);
+        require(to != address(0));
+        _balances[msg.sender] = _balances[msg.sender].sub(value);
+        _balances[to] = _balances[to].add(value);
+        emit Transfer(msg.sender, to, value);
+        return true;
+    }
+
+    function approve(address spender, uint256 value) public override returns (bool) {
+        require(spender != address(0));
+        _allowed[msg.sender][spender] = value;
+        emit Approval(msg.sender, spender, value);
+        return true;
+    }
+
+    function transferFrom(address from, address to, uint256 value) public override returns (bool){
+        require(value <= _balances[from]);
+        require(value <= _allowed[from][msg.sender]);
+        require(to != address(0));
+        _balances[from] = _balances[from].sub(value);
+        _balances[to] = _balances[to].add(value);
+        _allowed[from][msg.sender] = _allowed[from][msg.sender].sub(value);
+        emit Transfer(from, to, value);
+        return true;
+    }
+
+    function increaseAllowance(address spender, uint256 addedValue) public returns (bool){
+        require(spender != address(0));
+        _allowed[msg.sender][spender] = (
+        _allowed[msg.sender][spender].add(addedValue));
+        emit Approval(msg.sender, spender, _allowed[msg.sender][spender]);
+        return true;
+    }
+
+    function decreaseAllowance(address spender, uint256 subtractedValue) public returns (bool){
+        require(spender != address(0));
+        _allowed[msg.sender][spender] = (_allowed[msg.sender][spender].sub(subtractedValue));
+        emit Approval(msg.sender, spender, _allowed[msg.sender][spender]);
+        return true;
+    }
+
+    function _mint(address account, uint256 amount) internal {
+        require(account != address(0));
+        _totalSupply = _totalSupply.add(amount);
+        _balances[account] = _balances[account].add(amount);
+        emit Transfer(address(0), account, amount);
+    }
+
+    function _burn(address account, uint256 amount) internal {
+        require(account != address(0));
+        require(amount <= _balances[account]);
+        _totalSupply = _totalSupply.sub(amount);
+        _balances[account] = _balances[account].sub(amount);
+        emit Transfer(account, address(0), amount);
+    }
+
+    function _burnFrom(address account, uint256 amount) internal {
+        require(amount <= _allowed[account][msg.sender]);
+        _allowed[account][msg.sender] = _allowed[account][msg.sender].sub(amount);
+        _burn(account, amount);
+    }
+}
+
+contract ReentrancyGuard {
+  uint256 private _guardCounter = 1;
+
+  modifier nonReentrant() {
+    _guardCounter += 1;
+    uint256 localCounter = _guardCounter;
+    _;
+    require(localCounter == _guardCounter);
+  }
+}
 
 contract ShareWrapper {
     using SafeMath for uint256;

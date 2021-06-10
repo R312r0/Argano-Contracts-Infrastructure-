@@ -1,0 +1,366 @@
+{
+  "contractName": "IEpoch",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "epoch",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "nextEpochPoint",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.4+commit.c7e474f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"epoch\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"nextEpochPoint\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IEpoch.sol\":\"IEpoch\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IEpoch.sol\":{\"keccak256\":\"0xe5fa8ca80ec7875fcb4c60823093fd2ae064ce5f81d1aa6a0069705bbbe059f6\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6db83fcea90b9e4faef86d29c15d1db1033b0d4bd552702fede4b1ac0a2bcdfb\",\"dweb:/ipfs/QmZVE3AtKHxbqV1TSCzGJ8Wtm4TLDoMgoeLMFqbm33Dhum\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "// SPDX-License-Identifier: MIT\r\n\r\npragma solidity ^0.8.0;\r\n\r\ninterface IEpoch {\r\n    function epoch() external view returns (uint256);\r\n\r\n    function nextEpochPoint() external view returns (uint256);\r\n}\r\n",
+  "sourcePath": "C:\\Users\\PaulMuller\\Documents\\projects\\project_AGO\\contracts\\interfaces\\IEpoch.sol",
+  "ast": {
+    "absolutePath": "/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IEpoch.sol",
+    "exportedSymbols": {
+      "IEpoch": [
+        11234
+      ]
+    },
+    "id": 11235,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 11223,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "35:23:10"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "id": 11234,
+        "linearizedBaseContracts": [
+          11234
+        ],
+        "name": "IEpoch",
+        "nameLocation": "72:6:10",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "functionSelector": "900cf0cf",
+            "id": 11228,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "epoch",
+            "nameLocation": "95:5:10",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 11224,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "100:2:10"
+            },
+            "returnParameters": {
+              "id": 11227,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 11226,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 11228,
+                  "src": "126:7:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 11225,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "126:7:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "125:9:10"
+            },
+            "scope": 11234,
+            "src": "86:49:10",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "c5967c26",
+            "id": 11233,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "nextEpochPoint",
+            "nameLocation": "152:14:10",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 11229,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "166:2:10"
+            },
+            "returnParameters": {
+              "id": 11232,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 11231,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 11233,
+                  "src": "192:7:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 11230,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "192:7:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "191:9:10"
+            },
+            "scope": 11234,
+            "src": "143:58:10",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 11235,
+        "src": "62:142:10",
+        "usedErrors": []
+      }
+    ],
+    "src": "35:171:10"
+  },
+  "legacyAST": {
+    "absolutePath": "/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IEpoch.sol",
+    "exportedSymbols": {
+      "IEpoch": [
+        11234
+      ]
+    },
+    "id": 11235,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 11223,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "35:23:10"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "id": 11234,
+        "linearizedBaseContracts": [
+          11234
+        ],
+        "name": "IEpoch",
+        "nameLocation": "72:6:10",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "functionSelector": "900cf0cf",
+            "id": 11228,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "epoch",
+            "nameLocation": "95:5:10",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 11224,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "100:2:10"
+            },
+            "returnParameters": {
+              "id": 11227,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 11226,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 11228,
+                  "src": "126:7:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 11225,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "126:7:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "125:9:10"
+            },
+            "scope": 11234,
+            "src": "86:49:10",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "c5967c26",
+            "id": 11233,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "nextEpochPoint",
+            "nameLocation": "152:14:10",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 11229,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "166:2:10"
+            },
+            "returnParameters": {
+              "id": 11232,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 11231,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 11233,
+                  "src": "192:7:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 11230,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "192:7:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "191:9:10"
+            },
+            "scope": 11234,
+            "src": "143:58:10",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 11235,
+        "src": "62:142:10",
+        "usedErrors": []
+      }
+    ],
+    "src": "35:171:10"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.4+commit.c7e474f2.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.1",
+  "updatedAt": "2021-06-04T01:28:33.002Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}

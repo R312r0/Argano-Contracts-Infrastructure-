@@ -1,21 +1,442 @@
 // SPDX-License-Identifier: MIT
-
-pragma solidity ^0.8.0;
+pragma solidity 0.8.4;
 pragma experimental ABIEncoderV2;
 
-import "./openZeppelin/SafeMath.sol";
-import "./openZeppelin/IERC20.sol";
-import "./openZeppelin/SafeERC20.sol";
-import "./openZeppelin/Context.sol";
-import "./openZeppelin/ReentrancyGuard.sol";
+library SafeERC20 {
+  function safeTransfer(IERC20 token, address to, uint256 value) internal{
+    require(token.transfer(to, value));
+  }
 
-// import "./ERC20Custom.sol";
-import "./interfaces/ITreasury.sol";
-import "./interfaces/IOracle.sol";
-import "./interfaces/IPool.sol";
-import "./interfaces/IFoundry.sol";
-import "./interfaces/IUniswapRouter.sol";
-import "./Operator.sol";
+  function safeTransferFrom(IERC20 token, address from, address to, uint256 value) internal{
+    require(token.transferFrom(from, to, value));
+  }
+
+  function safeApprove( IERC20 token, address spender, uint256 value) internal{
+    require(token.approve(spender, value));
+  }
+}
+
+library SafeMath {
+  function mul(uint256 a, uint256 b) internal pure returns (uint256 c) {
+    if (a == 0) {return 0;}
+    c = a * b;
+    assert(c / a == b);
+    return c;
+  }
+
+  function div(uint256 a, uint256 b) internal pure returns (uint256) {
+    return a / b;
+  }
+
+  function sub(uint256 a, uint256 b) internal pure returns (uint256) {
+    assert(b <= a);
+    return a - b;
+  }
+
+  function add(uint256 a, uint256 b) internal pure returns (uint256 c) {
+    c = a + b;
+    assert(c >= a);
+    return c;
+  }
+}
+
+interface IUniswapRouter{
+    function factory() external pure returns (address);
+    function WETH() external pure returns (address);
+
+    function addLiquidity(
+        address tokenA,
+        address tokenB,
+        uint amountADesired,
+        uint amountBDesired,
+        uint amountAMin,
+        uint amountBMin,
+        address to,
+        uint deadline
+    ) external returns (uint amountA, uint amountB, uint liquidity);
+    function addLiquidityETH(
+        address token,
+        uint amountTokenDesired,
+        uint amountTokenMin,
+        uint amountETHMin,
+        address to,
+        uint deadline
+    ) external payable returns (uint amountToken, uint amountETH, uint liquidity);
+    function removeLiquidity(
+        address tokenA,
+        address tokenB,
+        uint liquidity,
+        uint amountAMin,
+        uint amountBMin,
+        address to,
+        uint deadline
+    ) external returns (uint amountA, uint amountB);
+    function removeLiquidityETH(
+        address token,
+        uint liquidity,
+        uint amountTokenMin,
+        uint amountETHMin,
+        address to,
+        uint deadline
+    ) external returns (uint amountToken, uint amountETH);
+    function removeLiquidityWithPermit(
+        address tokenA,
+        address tokenB,
+        uint liquidity,
+        uint amountAMin,
+        uint amountBMin,
+        address to,
+        uint deadline,
+        bool approveMax, uint8 v, bytes32 r, bytes32 s
+    ) external returns (uint amountA, uint amountB);
+    function removeLiquidityETHWithPermit(
+        address token,
+        uint liquidity,
+        uint amountTokenMin,
+        uint amountETHMin,
+        address to,
+        uint deadline,
+        bool approveMax, uint8 v, bytes32 r, bytes32 s
+    ) external returns (uint amountToken, uint amountETH);
+    function swapExactTokensForTokens(
+        uint amountIn,
+        uint amountOutMin,
+        address[] calldata path,
+        address to,
+        uint deadline
+    ) external returns (uint[] memory amounts);
+    function swapTokensForExactTokens(
+        uint amountOut,
+        uint amountInMax,
+        address[] calldata path,
+        address to,
+        uint deadline
+    ) external returns (uint[] memory amounts);
+    function swapExactETHForTokens(uint amountOutMin, address[] calldata path, address to, uint deadline)
+        external
+        payable
+        returns (uint[] memory amounts);
+    function swapTokensForExactETH(uint amountOut, uint amountInMax, address[] calldata path, address to, uint deadline)
+        external
+        returns (uint[] memory amounts);
+    function swapExactTokensForETH(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline)
+        external
+        returns (uint[] memory amounts);
+    function swapETHForExactTokens(uint amountOut, address[] calldata path, address to, uint deadline)
+        external
+        payable
+        returns (uint[] memory amounts);
+
+    function quote(uint amountA, uint reserveA, uint reserveB) external pure returns (uint amountB);
+    function getAmountOut(uint amountIn, uint reserveIn, uint reserveOut) external pure returns (uint amountOut);
+    function getAmountIn(uint amountOut, uint reserveIn, uint reserveOut) external pure returns (uint amountIn);
+    function getAmountsOut(uint amountIn, address[] calldata path) external view returns (uint[] memory amounts);
+    function getAmountsIn(uint amountOut, address[] calldata path) external view returns (uint[] memory amounts);
+    function removeLiquidityETHSupportingFeeOnTransferTokens(
+        address token,
+        uint liquidity,
+        uint amountTokenMin,
+        uint amountETHMin,
+        address to,
+        uint deadline
+    ) external returns (uint amountETH);
+    function removeLiquidityETHWithPermitSupportingFeeOnTransferTokens(
+        address token,
+        uint liquidity,
+        uint amountTokenMin,
+        uint amountETHMin,
+        address to,
+        uint deadline,
+        bool approveMax, uint8 v, bytes32 r, bytes32 s
+    ) external returns (uint amountETH);
+
+    function swapExactTokensForTokensSupportingFeeOnTransferTokens(
+        uint amountIn,
+        uint amountOutMin,
+        address[] calldata path,
+        address to,
+        uint deadline
+    ) external;
+    function swapExactETHForTokensSupportingFeeOnTransferTokens(
+        uint amountOutMin,
+        address[] calldata path,
+        address to,
+        uint deadline
+    ) external payable;
+    function swapExactTokensForETHSupportingFeeOnTransferTokens(
+        uint amountIn,
+        uint amountOutMin,
+        address[] calldata path,
+        address to,
+        uint deadline
+    ) external;
+}
+
+interface IFoundry {
+    function balanceOf(address _director) external view returns (uint256);
+
+    function earned(address _director) external view returns (uint256);
+
+    function canWithdraw(address _director) external view returns (bool);
+
+    function canClaimReward(address _director) external view returns (bool);
+
+    function epoch() external view returns (uint256);
+
+    function nextEpochPoint() external view returns (uint256);
+
+    function getDollarPrice() external view returns (uint256);
+
+    function setOperator(address _operator) external;
+
+    function setLockUp(uint256 _withdrawLockupEpochs, uint256 _rewardLockupEpochs) external;
+
+    function stake(uint256 _amount) external;
+
+    function withdraw(uint256 _amount) external;
+
+    function exit() external;
+
+    function claimReward() external;
+
+    function allocateSeigniorage(uint256 _amount) external;
+}
+
+interface IPool {
+    function collateralDollarBalance() external view returns (uint256);
+
+    function migrate(address _new_pool) external;
+
+    function transferCollateralToTreasury(uint256 amount) external;
+
+    function getCollateralPrice() external view returns (uint256);
+
+    function getCollateralToken() external view returns (address);
+}
+
+interface IOracle {
+    function consult() external view returns (uint256);
+}
+
+interface IEpoch {
+    function epoch() external view returns (uint256);
+
+    function nextEpochPoint() external view returns (uint256);
+}
+
+interface ITreasury is IEpoch {
+    function hasPool(address _address) external view returns (bool);
+
+    function info()
+        external
+        view
+        returns (
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256
+        );
+
+    function epochInfo()
+        external
+        view
+        returns (
+            uint256,
+            uint256,
+            uint256,
+            uint256
+        );
+}
+
+interface IERC20 {
+    function totalSupply() external view returns (uint256);
+    function balanceOf(address account) external view returns (uint256);
+    function transfer(address recipient, uint256 amount) external returns (bool);
+    function allowance(address owner, address spender) external view returns (uint256);
+    function approve(address spender, uint256 amount) external returns (bool);
+    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+    
+    function name() external view returns (string memory);
+    function symbol() external view returns (string memory);
+    function decimals() external view returns (uint8);
+}
+
+abstract contract Context {
+    function _msgSender() internal view virtual returns (address) {
+        return msg.sender;
+    }
+
+    function _msgData() internal view virtual returns (bytes calldata) {
+        this;
+        return msg.data;
+    }
+}
+
+abstract contract Ownable is Context {
+    address private _owner;
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+
+    constructor () {
+        address msgSender = _msgSender();
+        _owner = msgSender;
+        emit OwnershipTransferred(address(0), msgSender);
+    }
+
+    function owner() public view virtual returns (address) {
+        return _owner;
+    }
+
+    modifier onlyOwner() {
+        require(owner() == _msgSender(), "Ownable: caller is not the owner");
+        _;
+    }
+
+    function renounceOwnership() public virtual onlyOwner {
+        emit OwnershipTransferred(_owner, address(0));
+        _owner = address(0);
+    }
+
+    function transferOwnership(address newOwner) public virtual onlyOwner {
+        require(newOwner != address(0), "Ownable: new owner is the zero address");
+        emit OwnershipTransferred(_owner, newOwner);
+        _owner = newOwner;
+    }
+}
+
+abstract contract Operator is Context, Ownable {
+    address private _operator;
+
+    event OperatorTransferred(address indexed previousOperator, address indexed newOperator);
+
+    constructor(){
+        _operator = _msgSender();
+        emit OperatorTransferred(address(0), _operator);
+    }
+
+    function operator() public view returns (address) {
+        return _operator;
+    }
+
+    modifier onlyOperator() {
+        require(_operator == msg.sender, "operator: caller is not the operator");
+        _;
+    }
+
+    function isOperator() public view returns (bool) {
+        return _msgSender() == _operator;
+    }
+
+    function transferOperator(address newOperator_) public onlyOwner {
+        _transferOperator(newOperator_);
+    }
+
+    function _transferOperator(address newOperator_) internal {
+        require(newOperator_ != address(0), "operator: zero address given for new operator");
+        emit OperatorTransferred(address(0), newOperator_);
+        _operator = newOperator_;
+    }
+}
+
+contract ReentrancyGuard {
+  uint256 private _guardCounter = 1;
+
+  modifier nonReentrant() {
+    _guardCounter += 1;
+    uint256 localCounter = _guardCounter;
+    _;
+    require(localCounter == _guardCounter);
+  }
+}
+
+abstract contract ERC20 is IERC20 {
+    using SafeMath for uint256;
+    
+    mapping (address => uint256) private _balances;
+    mapping (address => mapping (address => uint256)) private _allowed;
+    uint256 private _totalSupply;
+
+    function totalSupply() public view override returns (uint256) {
+        return _totalSupply;
+    }
+
+    function balanceOf(address owner) public view override returns (uint256) {
+        return _balances[owner];
+    }
+
+    function allowance(address owner, address spender) public view override returns (uint256){
+        return _allowed[owner][spender];
+    }
+
+    function transfer(address to, uint256 value) public override returns (bool) {
+        require(value <= _balances[msg.sender]);
+        require(to != address(0));
+        _balances[msg.sender] = _balances[msg.sender].sub(value);
+        _balances[to] = _balances[to].add(value);
+        emit Transfer(msg.sender, to, value);
+        return true;
+    }
+
+    function approve(address spender, uint256 value) public override returns (bool) {
+        require(spender != address(0));
+        _allowed[msg.sender][spender] = value;
+        emit Approval(msg.sender, spender, value);
+        return true;
+    }
+
+    function transferFrom(address from, address to, uint256 value) public override returns (bool){
+        require(value <= _balances[from]);
+        require(value <= _allowed[from][msg.sender]);
+        require(to != address(0));
+        _balances[from] = _balances[from].sub(value);
+        _balances[to] = _balances[to].add(value);
+        _allowed[from][msg.sender] = _allowed[from][msg.sender].sub(value);
+        emit Transfer(from, to, value);
+        return true;
+    }
+
+    function increaseAllowance(address spender, uint256 addedValue) public returns (bool){
+        require(spender != address(0));
+        _allowed[msg.sender][spender] = (
+        _allowed[msg.sender][spender].add(addedValue));
+        emit Approval(msg.sender, spender, _allowed[msg.sender][spender]);
+        return true;
+    }
+
+    function decreaseAllowance(address spender, uint256 subtractedValue) public returns (bool){
+        require(spender != address(0));
+        _allowed[msg.sender][spender] = (_allowed[msg.sender][spender].sub(subtractedValue));
+        emit Approval(msg.sender, spender, _allowed[msg.sender][spender]);
+        return true;
+    }
+
+    function _mint(address account, uint256 amount) internal {
+        require(account != address(0));
+        _totalSupply = _totalSupply.add(amount);
+        _balances[account] = _balances[account].add(amount);
+        emit Transfer(address(0), account, amount);
+    }
+
+    function _burn(address account, uint256 amount) internal {
+        require(account != address(0));
+        require(amount <= _balances[account]);
+        _totalSupply = _totalSupply.sub(amount);
+        _balances[account] = _balances[account].sub(amount);
+        emit Transfer(account, address(0), amount);
+    }
+
+    function _burnFrom(address account, uint256 amount) internal {
+        require(amount <= _allowed[account][msg.sender]);
+        _allowed[account][msg.sender] = _allowed[account][msg.sender].sub(amount);
+        _burn(account, amount);
+    }
+}
+
 
 contract TreasuryAGOUSD is ITreasury, Operator, ReentrancyGuard {
     using SafeMath for uint256;
@@ -62,8 +483,8 @@ contract TreasuryAGOUSD is ITreasury, Operator, ReentrancyGuard {
 
     // uniswap
     address public uniswap_router;
-    address public uniswap_pair_WETH_USDT;
-    address public uniswap_pair_CNUSD_WETH;
+    address public uniswap_pair_WMATIC_USDT;
+    address public uniswap_pair_CNUSD_WMATIC;
 
     // foundry
     bool public initialized = false;
@@ -279,19 +700,18 @@ contract TreasuryAGOUSD is ITreasury, Operator, ReentrancyGuard {
     // SWAP tokens using uniswap
     function _swap(
         address _input_token,
-        address _output_token,
         uint256 _input_amount,
         uint256 _min_output_amount
     ) internal returns (uint256) {
-        require(uniswap_router != address(0) && uniswap_pair_CNUSD_WETH != address(0) && uniswap_pair_WETH_USDT != address(0), "!uniswap");
+        require(uniswap_router != address(0) && uniswap_pair_CNUSD_WMATIC != address(0) && uniswap_pair_WMATIC_USDT != address(0), "!uniswap");
         if (_input_amount == 0) return 0;
         address[] memory _path = new address[](2);
         if (_input_token == CNUSD) {
-            _path[0] = uniswap_pair_CNUSD_WETH;
-            _path[1] = uniswap_pair_WETH_USDT;
+            _path[0] = uniswap_pair_CNUSD_WMATIC;
+            _path[1] = uniswap_pair_WMATIC_USDT;
         } else {
-            _path[0] = uniswap_pair_WETH_USDT;
-            _path[1] = uniswap_pair_CNUSD_WETH;
+            _path[0] = uniswap_pair_WMATIC_USDT;
+            _path[1] = uniswap_pair_CNUSD_WMATIC;
         }
         IERC20(_input_token).safeApprove(uniswap_router, 0);
         IERC20(_input_token).safeApprove(uniswap_router, _input_amount);
@@ -331,7 +751,7 @@ contract TreasuryAGOUSD is ITreasury, Operator, ReentrancyGuard {
         uint256 _collateral_amount_sell = _collateral_value.mul(PRICE_PRECISION).div(_collateral_price);
         require(IERC20(rebalancing_pool_collateral).balanceOf(rebalancing_pool) > _collateral_amount_sell, "insufficentPoolBalance");
         IPool(rebalancing_pool).transferCollateralToTreasury(_collateral_amount_sell); // Transfer collateral from pool to treasury
-        uint256 out_share_amount = _swap(rebalancing_pool_collateral, CNUSD, _collateral_amount_sell, _min_share_amount);
+        uint256 out_share_amount = _swap(rebalancing_pool_collateral, _collateral_amount_sell, _min_share_amount);
         emit BoughtBack(_collateral_value, _collateral_amount_sell, out_share_amount);
     }
 
@@ -343,7 +763,7 @@ contract TreasuryAGOUSD is ITreasury, Operator, ReentrancyGuard {
         require(_min_collateral_amount <= _deficit_collateral_value, ">deficit");
         uint256 _share_balance = IERC20(CNUSD).balanceOf(address(this));
         require(_share_amount <= _share_balance, ">shareBalance");
-        uint256 out_collateral_amount = _swap(CNUSD, rebalancing_pool_collateral, _share_amount, _min_collateral_amount);
+        uint256 out_collateral_amount = _swap(CNUSD, _share_amount, _min_collateral_amount);
         uint256 _collateral_balance = IERC20(rebalancing_pool_collateral).balanceOf(address(this));
         if (_collateral_balance > 0) {
             IERC20(rebalancing_pool_collateral).safeTransfer(rebalancing_pool, _collateral_balance); // Transfer collateral from Treasury to Pool
@@ -435,12 +855,12 @@ contract TreasuryAGOUSD is ITreasury, Operator, ReentrancyGuard {
 
     function setUniswapParams(
         address _uniswap_router,
-        address _uniswap_pair_CNUSD_WETH,
-        address _uniswap_pair_WETH_USDT
+        address _uniswap_pair_CNUSD_WMATIC,
+        address _uniswap_pair_WMATIC_USDT
     ) public onlyOperator {
         uniswap_router = _uniswap_router;
-        uniswap_pair_CNUSD_WETH = _uniswap_pair_CNUSD_WETH;
-        uniswap_pair_WETH_USDT = _uniswap_pair_WETH_USDT;
+        uniswap_pair_CNUSD_WMATIC = _uniswap_pair_CNUSD_WMATIC;
+        uniswap_pair_WMATIC_USDT = _uniswap_pair_WMATIC_USDT;
     }
 
     function setRebalancePool(address _rebalance_pool) public onlyOperator {
