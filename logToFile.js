@@ -26,3 +26,12 @@ module.exports.writeAddress = _instance => {
     
     return _instance
 }
+
+module.exports.writeAddress_raw = (_address, _name) => {
+    let prev = undefined
+    try {prev = require('./lastDeployedAddresses.json')}catch (e) {prev = {}}
+    prev[_name] = _address
+    require('fs').writeFileSync(`./lastDeployedAddresses.json`, JSON.stringify(prev, null, 4), () => console.log(`${_name}@${_address} stored!`))
+    
+    return _address
+}

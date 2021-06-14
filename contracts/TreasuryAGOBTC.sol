@@ -438,7 +438,7 @@ abstract contract ERC20 is IERC20 {
 }
 
 
-contract TreasuryAGOUSD is ITreasury, Operator, ReentrancyGuard {
+contract TreasuryAGOBTC is ITreasury, Operator, ReentrancyGuard {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 

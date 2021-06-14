@@ -363,7 +363,7 @@ contract ShareWrapper {
     }
 }
 
-contract Foundry is ShareWrapper, ReentrancyGuard, Operator {
+contract FoundryBTC is ShareWrapper, ReentrancyGuard, Operator {
     using SafeERC20 for IERC20;
     using Address for address;
     using SafeMath for uint256;

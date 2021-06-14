@@ -123,19 +123,19 @@ interface AggregatorV3Interface {
     );
 }
 
-contract USDTOracle is Operator{
+contract MATICOracle is Operator{
     using SafeMath for uint256;
-    address public chainlinkUSDTUsd = 0x0A6513e40db6EB1b165753AD52E80663aeA50545;
+    address public chainlinkMATICUsd = 0xAB594600376Ec9fD91F8e885dADF0CE036862dE0;//matic-usd chainlink price feed on polygon
     uint256 private constant PRICE_PRECISION = 1e6;
 
     function consult() external view returns (uint256) {
-        AggregatorV3Interface _priceFeed = AggregatorV3Interface(chainlinkUSDTUsd);
+        AggregatorV3Interface _priceFeed = AggregatorV3Interface(chainlinkMATICUsd);
         (, int256 _price, , , ) = _priceFeed.latestRoundData();
         uint8 _decimals = _priceFeed.decimals();
         return uint256(_price).mul(PRICE_PRECISION).div(uint256(10)**_decimals);
     }
 
-    function setChainlinkUsdtUsd(address _chainlinkUSDTUsd) external onlyOperator {
-        chainlinkUSDTUsd = _chainlinkUSDTUsd;
+    function setChainlinkMATICUsd(address _chainlinkMATICUsd) external onlyOperator {
+        chainlinkMATICUsd = _chainlinkMATICUsd;
     }
 }
