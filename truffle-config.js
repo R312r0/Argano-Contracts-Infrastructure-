@@ -36,7 +36,7 @@ module.exports = {
         polygon: {
             provider: new HDWalletProvider(
                 process.env.RINKEBY_PRIVATE_KEY,
-                'https://rpc-mainnet.maticvigil.com/v1/64b99315d4c64be57564944e982966a4e5a17d17'
+                'https://rpc-mainnet.maticvigil.com/v1/64b99315d4c64be57564944e982966a4e5a17d17'//'https://rpc-mainnet.maticvigil.com/v1/64b99315d4c64be57564944e982966a4e5a17d17'
             ),
             network_id: 137,
             skipDryRun: true,
@@ -48,6 +48,6 @@ module.exports = {
         'truffle-plugin-verify'
     ],
     api_keys: {
-        etherscan: process.env.ETHERSCAN_API_KEY_PRO
+        etherscan: process.env.POLYSCAN_API_KEY//ETHERSCAN_API_KEY_PRO
     }
 }
