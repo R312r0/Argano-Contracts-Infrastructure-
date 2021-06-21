@@ -149,7 +149,6 @@ interface IUniswapRouter{
         uint deadline,
         bool approveMax, uint8 v, bytes32 r, bytes32 s
     ) external returns (uint amountETH);
-
     function swapExactTokensForTokensSupportingFeeOnTransferTokens(
         uint amountIn,
         uint amountOutMin,
@@ -174,43 +173,26 @@ interface IUniswapRouter{
 
 interface IFoundry {
     function balanceOf(address _director) external view returns (uint256);
-
     function earned(address _director) external view returns (uint256);
-
     function canWithdraw(address _director) external view returns (bool);
-
     function canClaimReward(address _director) external view returns (bool);
-
     function epoch() external view returns (uint256);
-
     function nextEpochPoint() external view returns (uint256);
-
     function getDollarPrice() external view returns (uint256);
-
     function setOperator(address _operator) external;
-
     function setLockUp(uint256 _withdrawLockupEpochs, uint256 _rewardLockupEpochs) external;
-
     function stake(uint256 _amount) external;
-
     function withdraw(uint256 _amount) external;
-
     function exit() external;
-
     function claimReward() external;
-
     function allocateSeigniorage(uint256 _amount) external;
 }
 
 interface IPool {
     function collateralDollarBalance() external view returns (uint256);
-
     function migrate(address _new_pool) external;
-
     function transferCollateralToTreasury(uint256 amount) external;
-
     function getCollateralPrice() external view returns (uint256);
-
     function getCollateralToken() external view returns (address);
 }
 
@@ -220,7 +202,6 @@ interface IOracle {
 
 interface IEpoch {
     function epoch() external view returns (uint256);
-
     function nextEpochPoint() external view returns (uint256);
 }
 
@@ -438,7 +419,7 @@ abstract contract ERC20 is IERC20 {
 }
 
 
-contract TreasuryAGOBTC is ITreasury, Operator, ReentrancyGuard {
+contract Treasury is ITreasury, Operator, ReentrancyGuard {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
@@ -447,6 +428,8 @@ contract TreasuryAGOBTC is ITreasury, Operator, ReentrancyGuard {
 
     address public AGOUSD;
     address public CNUSD;
+    address public AGO;
+
     address public strategist;
 
     bool public migrated = false;
@@ -554,7 +537,7 @@ contract TreasuryAGOBTC is ITreasury, Operator, ReentrancyGuard {
         price_target = 1000000; // = $1. (6 decimals of precision). Collateral ratio will adjust according to the $1 price target at genesis
         price_band = 5000;
         redemption_fee = 4000;
-        minting_fee = 3000;
+        minting_fee = 3000; 
     }
 
     function initialize(uint256 _startTime, uint256 _epoch_length) external onlyOperator {
@@ -587,6 +570,13 @@ contract TreasuryAGOBTC is ITreasury, Operator, ReentrancyGuard {
         return _epoch;
     }
 
+    function redemption_fee_adjusted() public view returns (uint256) {
+        uint256 _redemption_fee_adjusted = redemption_fee;
+        if (AGO == address(0)) return _redemption_fee_adjusted;
+        if (IERC20(AGO).balanceOf(tx.origin) > 1 * IERC20(AGO).decimals()) _redemption_fee_adjusted = redemption_fee.div(2);
+        return _redemption_fee_adjusted;
+    }
+
     function info()
         external
         view
@@ -602,7 +592,7 @@ contract TreasuryAGOBTC is ITreasury, Operator, ReentrancyGuard {
             uint256
         )
     {
-        return (dollarPrice(), sharePrice(), IERC20(AGOUSD).totalSupply(), target_collateral_ratio, effective_collateral_ratio, globalCollateralValue(), minting_fee, redemption_fee);
+        return (dollarPrice(), sharePrice(), IERC20(AGOUSD).totalSupply(), target_collateral_ratio, effective_collateral_ratio, globalCollateralValue(), minting_fee, redemption_fee_adjusted());
     }
 
     function epochInfo()
@@ -847,6 +837,10 @@ contract TreasuryAGOBTC is ITreasury, Operator, ReentrancyGuard {
 
     function setShareAddress(address _CNUSD) public onlyOperator {
         CNUSD = _CNUSD;
+    }
+
+    function setGovTokenAddress(address _AGO) public onlyOperator {
+        AGO = _AGO;
     }
 
     function setStrategist(address _strategist) external onlyOperator {

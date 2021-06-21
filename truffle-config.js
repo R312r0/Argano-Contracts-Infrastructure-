@@ -6,7 +6,7 @@ const HDWalletProvider = require('@truffle/hdwallet-provider')
 // const RinkebyProvider = new HDWalletProvider(process.env.RINKEBY_PRIVATE_KEY, process.env.RINKEBY_INFURA)
 
 module.exports = {
-    contracts_build_directory: path.join(__dirname, "client/src/contracts"),
+    contracts_build_directory: path.join(__dirname, "./contracts"),
     compilers: {
         solc: {
             version: "0.8.4",

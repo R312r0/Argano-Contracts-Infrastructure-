@@ -288,7 +288,7 @@ contract ReentrancyGuard {
 }
 
 
-contract PoolAGOBTC is Operator, ReentrancyGuard, IPool {
+contract Pool is Operator, ReentrancyGuard, IPool {
     using SafeMath for uint256;
     using SafeERC20 for ERC20;
 
