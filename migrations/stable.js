@@ -17,8 +17,8 @@ const a_wmatic_chainlinkAggregator  = '0xAB594600376Ec9fD91F8e885dADF0CE036862dE
 const a_factory                     = '0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32'//poly/quickswap
 const a_router                      = '0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff'//poly/quickswap
 
-const AGOUSD                        = artifacts.require('AGOUSD.sol')
-const CNUSD                         = artifacts.require('CNUSD.sol')
+const Dollar                        = artifacts.require('Dollar.sol')
+const Share                         = artifacts.require('Share.sol')
 const Pool                          = artifacts.require('Pool.sol')
 const Treasury                      = artifacts.require('Treasury.sol')
 const DollarOracle                  = artifacts.require('DollarOracle.sol')
@@ -28,28 +28,28 @@ const CNUSDWMATICPairOracle         = artifacts.require('CNUSDWMATICPairOracle.s
 const Foundry                       = artifacts.require('Foundry.sol')
 // const MATICOracle               = artifacts.require('MATICOracle.sol')
 
-const web3                          = AGOUSD.interfaceAdapter.web3
+const web3                          = Dollar.interfaceAdapter.web3
 const factory                       = new web3.eth.Contract(require('../factoryABI.json'),   a_factory)
 const router                        = new web3.eth.Contract(require('../routerABI.json'),    a_router)
 const usdt                          = new web3.eth.Contract(require('../usdtABI.json'),      a_usdt)
 const wmatic                        = new web3.eth.Contract(require('../wmaticABI.json'),    a_wmatic)
 
     
-const AGOBTC                        = artifacts.require('AGOBTC.sol')
-const CNBTC                         = artifacts.require('CNBTC.sol')
-const TreasuryAGOBTC                = artifacts.require('TreasuryAGOBTC.sol')
-// const PoolAGOBTC                    = artifacts.require('PoolAGOBTC.sol')
-const AGOBTCWBTCPairOracle          = artifacts.require('AGOBTCWBTCPairOracle.sol')
-const CNBTCWMATICPairOracle         = artifacts.require('CNBTCWMATICPairOracle.sol')
-const Foundry                       = artifacts.require('Foundry.sol')
-const FoundryBTC                    = artifacts.require('FoundryBTC.sol')
+// const AGOBTC                        = artifacts.require('AGOBTC.sol')
+// const CNBTC                         = artifacts.require('CNBTC.sol')
+// // const TreasuryAGOBTC                = artifacts.require('TreasuryAGOBTC.sol')
+// // const PoolAGOBTC                    = artifacts.require('PoolAGOBTC.sol')
+// const AGOBTCWBTCPairOracle          = artifacts.require('AGOBTCWBTCPairOracle.sol')
+// const CNBTCWMATICPairOracle         = artifacts.require('CNBTCWMATICPairOracle.sol')
+// // const Foundry                       = artifacts.require('Foundry.sol')
+// const FoundryBTC                    = artifacts.require('FoundryBTC.sol')
 
-const a_wmatic_wbtc                 = '0xdc9232e2df177d7a12fdff6ecbab114e2231198d'//quickswap pair
-const a_wbtc                        = '0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6'
-const a_wbtc_chainlinkAggregator    = '0xDE31F8bFBD8c84b5360CFACCa3539B938dd78ae6'
-const a_WBTC_oracle                 = '0x8F4264BcA942aF1C01faa2a29b6EaC3f7b311105'
+// const a_wmatic_wbtc                 = '0xdc9232e2df177d7a12fdff6ecbab114e2231198d'//quickswap pair
+// const a_wbtc                        = '0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6'
+// const a_wbtc_chainlinkAggregator    = '0xDE31F8bFBD8c84b5360CFACCa3539B938dd78ae6'
+// const a_WBTC_oracle                 = '0x8F4264BcA942aF1C01faa2a29b6EaC3f7b311105'
 
-const wbtc                          = new web3.eth.Contract(require('../usdtABI.json'),      a_wbtc)
+// const wbtc                          = new web3.eth.Contract(require('../usdtABI.json'),      a_wbtc)
 
 
 module.exports = async (_deployer, _network, _accounts) => {
@@ -57,8 +57,8 @@ module.exports = async (_deployer, _network, _accounts) => {
     
     let i_Treasury = undefined
     await _deployer.deploy(Treasury).then(async i => {i_Treasury = save(i)})
-    const i_AGOUSD  = save(await _deployer.deploy(AGOUSD, 'Argano Dollar token',       'AGOUSD',   i_Treasury.address))
-    const i_CNUSD   = save(await _deployer.deploy(CNUSD,  'Catena Dollar share token', 'CNUSD',    i_Treasury.address))
+    const i_AGOUSD  = save(await _deployer.deploy(Dollar, 'Argano Dollar token',       'Dollar',   i_Treasury.address))
+    const i_CNUSD   = save(await _deployer.deploy(Share,  'Catena Dollar share token', 'Share',    i_Treasury.address))
 
     await i_AGOUSD.initialize()
     await i_CNUSD.initialize(owner, owner, startTime)
@@ -66,20 +66,20 @@ module.exports = async (_deployer, _network, _accounts) => {
     await i_Treasury.setDollarAddress(i_AGOUSD.address)
     await i_Treasury.setShareAddress(i_CNUSD.address)
 
-    console.log(`sleept for ${(9e4/1000).toFixed(3)} sec...`);await sleep(9e4)
+    // console.log(`sleept for ${(9e4/1000).toFixed(3)} sec...`);await sleep(9e4)
 
     const i_Pool = save(await _deployer.deploy(Pool, 
         i_AGOUSD.address,
         i_CNUSD.address,
         a_usdt,
         i_Treasury.address,
-        _ONE_THOUSAND_.mul(5000000).toHexString()//pool celling 5m AGOUSD
+        _ONE_THOUSAND_.mul(5000000).toHexString()//pool celling 5m Dollar
     ))
     
     await i_Treasury.addPool(i_Pool.address)
     await i_Pool.setOracle(a_usdt_oracle)
              
-    console.log(`sleept for ${(9e4/1000).toFixed(3)} sec...`);await sleep(9e4)
+    // console.log(`sleept for ${(9e4/1000).toFixed(3)} sec...`);await sleep(9e4)
 
     // await i_AGOUSD.approve(a_router, _ONE_HUNDRED_THOUSAND_)
     // await usdt.methods.approve(a_router, _ONE_HUNDRED_THOUSAND_).send({from: owner})
@@ -98,7 +98,7 @@ module.exports = async (_deployer, _network, _accounts) => {
     const i_AGOUSDOracle = save(await _deployer.deploy(DollarOracle, i_AGOUSD.address, i_AGOUSDUSDTPairOracle.address, a_usdt_chainlinkAggregator))
     const i_CNUSDOracle  = save(await _deployer.deploy(ShareOracle,  i_CNUSD.address,  i_CNUSDWMATICPairOracle.address, a_wmatic_chainlinkAggregator))
 
-    console.log(`sleept for ${(9e4/1000).toFixed(2)} sec...`);await sleep(6e4)
+    // console.log(`sleept for ${(9e4/1000).toFixed(2)} sec...`);await sleep(6e4)
     
     // await i_Treasury.setOracleDollar(i_AGOUSDOracle.address)
     // await i_Treasury.setOracleShare(i_CNUSDOracle.address)
@@ -139,7 +139,7 @@ module.exports = async (_deployer, _network, _accounts) => {
     //     i_CNBTC.address,
     //     a_wbtc,
     //     i_TreasuryAGOBTC.address,
-    //     _ONE_THOUSAND_.mul(5000000).toHexString()//pool celling 5m AGOUSD
+    //     _ONE_THOUSAND_.mul(5000000).toHexString()//pool celling 5m Dollar
     // ))
     
     // await i_TreasuryAGOBTC.addPool(i_PoolAGOBTC.address)

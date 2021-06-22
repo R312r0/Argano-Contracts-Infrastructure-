@@ -381,7 +381,7 @@ contract CNUSD is ERC20Custom, Operator {
 }
 
 
-contract AGOBTC is ERC20Custom, IDollar, Operator {
+contract Dollar is ERC20Custom, IDollar, Operator {
     using SafeMath for uint256;
 
     // ERC20

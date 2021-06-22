@@ -256,7 +256,7 @@ abstract contract ERC20Custom is Context, IERC20 {
 }
 
 
-contract CNBTC is ERC20Custom, Operator {
+contract Share is ERC20Custom, Operator {
     using SafeMath for uint256;
 
     /* ========== STATE VARIABLES ========== */

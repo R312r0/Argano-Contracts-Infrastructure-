@@ -2,7 +2,31 @@
 
 pragma solidity ^0.8.0;
 
-import "./openZeppelin/SafeMath.sol";
+library SafeMath {
+    function mul(uint256 a, uint256 b) internal pure returns (uint256 c) {
+        if (a == 0) {
+            return 0;
+        }
+        c = a * b;
+        assert(c / a == b);
+        return c;
+    }
+
+    function div(uint256 a, uint256 b) internal pure returns (uint256) {
+        return a / b;
+    }
+
+    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
+        assert(b <= a);
+        return a - b;
+    }
+
+    function add(uint256 a, uint256 b) internal pure returns (uint256 c) {
+        c = a + b;
+        assert(c >= a);
+        return c;
+    }
+}
 
 contract Timelock {
     using SafeMath for uint256;
@@ -10,9 +34,30 @@ contract Timelock {
     event NewAdmin(address indexed newAdmin);
     event NewPendingAdmin(address indexed newPendingAdmin);
     event NewDelay(uint256 indexed newDelay);
-    event CancelTransaction(bytes32 indexed txHash, address indexed target, uint256 value, string signature, bytes data, uint256 eta);
-    event ExecuteTransaction(bytes32 indexed txHash, address indexed target, uint256 value, string signature, bytes data, uint256 eta);
-    event QueueTransaction(bytes32 indexed txHash, address indexed target, uint256 value, string signature, bytes data, uint256 eta);
+    event CancelTransaction(
+        bytes32 indexed txHash,
+        address indexed target,
+        uint256 value,
+        string signature,
+        bytes data,
+        uint256 eta
+    );
+    event ExecuteTransaction(
+        bytes32 indexed txHash,
+        address indexed target,
+        uint256 value,
+        string signature,
+        bytes data,
+        uint256 eta
+    );
+    event QueueTransaction(
+        bytes32 indexed txHash,
+        address indexed target,
+        uint256 value,
+        string signature,
+        bytes data,
+        uint256 eta
+    );
 
     uint256 public constant GRACE_PERIOD = 14 days;
     uint256 public constant MINIMUM_DELAY = 12 hours;
@@ -24,25 +69,43 @@ contract Timelock {
 
     mapping(bytes32 => bool) public queuedTransactions;
 
-    constructor(address admin_, uint256 delay_){
-        require(delay_ >= MINIMUM_DELAY, "Timelock::constructor: Delay must exceed minimum delay.");
-        require(delay_ <= MAXIMUM_DELAY, "Timelock::setDelay: Delay must not exceed maximum delay.");
+    constructor(address admin_, uint256 delay_) {
+        require(
+            delay_ >= MINIMUM_DELAY,
+            "Timelock::constructor: Delay must exceed minimum delay."
+        );
+        require(
+            delay_ <= MAXIMUM_DELAY,
+            "Timelock::setDelay: Delay must not exceed maximum delay."
+        );
 
         admin = admin_;
         delay = delay_;
     }
 
     function setDelay(uint256 delay_) public {
-        require(msg.sender == address(this), "Timelock::setDelay: Call must come from Timelock.");
-        require(delay_ >= MINIMUM_DELAY, "Timelock::setDelay: Delay must exceed minimum delay.");
-        require(delay_ <= MAXIMUM_DELAY, "Timelock::setDelay: Delay must not exceed maximum delay.");
+        require(
+            msg.sender == address(this),
+            "Timelock::setDelay: Call must come from Timelock."
+        );
+        require(
+            delay_ >= MINIMUM_DELAY,
+            "Timelock::setDelay: Delay must exceed minimum delay."
+        );
+        require(
+            delay_ <= MAXIMUM_DELAY,
+            "Timelock::setDelay: Delay must not exceed maximum delay."
+        );
         delay = delay_;
 
         emit NewDelay(delay);
     }
 
     function acceptAdmin() public {
-        require(msg.sender == pendingAdmin, "Timelock::acceptAdmin: Call must come from pendingAdmin.");
+        require(
+            msg.sender == pendingAdmin,
+            "Timelock::acceptAdmin: Call must come from pendingAdmin."
+        );
         admin = msg.sender;
         pendingAdmin = address(0);
 
@@ -50,7 +113,10 @@ contract Timelock {
     }
 
     function setPendingAdmin(address pendingAdmin_) public {
-        require(msg.sender == address(this), "Timelock::setPendingAdmin: Call must come from Timelock.");
+        require(
+            msg.sender == address(this),
+            "Timelock::setPendingAdmin: Call must come from Timelock."
+        );
         pendingAdmin = pendingAdmin_;
 
         emit NewPendingAdmin(pendingAdmin);
@@ -63,10 +129,17 @@ contract Timelock {
         bytes memory data,
         uint256 eta
     ) public returns (bytes32) {
-        require(msg.sender == admin, "Timelock::queueTransaction: Call must come from admin.");
-        require(eta >= getBlockTimestamp().add(delay), "Timelock::queueTransaction: Estimated execution block must satisfy delay.");
+        require(
+            msg.sender == admin,
+            "Timelock::queueTransaction: Call must come from admin."
+        );
+        require(
+            eta >= getBlockTimestamp().add(delay),
+            "Timelock::queueTransaction: Estimated execution block must satisfy delay."
+        );
 
-        bytes32 txHash = keccak256(abi.encode(target, value, signature, data, eta));
+        bytes32 txHash =
+            keccak256(abi.encode(target, value, signature, data, eta));
         queuedTransactions[txHash] = true;
 
         emit QueueTransaction(txHash, target, value, signature, data, eta);
@@ -80,9 +153,13 @@ contract Timelock {
         bytes memory data,
         uint256 eta
     ) public {
-        require(msg.sender == admin, "Timelock::cancelTransaction: Call must come from admin.");
+        require(
+            msg.sender == admin,
+            "Timelock::cancelTransaction: Call must come from admin."
+        );
 
-        bytes32 txHash = keccak256(abi.encode(target, value, signature, data, eta));
+        bytes32 txHash =
+            keccak256(abi.encode(target, value, signature, data, eta));
         queuedTransactions[txHash] = false;
 
         emit CancelTransaction(txHash, target, value, signature, data, eta);
@@ -95,12 +172,25 @@ contract Timelock {
         bytes memory data,
         uint256 eta
     ) public payable returns (bytes memory) {
-        require(msg.sender == admin, "Timelock::executeTransaction: Call must come from admin.");
+        require(
+            msg.sender == admin,
+            "Timelock::executeTransaction: Call must come from admin."
+        );
 
-        bytes32 txHash = keccak256(abi.encode(target, value, signature, data, eta));
-        require(queuedTransactions[txHash], "Timelock::executeTransaction: Transaction hasn't been queued.");
-        require(getBlockTimestamp() >= eta, "Timelock::executeTransaction: Transaction hasn't surpassed time lock.");
-        require(getBlockTimestamp() <= eta.add(GRACE_PERIOD), "Timelock::executeTransaction: Transaction is stale.");
+        bytes32 txHash =
+            keccak256(abi.encode(target, value, signature, data, eta));
+        require(
+            queuedTransactions[txHash],
+            "Timelock::executeTransaction: Transaction hasn't been queued."
+        );
+        require(
+            getBlockTimestamp() >= eta,
+            "Timelock::executeTransaction: Transaction hasn't surpassed time lock."
+        );
+        require(
+            getBlockTimestamp() <= eta.add(GRACE_PERIOD),
+            "Timelock::executeTransaction: Transaction is stale."
+        );
 
         queuedTransactions[txHash] = false;
 
@@ -109,12 +199,19 @@ contract Timelock {
         if (bytes(signature).length == 0) {
             callData = data;
         } else {
-            callData = abi.encodePacked(bytes4(keccak256(bytes(signature))), data);
+            callData = abi.encodePacked(
+                bytes4(keccak256(bytes(signature))),
+                data
+            );
         }
 
         // Execute the call
-        (bool success, bytes memory returnData) = target.call{value: value}(callData);
-        require(success, "Timelock::executeTransaction: Transaction execution reverted.");
+        (bool success, bytes memory returnData) =
+            target.call{value: value}(callData);
+        require(
+            success,
+            "Timelock::executeTransaction: Transaction execution reverted."
+        );
 
         emit ExecuteTransaction(txHash, target, value, signature, data, eta);
 
