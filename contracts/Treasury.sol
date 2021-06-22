@@ -425,10 +425,11 @@ contract Treasury is ITreasury, Operator, ReentrancyGuard {
 
     address public oracleDollar;
     address public oracleShare;
+    address public oracleGovToken;
 
     address public AGOUSD;
     address public CNUSD;
-    address public AGO;
+    address public governanceToken;
 
     address public strategist;
 
@@ -443,20 +444,21 @@ contract Treasury is ITreasury, Operator, ReentrancyGuard {
     uint256 private constant RATIO_PRECISION = 1e6;
 
     // fees
-    uint256 public redemption_fee; // 6 decimals of precision
-    uint256 public minting_fee; // 6 decimals of precision
+    uint256 public redemption_fee = 4000; // 6 decimals of precision
+    uint256 public minting_fee = 3000; // 6 decimals of precision
 
     // collateral_ratio
     uint256 public last_refresh_cr_timestamp;
-    uint256 public target_collateral_ratio; // 6 decimals of precision
-    uint256 public effective_collateral_ratio; // 6 decimals of precision
-    uint256 public refresh_cooldown; // Seconds to wait before being able to run refreshCollateralRatio() again
-    uint256 public ratio_step; // Amount to change the collateralization ratio by upon refreshCollateralRatio()
-    uint256 public price_target; // The price of AGOUSD at which the collateral ratio will respond to; this value is only used for the collateral ratio mechanism and not for minting and redeeming which are hardcoded at $1
-    uint256 public price_band; // The bound above and below the price target at which the Collateral ratio is allowed to drop
+    uint256 public target_collateral_ratio = 1000000; // = 100% - fully collateralized at start; // 6 decimals of precision
+    uint256 public effective_collateral_ratio = 1000000; // = 100% - fully collateralized at start; // 6 decimals of precision
+    uint256 public refresh_cooldown = 3600; // Refresh cooldown period is set to 1 hour (3600 seconds) at genesis; // Seconds to wait before being able to run refreshCollateralRatio() again
+    uint256 public ratio_step = 2500; // Amount to change the collateralization ratio by upon refreshCollateralRatio() // = 0.25% at 6 decimals of precision
+    uint256 public price_target = 1000000; // = $1. (6 decimals of precision). Collateral ratio will adjust according to the $1 price target at genesis; // The price of Dollar at which the collateral ratio will respond to; this value is only used for the collateral ratio mechanism and not for minting and redeeming which are hardcoded at $1
+    uint256 public price_band = 5000; // The bound above and below the price target at which the Collateral ratio is allowed to drop
+    uint256 public gov_token_value_for_discount = 100;//100$ in governance tokens
+    uint256 private constant COLLATERAL_RATIO_MAX = 1e6;
     bool public collateral_ratio_paused = true; // during bootstraping phase, collateral_ratio will be fixed at 100%
     bool public using_effective_collateral_ratio = false; // toggle the effective collateral ratio usage
-    uint256 private constant COLLATERAL_RATIO_MAX = 1e6;
 
     // rebalance
     address public rebalancing_pool;
@@ -527,19 +529,6 @@ contract Treasury is ITreasury, Operator, ReentrancyGuard {
     event BoughtBack(uint256 collateral_value, uint256 collateral_amount, uint256 output_share_amount);
     event Recollateralized(uint256 share_amount, uint256 output_collateral_amount, uint256 output_collateral_value);
 
-    /* ========== CONSTRUCTOR ========== */
-
-    constructor(){
-        ratio_step = 2500; // = 0.25% at 6 decimals of precision
-        target_collateral_ratio = 1000000; // = 100% - fully collateralized at start
-        effective_collateral_ratio = 1000000; // = 100% - fully collateralized at start
-        refresh_cooldown = 3600; // Refresh cooldown period is set to 1 hour (3600 seconds) at genesis
-        price_target = 1000000; // = $1. (6 decimals of precision). Collateral ratio will adjust according to the $1 price target at genesis
-        price_band = 5000;
-        redemption_fee = 4000;
-        minting_fee = 3000; 
-    }
-
     function initialize(uint256 _startTime, uint256 _epoch_length) external onlyOperator {
         require(initialized == false, "alreadyInitialized");
         startTime = _startTime;
@@ -558,6 +547,10 @@ contract Treasury is ITreasury, Operator, ReentrancyGuard {
         return IOracle(oracleShare).consult();
     }
 
+    function gov_token_price() public view returns (uint256) {
+        return IOracle(oracleGovToken).consult();
+    }
+
     function hasPool(address _address) external view override returns (bool) {
         return pools[_address] == true;
     }
@@ -571,10 +564,13 @@ contract Treasury is ITreasury, Operator, ReentrancyGuard {
     }
 
     function redemption_fee_adjusted() public view returns (uint256) {
-        uint256 _redemption_fee_adjusted = redemption_fee;
-        if (AGO == address(0)) return _redemption_fee_adjusted;
-        if (IERC20(AGO).balanceOf(tx.origin) > 1 * IERC20(AGO).decimals()) _redemption_fee_adjusted = redemption_fee.div(2);
-        return _redemption_fee_adjusted;
+        if (governanceToken == address(0)) return redemption_fee;
+        if (IERC20(governanceToken).balanceOf(tx.origin) > discount_requirenment() ) return redemption_fee.div(2);
+    }
+
+    function discount_requirenment() public view returns (uint256) {
+        if (gov_token_price == 0) return 1;
+        return gov_token_value_for_discount.mul(PRICE_PRECISION).mul(IERC20(governanceToken).decimals().div(gov_token_price));
     }
 
     function info()
@@ -592,7 +588,16 @@ contract Treasury is ITreasury, Operator, ReentrancyGuard {
             uint256
         )
     {
-        return (dollarPrice(), sharePrice(), IERC20(AGOUSD).totalSupply(), target_collateral_ratio, effective_collateral_ratio, globalCollateralValue(), minting_fee, redemption_fee_adjusted());
+        return (
+            dollarPrice(), 
+            sharePrice(), 
+            IERC20(AGOUSD).totalSupply(), 
+            target_collateral_ratio, 
+            effective_collateral_ratio, 
+            globalCollateralValue(),    
+            minting_fee, 
+            redemption_fee_adjusted()
+        );
     }
 
     function epochInfo()
@@ -791,6 +796,10 @@ contract Treasury is ITreasury, Operator, ReentrancyGuard {
         }
     }
 
+    function setGovTokenValueForDiscount(uint256 _gov_token_value_for_discount) public onlyOperator {
+        gov_token_value_for_discount = _gov_token_value_for_discount;
+    }
+
     function setRedemptionFee(uint256 _redemption_fee) public onlyOperator {
         redemption_fee = _redemption_fee;
     }
@@ -831,6 +840,10 @@ contract Treasury is ITreasury, Operator, ReentrancyGuard {
         oracleShare = _oracleShare;
     }
 
+    function setGovTokenShare(address _oracleGovToken) public onlyOperator {
+        oracleGovToken = _oracleGovToken;
+    }
+
     function setDollarAddress(address _AGOUSD) public onlyOperator {
         AGOUSD = _AGOUSD;
     }
@@ -839,8 +852,8 @@ contract Treasury is ITreasury, Operator, ReentrancyGuard {
         CNUSD = _CNUSD;
     }
 
-    function setGovTokenAddress(address _AGO) public onlyOperator {
-        AGO = _AGO;
+    function setGovTokenAddress(address _governanceToken) public onlyOperator {
+        governanceToken = _governanceToken;
     }
 
     function setStrategist(address _strategist) external onlyOperator {

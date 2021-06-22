@@ -294,11 +294,12 @@ contract Pool is Operator, ReentrancyGuard, IPool {
 
     /* ========== STATE VARIABLES ========== */
 
-    address public oracle; // oracle to get price of collateral
-    address public collateral;
     address public dollar;
-    address public treasury;
     address public share;
+    address public collateral;
+    address public governanceToken;
+    address public treasury;
+    address public oracle; // oracle to get price of collateral
 
     mapping(address => uint256) public redeem_share_balances;
     mapping(address => uint256) public redeem_collateral_balances;
@@ -320,7 +321,10 @@ contract Pool is Operator, ReentrancyGuard, IPool {
     uint256 public pool_ceiling = 0;
 
     // Number of blocks to wait before being able to collectRedemption()
-    uint256 public redemption_delay = 1;
+    uint256 public collect_redemption_delay = 1;
+
+    // Number of blocks to wait before being able to redem()
+    uint256 public redemption_delay = 30;//~1 min, when block time is around 2 sec
 
     // AccessControl state variables
     bool public mint_paused = false;
@@ -345,12 +349,14 @@ contract Pool is Operator, ReentrancyGuard, IPool {
         address _dollar,
         address _share,
         address _collateral,
+        address _governanceToken,
         address _treasury,
         uint256 _pool_ceiling
     ){
         dollar = _dollar;
         share = _share;
         collateral = _collateral;
+        governanceToken = _governanceToken;
         treasury = _treasury;
         pool_ceiling = _pool_ceiling;
         missing_decimals = uint256(18).sub(ERC20(_collateral).decimals());
@@ -438,6 +444,7 @@ contract Pool is Operator, ReentrancyGuard, IPool {
         uint256 _collateral_out_min
     ) external notMigrated {
         require(redeem_paused == false, "Redeeming is paused");
+        require((last_redeemed[msg.sender].add(redemption_delay)) <= block.number, "<redemption_delay");
         (, uint256 _share_price, , , uint256 _effective_collateral_ratio, , , uint256 _redemption_fee) = ITreasury(treasury).info();
         uint256 _collateral_price = getCollateralPrice();
         uint256 _dollar_amount_post_fee = _dollar_amount.sub((_dollar_amount.mul(_redemption_fee)).div(PRICE_PRECISION));
@@ -479,7 +486,7 @@ contract Pool is Operator, ReentrancyGuard, IPool {
 
     function collectRedemption() external {
         // Redeem and Collect cannot happen in the same transaction to avoid flash loan attack
-        require((last_redeemed[msg.sender].add(redemption_delay)) <= block.number, "<redemption_delay");
+        require((last_redeemed[msg.sender].add(collect_redemption_delay)) <= block.number, "<collect_redemption_delay");
 
         bool _send_share = false;
         bool _send_collateral = false;
@@ -533,6 +540,10 @@ contract Pool is Operator, ReentrancyGuard, IPool {
 
     function setPoolCeiling(uint256 _pool_ceiling) external onlyOperator {
         pool_ceiling = _pool_ceiling;
+    }
+
+    function setCollectRedemptionDelay(uint256 _collect_redemption_delay) external onlyOperator {
+        collect_redemption_delay = _collect_redemption_delay;
     }
 
     function setRedemptionDelay(uint256 _redemption_delay) external onlyOperator {

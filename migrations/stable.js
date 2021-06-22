@@ -71,6 +71,7 @@ module.exports = async (_deployer, _network, _accounts) => {
     const i_Pool = save(await _deployer.deploy(Pool, 
         i_AGOUSD.address,
         i_CNUSD.address,
+        //AGO TOKEN HERE//
         a_usdt,
         i_Treasury.address,
         _ONE_THOUSAND_.mul(5000000).toHexString()//pool celling 5m Dollar
