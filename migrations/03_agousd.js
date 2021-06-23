@@ -41,19 +41,19 @@ const wmatic                        = new web3.eth.Contract(require('../wmaticAB
 
 module.exports = async (_deployer, _network, _accounts) => {
     const owner = _accounts[0]
-    
+    return
 
     let i_Treasury = undefined//bug in truffle require usage of callback during first deployment
     await _deployer.deploy(Treasury).then(async i => {i_Treasury = save(i)})
     await i_Treasury.setStrategist(owner)
-    await i_Treasury.setDollarAddress(i_AGOUSD.address)
-    await i_Treasury.setShareAddress(i_CNUSD.address)
     await i_Treasury.setGovTokenAddress(a_ARGANO)
-
-    const i_AGOUSD  = save(await _deployer.deploy(Dollar, 'Argano Dollar token',       'Dollar',   i_Treasury.address))
+    
+    const i_AGOUSD  = save(await _deployer.deploy(Dollar, 'Argano Dollar token',       'AGOUSD',   i_Treasury.address))
+    await i_Treasury.setDollarAddress(i_AGOUSD.address)
     await i_AGOUSD.initialize()
-
-    const i_CNUSD   = save(await _deployer.deploy(Share,  'Catena Dollar share token', 'Share',    i_Treasury.address))
+    
+    const i_CNUSD   = save(await _deployer.deploy(Share,  'Catena Dollar share token', 'CNUSD',    i_Treasury.address))
+    await i_Treasury.setShareAddress(i_CNUSD.address)
     await i_CNUSD.initialize(owner, owner, startTime)
 
 
@@ -66,9 +66,9 @@ module.exports = async (_deployer, _network, _accounts) => {
     const a_agousdUsdtPair = save_raw(await factory.methods.getPair(i_AGOUSD.address, usdt._address).call(), "a_agousdUsdtPair")
     console.log('new pair: ', a_agousdUsdtPair)
     const i_AGOUSDUSDTPairOracle    = save(await _deployer.deploy(DollarCollateralPairOracle, a_agousdUsdtPair))
-    console.log('new pair oracle: ', i_AGOUSDUSDTPairOracle)
+    console.log('new pair oracle: ', i_AGOUSDUSDTPairOracle.address)
     const i_AGOUSDOracle = save(await _deployer.deploy(DollarOracle, i_AGOUSD.address, i_AGOUSDUSDTPairOracle.address, a_usdt_chainlinkAggregator))
-    console.log('new dollar oracle: ', i_AGOUSDOracle)     
+    console.log('new dollar oracle: ', i_AGOUSDOracle.address)     
 
 
     await i_CNUSD.approve(a_router, _ONE_HUNDRED_THOUSAND_)
@@ -80,9 +80,9 @@ module.exports = async (_deployer, _network, _accounts) => {
     const a_cnusdWmaticPair = save_raw(await factory.methods.getPair(i_CNUSD.address, wmatic._address).call(),"a_cnusdWmaticPair")
     console.log('new pair: ', a_cnusdWmaticPair)
     const i_CNUSDWMATICPairOracle   = save(await _deployer.deploy(ShareWCoinPairOracle, a_cnusdWmaticPair))
-    onsole.log('new pair oracle: ', i_CNUSDWMATICPairOracle)
+    console.log('new pair oracle: ', i_CNUSDWMATICPairOracle.address)
     const i_CNUSDOracle  = save(await _deployer.deploy(ShareOracle,  i_CNUSD.address,  i_CNUSDWMATICPairOracle.address, a_wmatic_chainlinkAggregator))
-    console.log('new share oracle: ', i_CNUSDOracle)      
+    console.log('new share oracle: ', i_CNUSDOracle.address)      
 
     
     const i_Foundry = save(await _deployer.deploy(Foundry))
@@ -111,7 +111,6 @@ module.exports = async (_deployer, _network, _accounts) => {
     await i_Treasury.setUniswapParams(a_router, a_cnusdWmaticPair, a_wmatic_usdt)
     await i_Treasury.setFoundry(i_Foundry.address)
 
-    console.log(e.r.r.o.r)//throw error
 }
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))

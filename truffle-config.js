@@ -40,7 +40,8 @@ module.exports = {
             network_id: 137,
             skipDryRun: true,
             // networkCheckTimeout: 5000,
-            gas: 10e6
+            gasPrice: 5e9,
+            gas: 15e6
         }
     },
     plugins: [
