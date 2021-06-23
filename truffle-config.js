@@ -6,13 +6,13 @@ const HDWalletProvider = require('@truffle/hdwallet-provider')
 // const RinkebyProvider = new HDWalletProvider(process.env.RINKEBY_PRIVATE_KEY, process.env.RINKEBY_INFURA)
 
 module.exports = {
-    contracts_build_directory: path.join(__dirname, "./contracts/build"),
+    // contracts_build_directory: path.join(__dirname, "./contracts/build"),
     compilers: {
         solc: {
             version: "0.8.4",
             settings: {
                 optimizer: {
-                    enabled: false,
+                    enabled: true,
                     runs: 200
                 },
             }
@@ -35,12 +35,12 @@ module.exports = {
         polygon: {
             provider: new HDWalletProvider(
                 process.env.PRIVATE_KEY,
-                'https://rpc-mainnet.maticvigil.com/v1/64b99315d4c64be57564944e982966a4e5a17d17'//'https://rpc-mainnet.maticvigil.com/v1/64b99315d4c64be57564944e982966a4e5a17d17'
+                'https://rpc-mainnet.maticvigil.com/v1/64b99315d4c64be57564944e982966a4e5a17d17'
             ),
             network_id: 137,
             skipDryRun: true,
-            networkCheckTimeout: 5000,
-            gas: 20000000
+            // networkCheckTimeout: 5000,
+            gas: 10e6
         }
     },
     plugins: [
