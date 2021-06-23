@@ -2,250 +2,20 @@
 pragma solidity 0.8.4;
 pragma experimental ABIEncoderV2;
 
-library SafeERC20 {
-  function safeTransfer(IERC20 token, address to, uint256 value) internal{
-    require(token.transfer(to, value));
-  }
-
-  function safeApprove( IERC20 token, address spender, uint256 value) internal{
-    require(token.approve(spender, value));
-  }
-}
-
-library SafeMath {
-  function mul(uint256 a, uint256 b) internal pure returns (uint256 c) {
-    if (a == 0) {return 0;}
-    c = a * b;
-    assert(c / a == b);
-    return c;
-  }
-
-  function div(uint256 a, uint256 b) internal pure returns (uint256) {
-    return a / b;
-  }
-
-  function sub(uint256 a, uint256 b) internal pure returns (uint256) {
-    assert(b <= a);
-    return a - b;
-  }
-
-  function add(uint256 a, uint256 b) internal pure returns (uint256 c) {
-    c = a + b;
-    assert(c >= a);
-    return c;
-  }
-}
-
-interface IUniswapRouter{
-    function swapExactTokensForTokens(
-        uint amountIn,
-        uint amountOutMin,
-        address[] calldata path,
-        address to,
-        uint deadline
-    ) external returns (uint[] memory amounts);
-}
-
-interface IFoundry {
-    function allocateSeigniorage(uint256 _amount) external;
-}
-
-interface IPool {
-    function collateralDollarBalance() external view returns (uint256);
-    function migrate(address _new_pool) external;
-    function transferCollateralToTreasury(uint256 amount) external;
-    function getCollateralPrice() external view returns (uint256);
-    function getCollateralToken() external view returns (address);
-}
-
-interface IOracle {
-    function consult() external view returns (uint256);
-}
-
-interface IEpoch {
-    function epoch() external view returns (uint256);
-    function nextEpochPoint() external view returns (uint256);
-}
-
-interface ITreasury is IEpoch {
-    function hasPool(address _address) external view returns (bool);
-
-    function info()
-        external
-        view
-        returns (
-            uint256,
-            uint256,
-            uint256,
-            uint256,
-            uint256,
-            uint256,
-            uint256,
-            uint256
-        );
-
-    function epochInfo()
-        external
-        view
-        returns (
-            uint256,
-            uint256,
-            uint256,
-            uint256
-        );
-}
-
-interface IERC20 {
-    function totalSupply() external view returns (uint256);
-    function balanceOf(address account) external view returns (uint256);
-    function transfer(address recipient, uint256 amount) external returns (bool);
-    function allowance(address owner, address spender) external view returns (uint256);
-    function approve(address spender, uint256 amount) external returns (bool);
-    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
-    event Transfer(address indexed from, address indexed to, uint256 value);
-    event Approval(address indexed owner, address indexed spender, uint256 value);
-    
-    function name() external view returns (string memory);
-    function symbol() external view returns (string memory);
-    function decimals() external view returns (uint8);
-}
-
-abstract contract Context {
-    function _msgSender() internal view virtual returns (address) {
-        return msg.sender;
-    }
-
-    function _msgData() internal view virtual returns (bytes calldata) {
-        this;
-        return msg.data;
-    }
-}
-
-abstract contract Ownable is Context {
-    address private _owner;
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
-
-    constructor () {
-        address msgSender = _msgSender();
-        _owner = msgSender;
-        emit OwnershipTransferred(address(0), msgSender);
-    }
-
-    function owner() public view virtual returns (address) {
-        return _owner;
-    }
-
-    modifier onlyOwner() {
-        require(owner() == _msgSender(), "Ownable: caller is not the owner");
-        _;
-    }
-
-    function renounceOwnership() public virtual onlyOwner {
-        emit OwnershipTransferred(_owner, address(0));
-        _owner = address(0);
-    }
-
-    function transferOwnership(address newOwner) public virtual onlyOwner {
-        require(newOwner != address(0), "Ownable: new owner is the zero address");
-        emit OwnershipTransferred(_owner, newOwner);
-        _owner = newOwner;
-    }
-}
-
-contract ReentrancyGuard {
-  uint256 private _guardCounter = 1;
-
-  modifier nonReentrant() {
-    _guardCounter += 1;
-    uint256 localCounter = _guardCounter;
-    _;
-    require(localCounter == _guardCounter);
-  }
-}
-
-abstract contract ERC20 is IERC20 {
-    using SafeMath for uint256;
-    
-    mapping (address => uint256) private _balances;
-    mapping (address => mapping (address => uint256)) private _allowed;
-    uint256 private _totalSupply;
-
-    function totalSupply() public view override returns (uint256) {
-        return _totalSupply;
-    }
-
-    function balanceOf(address owner) public view override returns (uint256) {
-        return _balances[owner];
-    }
-
-    function allowance(address owner, address spender) public view override returns (uint256){
-        return _allowed[owner][spender];
-    }
-
-    function transfer(address to, uint256 value) public override returns (bool) {
-        require(value <= _balances[msg.sender]);
-        require(to != address(0));
-        _balances[msg.sender] = _balances[msg.sender].sub(value);
-        _balances[to] = _balances[to].add(value);
-        emit Transfer(msg.sender, to, value);
-        return true;
-    }
-
-    function approve(address spender, uint256 value) public override returns (bool) {
-        require(spender != address(0));
-        _allowed[msg.sender][spender] = value;
-        emit Approval(msg.sender, spender, value);
-        return true;
-    }
-
-    function transferFrom(address from, address to, uint256 value) public override returns (bool){
-        require(value <= _balances[from]);
-        require(value <= _allowed[from][msg.sender]);
-        require(to != address(0));
-        _balances[from] = _balances[from].sub(value);
-        _balances[to] = _balances[to].add(value);
-        _allowed[from][msg.sender] = _allowed[from][msg.sender].sub(value);
-        emit Transfer(from, to, value);
-        return true;
-    }
-
-    function increaseAllowance(address spender, uint256 addedValue) public returns (bool){
-        require(spender != address(0));
-        _allowed[msg.sender][spender] = (
-        _allowed[msg.sender][spender].add(addedValue));
-        emit Approval(msg.sender, spender, _allowed[msg.sender][spender]);
-        return true;
-    }
-
-    function decreaseAllowance(address spender, uint256 subtractedValue) public returns (bool){
-        require(spender != address(0));
-        _allowed[msg.sender][spender] = (_allowed[msg.sender][spender].sub(subtractedValue));
-        emit Approval(msg.sender, spender, _allowed[msg.sender][spender]);
-        return true;
-    }
-
-    function _mint(address account, uint256 amount) internal {
-        require(account != address(0));
-        _totalSupply = _totalSupply.add(amount);
-        _balances[account] = _balances[account].add(amount);
-        emit Transfer(address(0), account, amount);
-    }
-
-    function _burn(address account, uint256 amount) internal {
-        require(account != address(0));
-        require(amount <= _balances[account]);
-        _totalSupply = _totalSupply.sub(amount);
-        _balances[account] = _balances[account].sub(amount);
-        emit Transfer(account, address(0), amount);
-    }
-
-    function _burnFrom(address account, uint256 amount) internal {
-        require(amount <= _allowed[account][msg.sender]);
-        _allowed[account][msg.sender] = _allowed[account][msg.sender].sub(amount);
-        _burn(account, amount);
-    }
-}
-
+import "./libraries/SafeERC20.sol";
+import "./libraries/SafeMath.sol";
+import "./interfaces/IUniswapRouter.sol";
+import "./interfaces/IFoundry.sol";
+import "./interfaces/IPool.sol";
+import "./interfaces/IOracle.sol";
+import "./interfaces/IEpoch.sol";
+import "./interfaces/ITreasury.sol";
+import "./interfaces/IERC20.sol";
+import "./utilityContracts/Context.sol";
+import "./utilityContracts/Ownable.sol";
+import "./utilityContracts/ReentrancyGuard.sol";
+import "./utilityContracts/ERC20.sol";
+import "./utilityContracts/ERC20Detailed.sol";
 
 contract Treasury is ITreasury, Ownable, ReentrancyGuard {
     using SafeMath for uint256;
@@ -316,7 +86,7 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
     }
 
     modifier onlyStrategistOrOwner() {
-        require(strategist == msg.sender || owner() == msg.sender, "!strategist&&!owner");
+        require(strategist == msg.sender || owner == msg.sender, "!strategist&&!owner");
         _;
     }
 
@@ -398,7 +168,7 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
 
     function discount_requirenment() public view returns (uint256) {
         if (gov_token_price() == 0) return 1;
-        uint256 decimals = IERC20(governanceToken).decimals();
+        uint256 decimals = ERC20Detailed(governanceToken).decimals();
         return  gov_token_value_for_discount
                 .mul(PRICE_PRECISION)
                 .mul(decimals)
