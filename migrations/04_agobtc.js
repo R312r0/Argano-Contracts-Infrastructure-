@@ -41,22 +41,25 @@ const wcoin                         = new web3.eth.Contract(require('../wmaticAB
 
 module.exports = async (_deployer, _network, _accounts) => {
     const owner = _accounts[0]
+    console.log(a.s.d)
     
 
     let i_Treasury = undefined//bug in truffle require usage of callback during first deployment
     await _deployer.deploy(Treasury).then(async i => {i_Treasury = save(i)})
     await i_Treasury.setStrategist(owner)
     await i_Treasury.setGovTokenAddress(a_governance_token)
+    await sleep(20000)
     
     const i_dollar  = save(await _deployer.deploy(Dollar, 'Argano Bitcoin token', 'AGOBTC', i_Treasury.address))
     await i_Treasury.setDollarAddress(i_dollar.address)
     await i_dollar.initialize()
+    await sleep(20000)
     
     const i_share   = save(await _deployer.deploy(Share, 'Catena Bitcoin share token', 'CNBTC', i_Treasury.address))
     await i_Treasury.setShareAddress(i_share.address)
     await i_share.initialize(owner, owner, startTime)
 
-
+    console.log(`collaterall bal: ${await wmatic.methods.balanceOf(owner)/1e18}`)
     await i_dollar.approve(a_router, _ONE_HUNDRED_THOUSAND_)
     console.log('AGOBTC approved for router')
     await collateral.methods.approve(a_router, _ONE_HUNDRED_THOUSAND_).send({from: owner})
@@ -71,6 +74,7 @@ module.exports = async (_deployer, _network, _accounts) => {
     console.log('new dollar oracle: ', i_dollar_oracle.address)     
 
 
+    console.log(`wcoin bal: ${await wmatic.methods.balanceOf(owner)/1e18}`)
     await i_share.approve(a_router, _ONE_HUNDRED_THOUSAND_)
     console.log('CNBTC approved for router')
     await wcoin.methods.approve(a_router, _ONE_HUNDRED_THOUSAND_).send({from: owner})
@@ -88,6 +92,7 @@ module.exports = async (_deployer, _network, _accounts) => {
     const i_Foundry = save(await _deployer.deploy(Foundry))
     await i_Foundry.initialize(a_collateral, i_share.address, i_Treasury.address)
     await i_Foundry.setOracle(a_collateral_oracle)
+    await sleep(20000)
 
 
     const i_Pool = save(await _deployer.deploy(Pool, 
@@ -99,6 +104,7 @@ module.exports = async (_deployer, _network, _accounts) => {
         poolCelling
     ))
     await i_Pool.setOracle(a_collateral_oracle)
+    await sleep(20000)
 
 
     await i_Treasury.addPool(i_Pool.address)

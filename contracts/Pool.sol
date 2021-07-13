@@ -1,24 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.4;
-pragma experimental ABIEncoderV2;
 
-import "./libraries/SafeMath.sol";
-import "./libraries/SafeERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "./interfaces/IPool.sol";
 import "./interfaces/IOracle.sol";
 import "./interfaces/IEpoch.sol";
 import "./interfaces/ITreasury.sol";
 import "./interfaces/IDollar.sol";
 import "./interfaces/IShare.sol";
-import "./interfaces/IERC20.sol";
-import "./utilityContracts/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "./utilityContracts/ERC20Detailed.sol";
-import "./utilityContracts/Context.sol";
-import "./utilityContracts/Ownable.sol";
-import "./utilityContracts/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/Context.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 contract Pool is Ownable, ReentrancyGuard, IPool {
-    using SafeMath for uint256;
     using SafeERC20 for ERC20;
 
     /* ========== STATE VARIABLES ========== */
@@ -88,7 +85,7 @@ contract Pool is Ownable, ReentrancyGuard, IPool {
         governanceToken = _governanceToken;
         treasury = _treasury;
         pool_ceiling = _pool_ceiling;
-        missing_decimals = uint256(18).sub(ERC20Detailed(_collateral).decimals());
+        missing_decimals = uint256(18) - ERC20Detailed(_collateral).decimals();
     }
 
     /* ========== VIEWS ========== */
@@ -96,7 +93,7 @@ contract Pool is Ownable, ReentrancyGuard, IPool {
     // Returns dollar value of collateral held in this pool
     function collateralDollarBalance() external view override returns (uint256) {
         uint256 collateral_usd_price = getCollateralPrice();
-        return (ERC20(collateral).balanceOf(address(this)).sub(unclaimed_pool_collateral)).mul(10**missing_decimals).mul(collateral_usd_price).div(PRICE_PRECISION);
+        return ERC20(collateral).balanceOf(address(this)) - unclaimed_pool_collateral * 10**missing_decimals * collateral_usd_price / PRICE_PRECISION;
     }
 
     function info()
@@ -140,21 +137,21 @@ contract Pool is Ownable, ReentrancyGuard, IPool {
     ) external notMigrated {
         require(mint_paused == false, "Minting is paused");
         (, uint256 _share_price, , uint256 _target_collateral_ratio, , , uint256 _minting_fee, ) = ITreasury(treasury).info();
-        require(ERC20(collateral).balanceOf(address(this)).sub(unclaimed_pool_collateral).add(_collateral_amount) <= pool_ceiling, ">poolCeiling");
+        require(ERC20(collateral).balanceOf(address(this)) - (unclaimed_pool_collateral) + (_collateral_amount) <= pool_ceiling, ">poolCeiling");
         uint256 _price_collateral = getCollateralPrice();
         uint256 _total_dollar_value = 0;
         uint256 _required_share_amount = 0;
         if (_target_collateral_ratio > 0) {
-            uint256 _collateral_value = (_collateral_amount * (10**missing_decimals)).mul(_price_collateral).div(PRICE_PRECISION);
-            _total_dollar_value = _collateral_value.mul(COLLATERAL_RATIO_PRECISION).div(_target_collateral_ratio);
+            uint256 _collateral_value = (_collateral_amount * (10**missing_decimals)) * (_price_collateral) / (PRICE_PRECISION);
+            _total_dollar_value = _collateral_value * (COLLATERAL_RATIO_PRECISION) / (_target_collateral_ratio);
             if (_target_collateral_ratio < COLLATERAL_RATIO_MAX) {
-                _required_share_amount = _total_dollar_value.sub(_collateral_value).mul(PRICE_PRECISION).div(_share_price);
+                _required_share_amount = _total_dollar_value - (_collateral_value) * (PRICE_PRECISION) / (_share_price);
             }
         } else {
-            _total_dollar_value = _share_amount.mul(_share_price).div(PRICE_PRECISION);
+            _total_dollar_value = _share_amount * _share_price / PRICE_PRECISION;
             _required_share_amount = _share_amount;
         }
-        uint256 _actual_dollar_amount = _total_dollar_value.sub((_total_dollar_value.mul(_minting_fee)).div(PRICE_PRECISION));
+        uint256 _actual_dollar_amount = _total_dollar_value - ((_total_dollar_value * _minting_fee) / PRICE_PRECISION);
         require(_dollar_out_min <= _actual_dollar_amount, ">slippage");
 
         if (_required_share_amount > 0) {
@@ -173,35 +170,35 @@ contract Pool is Ownable, ReentrancyGuard, IPool {
         uint256 _collateral_out_min
     ) external notMigrated {
         require(redeem_paused == false, "Redeeming is paused");
-        require((last_redeemed[msg.sender].add(redemption_delay)) <= block.number, "<redemption_delay");
+        require((last_redeemed[msg.sender] + (redemption_delay)) <= block.number, "<redemption_delay");
         (, uint256 _share_price, , , uint256 _effective_collateral_ratio, , , uint256 _redemption_fee) = ITreasury(treasury).info();
         uint256 _collateral_price = getCollateralPrice();
-        uint256 _dollar_amount_post_fee = _dollar_amount.sub((_dollar_amount.mul(_redemption_fee)).div(PRICE_PRECISION));
+        uint256 _dollar_amount_post_fee = _dollar_amount - ((_dollar_amount * (_redemption_fee)) / (PRICE_PRECISION));
         uint256 _collateral_output_amount = 0;
         uint256 _share_output_amount = 0;
 
         if (_effective_collateral_ratio < COLLATERAL_RATIO_MAX) {
-            uint256 _share_output_value = _dollar_amount_post_fee.sub(_dollar_amount_post_fee.mul(_effective_collateral_ratio).div(PRICE_PRECISION));
-            _share_output_amount = _share_output_value.mul(PRICE_PRECISION).div(_share_price);
+            uint256 _share_output_value = _dollar_amount_post_fee - (_dollar_amount_post_fee * (_effective_collateral_ratio) / (PRICE_PRECISION));
+            _share_output_amount = _share_output_value * (PRICE_PRECISION) / (_share_price);
         }
 
         if (_effective_collateral_ratio > 0) {
-            uint256 _collateral_output_value = _dollar_amount_post_fee.div(10**missing_decimals).mul(_effective_collateral_ratio).div(PRICE_PRECISION);
-            _collateral_output_amount = _collateral_output_value.mul(PRICE_PRECISION).div(_collateral_price);
+            uint256 _collateral_output_value = _dollar_amount_post_fee / (10**missing_decimals) * (_effective_collateral_ratio) / (PRICE_PRECISION);
+            _collateral_output_amount = _collateral_output_value * (PRICE_PRECISION) / (_collateral_price);
         }
 
         // Check if collateral balance meets and meet output expectation
-        require(_collateral_output_amount <= ERC20(collateral).balanceOf(address(this)).sub(unclaimed_pool_collateral), "<collateralBlanace");
+        require(_collateral_output_amount <= ERC20(collateral).balanceOf(address(this)) - (unclaimed_pool_collateral), "<collateralBlanace");
         require(_collateral_out_min <= _collateral_output_amount && _share_out_min <= _share_output_amount, ">slippage");
 
         if (_collateral_output_amount > 0) {
-            redeem_collateral_balances[msg.sender] = redeem_collateral_balances[msg.sender].add(_collateral_output_amount);
-            unclaimed_pool_collateral = unclaimed_pool_collateral.add(_collateral_output_amount);
+            redeem_collateral_balances[msg.sender] = redeem_collateral_balances[msg.sender] + (_collateral_output_amount);
+            unclaimed_pool_collateral = unclaimed_pool_collateral + (_collateral_output_amount);
         }
 
         if (_share_output_amount > 0) {
-            redeem_share_balances[msg.sender] = redeem_share_balances[msg.sender].add(_share_output_amount);
-            unclaimed_pool_share = unclaimed_pool_share.add(_share_output_amount);
+            redeem_share_balances[msg.sender] = redeem_share_balances[msg.sender] + (_share_output_amount);
+            unclaimed_pool_share = unclaimed_pool_share + (_share_output_amount);
         }
 
         last_redeemed[msg.sender] = block.number;
@@ -215,7 +212,7 @@ contract Pool is Ownable, ReentrancyGuard, IPool {
 
     function collectRedemption() external {
         // Redeem and Collect cannot happen in the same transaction to avoid flash loan attack
-        require((last_redeemed[msg.sender].add(collect_redemption_delay)) <= block.number, "<collect_redemption_delay");
+        require((last_redeemed[msg.sender] + (collect_redemption_delay)) <= block.number, "<collect_redemption_delay");
 
         bool _send_share = false;
         bool _send_collateral = false;
@@ -226,14 +223,14 @@ contract Pool is Ownable, ReentrancyGuard, IPool {
         if (redeem_share_balances[msg.sender] > 0) {
             _share_amount = redeem_share_balances[msg.sender];
             redeem_share_balances[msg.sender] = 0;
-            unclaimed_pool_share = unclaimed_pool_share.sub(_share_amount);
+            unclaimed_pool_share = unclaimed_pool_share - (_share_amount);
             _send_share = true;
         }
 
         if (redeem_collateral_balances[msg.sender] > 0) {
             _collateral_amount = redeem_collateral_balances[msg.sender];
             redeem_collateral_balances[msg.sender] = 0;
-            unclaimed_pool_collateral = unclaimed_pool_collateral.sub(_collateral_amount);
+            unclaimed_pool_collateral = unclaimed_pool_collateral - (_collateral_amount);
             _send_collateral = true;
         }
 
@@ -251,7 +248,7 @@ contract Pool is Ownable, ReentrancyGuard, IPool {
     // move collateral to new pool address
     function migrate(address _new_pool) external override nonReentrant onlyOwner notMigrated {
         migrated = true;
-        uint256 availableCollateral = ERC20(collateral).balanceOf(address(this)).sub(unclaimed_pool_collateral);
+        uint256 availableCollateral = ERC20(collateral).balanceOf(address(this)) - (unclaimed_pool_collateral);
         ERC20(collateral).safeTransfer(_new_pool, availableCollateral);
     }
 

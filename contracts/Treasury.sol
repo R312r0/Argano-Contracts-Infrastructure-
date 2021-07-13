@@ -1,24 +1,20 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.4;
-pragma experimental ABIEncoderV2;
 
-import "./libraries/SafeERC20.sol";
-import "./libraries/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
 import "./interfaces/IUniswapRouter.sol";
 import "./interfaces/IFoundry.sol";
 import "./interfaces/IPool.sol";
 import "./interfaces/IOracle.sol";
 import "./interfaces/IEpoch.sol";
 import "./interfaces/ITreasury.sol";
-import "./interfaces/IERC20.sol";
-import "./utilityContracts/Context.sol";
-import "./utilityContracts/Ownable.sol";
-import "./utilityContracts/ReentrancyGuard.sol";
-import "./utilityContracts/ERC20.sol";
 import "./utilityContracts/ERC20Detailed.sol";
 
 contract Treasury is ITreasury, Ownable, ReentrancyGuard {
-    using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
     address public oracleDollar;
@@ -119,7 +115,7 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
         require(block.timestamp >= _nextEpochPoint, "Treasury: not opened yet");
         _;
         lastEpochTime = _nextEpochPoint;
-        _epoch = _epoch.add(1);
+        _epoch = _epoch + 1;
     }
 
     /* ========== EVENTS ============= */
@@ -131,7 +127,7 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
         require(initialized == false, "alreadyInitialized");
         startTime = _startTime;
         epoch_length = _epoch_length;
-        lastEpochTime = _startTime.sub(epoch_length);
+        lastEpochTime = _startTime - epoch_length;
         initialized = true;
     }
 
@@ -154,7 +150,7 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
     }
 
     function nextEpochPoint() public view override returns (uint256) {
-        return lastEpochTime.add(epoch_length);
+        return lastEpochTime + epoch_length;
     }
 
     function epoch() public view override returns (uint256) {
@@ -163,16 +159,13 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
 
     function redemption_fee_adjusted() public view returns (uint256) {
         if (governanceToken == address(0)) return redemption_fee;
-        if (IERC20(governanceToken).balanceOf(tx.origin) > discount_requirenment() ) return redemption_fee.div(2);
+        if (IERC20(governanceToken).balanceOf(tx.origin) > discount_requirenment() ) return redemption_fee / 2;
     }
 
     function discount_requirenment() public view returns (uint256) {
         if (gov_token_price() == 0) return 1;
         uint256 decimals = ERC20Detailed(governanceToken).decimals();
-        return  gov_token_value_for_discount
-                .mul(PRICE_PRECISION)
-                .mul(decimals)
-                .div(gov_token_price());
+        return  gov_token_value_for_discount * PRICE_PRECISION * decimals / gov_token_price();
     }
 
     function info()
@@ -222,7 +215,7 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
         for (uint256 i = 0; i < pools_array.length; i++) {
             // Exclude null addresses
             if (pools_array[i] != address(0)) {
-                total_collateral_value = total_collateral_value.add(IPool(pools_array[i]).collateralDollarBalance());
+                total_collateral_value = total_collateral_value + IPool(pools_array[i]).collateralDollarBalance();
             }
         }
         return total_collateral_value;
@@ -234,7 +227,7 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
         }
         uint256 total_collateral_value = globalCollateralValue();
         uint256 total_supply_dollar = IERC20(AGOUSD).totalSupply();
-        uint256 ecr = total_collateral_value.mul(PRICE_PRECISION).div(total_supply_dollar);
+        uint256 ecr = total_collateral_value * PRICE_PRECISION / total_supply_dollar;
         if (ecr > COLLATERAL_RATIO_MAX) {
             return COLLATERAL_RATIO_MAX;
         }
@@ -250,22 +243,22 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
         uint256 current_dollar_price = dollarPrice();
 
         // Step increments are 0.25% (upon genesis, changable by setRatioStep())
-        if (current_dollar_price > price_target.add(price_band)) {
+        if (current_dollar_price > price_target + price_band ) {
             // decrease collateral ratio
             if (target_collateral_ratio <= ratio_step) {
                 // if within a step of 0, go to 0
                 target_collateral_ratio = 0;
             } else {
-                target_collateral_ratio = target_collateral_ratio.sub(ratio_step);
+                target_collateral_ratio = target_collateral_ratio - ratio_step;
             }
         }
         // IRON price is below $1 - `price_band`. Need to increase `collateral_ratio`
-        else if (current_dollar_price < price_target.sub(price_band)) {
+        else if (current_dollar_price < price_target - price_band) {
             // increase collateral ratio
-            if (target_collateral_ratio.add(ratio_step) >= COLLATERAL_RATIO_MAX) {
+            if (target_collateral_ratio + ratio_step >= COLLATERAL_RATIO_MAX) {
                 target_collateral_ratio = COLLATERAL_RATIO_MAX; // cap collateral ratio at 1.000000
             } else {
-                target_collateral_ratio = target_collateral_ratio.add(ratio_step);
+                target_collateral_ratio = target_collateral_ratio + ratio_step;
             }
         }
 
@@ -282,12 +275,12 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
     // Check if the protocol is over- or under-collateralized, by how much
     function calcCollateralBalance() public view returns (uint256 _collateral_value, bool _exceeded) {
         uint256 total_collateral_value = globalCollateralValue();
-        uint256 target_collateral_value = IERC20(AGOUSD).totalSupply().mul(target_collateral_ratio).div(PRICE_PRECISION);
+        uint256 target_collateral_value = IERC20(AGOUSD).totalSupply() * target_collateral_ratio / PRICE_PRECISION;
         if (total_collateral_value >= target_collateral_value) {
-            _collateral_value = total_collateral_value.sub(target_collateral_value);
+            _collateral_value = total_collateral_value - target_collateral_value;
             _exceeded = true;
         } else {
-            _collateral_value = target_collateral_value.sub(total_collateral_value);
+            _collateral_value = target_collateral_value - total_collateral_value;
             _exceeded = false;
         }
     }
@@ -312,7 +305,7 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
         }
         IERC20(_input_token).safeApprove(uniswap_router, 0);
         IERC20(_input_token).safeApprove(uniswap_router, _input_amount);
-        uint256[] memory out_amounts = IUniswapRouter(uniswap_router).swapExactTokensForTokens(_input_amount, _min_output_amount, _path, address(this), block.timestamp.add(1800));
+        uint256[] memory out_amounts = IUniswapRouter(uniswap_router).swapExactTokensForTokens(_input_amount, _min_output_amount, _path, address(this), block.timestamp + 1800);
         return out_amounts[out_amounts.length - 1];
     }
     /* ========== RESTRICTED FUNCTIONS ========== */
@@ -345,7 +338,7 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
         require(_exceeded && _excess_collateral_value > 0, "!exceeded");
         require(_collateral_value > 0 && _collateral_value < _excess_collateral_value, "invalidCollateralAmount");
         uint256 _collateral_price = IPool(rebalancing_pool).getCollateralPrice();
-        uint256 _collateral_amount_sell = _collateral_value.mul(PRICE_PRECISION).div(_collateral_price);
+        uint256 _collateral_amount_sell = _collateral_value * PRICE_PRECISION / _collateral_price;
         require(IERC20(rebalancing_pool_collateral).balanceOf(rebalancing_pool) > _collateral_amount_sell, "insufficentPoolBalance");
         IPool(rebalancing_pool).transferCollateralToTreasury(_collateral_amount_sell); // Transfer collateral from pool to treasury
         uint256 out_share_amount = _swap(rebalancing_pool_collateral, _collateral_amount_sell, _min_share_amount);
@@ -366,7 +359,7 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
             IERC20(rebalancing_pool_collateral).safeTransfer(rebalancing_pool, _collateral_balance); // Transfer collateral from Treasury to Pool
         }
         uint256 collateral_price = IPool(rebalancing_pool).getCollateralPrice();
-        uint256 out_collateral_value = out_collateral_amount.mul(collateral_price).div(PRICE_PRECISION);
+        uint256 out_collateral_value = out_collateral_amount * collateral_price / PRICE_PRECISION;
         emit Recollateralized(_share_amount, out_collateral_amount, out_collateral_value);
     }
 
@@ -374,9 +367,9 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
         (uint256 _excess_collateral_value, bool _exceeded) = calcCollateralBalance();
         uint256 _allocation_value = 0;
         if (_exceeded) {
-            _allocation_value = _excess_collateral_value.mul(excess_collateral_distributed_ratio).div(RATIO_PRECISION);
+            _allocation_value = _excess_collateral_value * excess_collateral_distributed_ratio / RATIO_PRECISION;
             uint256 collateral_price = IPool(rebalancing_pool).getCollateralPrice();
-            uint256 _allocation_amount = _allocation_value.mul(PRICE_PRECISION).div(collateral_price);
+            uint256 _allocation_amount = _allocation_value * PRICE_PRECISION / collateral_price;
             IPool(rebalancing_pool).transferCollateralToTreasury(_allocation_amount); // Transfer collateral from pool to treasury
             IERC20(rebalancing_pool_collateral).safeApprove(foundry, 0);
             IERC20(rebalancing_pool_collateral).safeApprove(foundry, _allocation_amount);
@@ -486,7 +479,7 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
     function resetStartTime(uint256 _startTime) external onlyOwner {
         require(_epoch == 0, "already started");
         startTime = _startTime;
-        lastEpochTime = _startTime.sub(8 hours);
+        lastEpochTime = _startTime - 8 hours;
     }
 
     function setFoundry(address _foundry) public onlyOwner {

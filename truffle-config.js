@@ -39,8 +39,19 @@ module.exports = {
             ),
             network_id: 137,
             skipDryRun: true,
+            networkCheckTimeout: 15000,
+            gasPrice: 10e9,
+            gas: 15e6
+        },
+        mumbai: {
+            provider: new HDWalletProvider(
+                process.env.PRIVATE_KEY,
+                'https://rpc-mumbai.maticvigil.com'
+            ),
+            network_id: 80001,
+            skipDryRun: true,
             // networkCheckTimeout: 5000,
-            gasPrice: 5e9,
+            gasPrice: 1e9,
             gas: 15e6
         }
     },

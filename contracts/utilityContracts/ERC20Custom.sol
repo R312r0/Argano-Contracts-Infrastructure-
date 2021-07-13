@@ -1,8 +1,8 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.4;
 
-import "../utilityContracts/Context.sol";
-import "../interfaces/IERC20.sol";
+import "@openzeppelin/contracts/utils/Context.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../libraries/SafeMath.sol";
 
 abstract contract ERC20Custom is Context, IERC20 {
@@ -74,13 +74,6 @@ abstract contract ERC20Custom is Context, IERC20 {
 
 	function burn(uint256 amount) public virtual {
 		_burn(_msgSender(), amount);
-	}
-
-	function burnFrom(address account, uint256 amount) public virtual {
-		uint256 decreasedAllowance = allowance(account, _msgSender()).sub(amount);
-
-		_approve(account, _msgSender(), decreasedAllowance);
-		_burn(account, amount);
 	}
 
 	function _burn(address account, uint256 amount) internal virtual {

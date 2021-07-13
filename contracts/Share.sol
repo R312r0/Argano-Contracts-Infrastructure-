@@ -1,51 +1,33 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.4;
-pragma experimental ABIEncoderV2;
 
-import "./libraries/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/utils/Context.sol";
 import "./interfaces/IEpoch.sol";
 import "./interfaces/ITreasury.sol";
-import "./interfaces/IERC20.sol";
-import "./utilityContracts/Context.sol";
-import "./utilityContracts/Ownable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "./utilityContracts/ERC20Custom.sol";
 
 contract Share is ERC20Custom, Ownable {
-    using SafeMath for uint256;
-
-    /* ========== STATE VARIABLES ========== */
-
-    // ERC20 - Token
     string public  symbol;
     string public  name;
     uint8 public constant  decimals = 18;
 
-    // CONTRACTS
     address public treasury;
 
-    // FLAGS
     bool public initialized;
 
-    // DISTRIBUTION
     uint256 public constant COMMUNITY_REWARD_ALLOCATION = 80000000 ether; // 80M
-    uint256 public constant DEV_FUND_ALLOCATION = 0 ether; // 0
-    uint256 public constant VESTING_DURATION = 1 days;//365 days; // 12 months
-    uint256 public startTime; // Start time of vesting duration
-    uint256 public endTime; // End of vesting duration
-    address public devFund;
     address public rewardController; // Holding SHARE tokens to distribute into Liquiditiy Mining Pools
-    uint256 public devFundLastClaimed;
-    uint256 public devFundEmissionRate = DEV_FUND_ALLOCATION / VESTING_DURATION;
     uint256 public communityRewardClaimed;
-
-    /* ========== MODIFIERS ========== */
 
     modifier onlyPools() {
         require(ITreasury(treasury).hasPool(msg.sender), "!pools");
         _;
     }
 
-    /* ========== CONSTRUCTOR ========== */
+    event ShareBurned(address indexed from, address indexed to, uint256 amount);// Track Share burned
+    event ShareMinted(address indexed from, address indexed to, uint256 amount);// Track Share minted
 
     constructor(string memory _name, string memory _symbol,  address _treasury){
         name = _name;
@@ -53,19 +35,11 @@ contract Share is ERC20Custom, Ownable {
         treasury = _treasury;
     }
 
-    function initialize(
-        address _devFund,
-        address _rewardController,
-        uint256 _startTime
-    ) external onlyOwner {
+    function initialize( address _rewardController) external onlyOwner {
         require(!initialized, "alreadyInitialized");
         require(_rewardController != address(0), "!rewardController");
         initialized = true;
-        devFund = _devFund;
         rewardController = _rewardController;
-        startTime = _startTime;
-        endTime = _startTime + VESTING_DURATION;
-        devFundLastClaimed = _startTime;
 
         _mint(msg.sender, 5000 ether);
     }
@@ -74,22 +48,16 @@ contract Share is ERC20Custom, Ownable {
         require(amount > 0, "invalidAmount");
         require(initialized, "!initialized");
         require(rewardController != address(0), "!rewardController");
-        uint256 _remainingRewards = COMMUNITY_REWARD_ALLOCATION.sub(communityRewardClaimed);
+        uint256 _remainingRewards = COMMUNITY_REWARD_ALLOCATION - communityRewardClaimed;
         require(amount <= _remainingRewards, "exceedRewards");
-        communityRewardClaimed = communityRewardClaimed.add(amount);
+        communityRewardClaimed = communityRewardClaimed + amount;
         _mint(rewardController, amount);
     }
 
     /* ========== RESTRICTED FUNCTIONS ========== */
-
     function setTreasuryAddress(address _treasury) external onlyOwner {
+        require(_treasury != address(0), 'Zero address passed');
         treasury = _treasury;
-    }
-
-    function setDevFund(address _devFund) external {
-        require(msg.sender == devFund, "!dev");
-        require(_devFund != address(0), "zero");
-        devFund = _devFund;
     }
 
     // This function is what other Pools will call to mint new SHARE
@@ -103,28 +71,4 @@ contract Share is ERC20Custom, Ownable {
         super._burnFrom(b_address, b_amount);
         emit ShareBurned(b_address, address(this), b_amount);
     }
-
-    function unclaimedDevFund() public view returns (uint256 _pending) {
-        uint256 _now = block.timestamp;
-        if (_now > endTime) _now = endTime;
-        if (devFundLastClaimed >= _now) return 0;
-        _pending = _now.sub(devFundLastClaimed).mul(devFundEmissionRate);
-    }
-
-    function claimDevFundRewards() external {
-        require(msg.sender == devFund, "!dev");
-        uint256 _pending = unclaimedDevFund();
-        if (_pending > 0 && devFund != address(0)) {
-            _mint(devFund, _pending);
-            devFundLastClaimed = block.timestamp;
-        }
-    }
-
-    /* ========== EVENTS ========== */
-
-    // Track Share burned
-    event ShareBurned(address indexed from, address indexed to, uint256 amount);
-
-    // Track Share minted
-    event ShareMinted(address indexed from, address indexed to, uint256 amount);
 }

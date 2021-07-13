@@ -37,27 +37,27 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "// SPDX-License-Identifier: MIT\r\npragma solidity 0.8.4;\r\n\r\ninterface IEpoch {\r\n    function epoch() external view returns (uint256);\r\n    function nextEpochPoint() external view returns (uint256);\r\n}\r\n",
-  "sourcePath": "C:\\Users\\PaulMuller\\Documents\\projects\\project_AGO\\contracts\\interfaces\\IEpoch.sol",
+  "sourcePath": "C:/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IEpoch.sol",
   "ast": {
     "absolutePath": "/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IEpoch.sol",
     "exportedSymbols": {
       "IEpoch": [
-        5098
+        81
       ]
     },
-    "id": 5099,
+    "id": 82,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 5087,
+        "id": 70,
         "literals": [
           "solidity",
           "0.8",
           ".4"
         ],
         "nodeType": "PragmaDirective",
-        "src": "33:22:11"
+        "src": "33:22:1"
       },
       {
         "abstract": false,
@@ -65,42 +65,42 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 5098,
+        "id": 81,
         "linearizedBaseContracts": [
-          5098
+          81
         ],
         "name": "IEpoch",
-        "nameLocation": "69:6:11",
+        "nameLocation": "69:6:1",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "functionSelector": "900cf0cf",
-            "id": 5092,
+            "id": 75,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "epoch",
-            "nameLocation": "92:5:11",
+            "nameLocation": "92:5:1",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5088,
+              "id": 71,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "97:2:11"
+              "src": "97:2:1"
             },
             "returnParameters": {
-              "id": 5091,
+              "id": 74,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5090,
+                  "id": 73,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5092,
-                  "src": "123:7:11",
+                  "scope": 75,
+                  "src": "123:7:1",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -108,10 +108,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 5089,
+                    "id": 72,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "123:7:11",
+                    "src": "123:7:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -120,42 +120,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "122:9:11"
+              "src": "122:9:1"
             },
-            "scope": 5098,
-            "src": "83:49:11",
+            "scope": 81,
+            "src": "83:49:1",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           },
           {
             "functionSelector": "c5967c26",
-            "id": 5097,
+            "id": 80,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "nextEpochPoint",
-            "nameLocation": "147:14:11",
+            "nameLocation": "147:14:1",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5093,
+              "id": 76,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "161:2:11"
+              "src": "161:2:1"
             },
             "returnParameters": {
-              "id": 5096,
+              "id": 79,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5095,
+                  "id": 78,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5097,
-                  "src": "187:7:11",
+                  "scope": 80,
+                  "src": "187:7:1",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -163,10 +163,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 5094,
+                    "id": 77,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "187:7:11",
+                    "src": "187:7:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -175,42 +175,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "186:9:11"
+              "src": "186:9:1"
             },
-            "scope": 5098,
-            "src": "138:58:11",
+            "scope": 81,
+            "src": "138:58:1",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 5099,
-        "src": "59:140:11",
+        "scope": 82,
+        "src": "59:140:1",
         "usedErrors": []
       }
     ],
-    "src": "33:168:11"
+    "src": "33:168:1"
   },
   "legacyAST": {
     "absolutePath": "/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IEpoch.sol",
     "exportedSymbols": {
       "IEpoch": [
-        5098
+        81
       ]
     },
-    "id": 5099,
+    "id": 82,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 5087,
+        "id": 70,
         "literals": [
           "solidity",
           "0.8",
           ".4"
         ],
         "nodeType": "PragmaDirective",
-        "src": "33:22:11"
+        "src": "33:22:1"
       },
       {
         "abstract": false,
@@ -218,42 +218,42 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 5098,
+        "id": 81,
         "linearizedBaseContracts": [
-          5098
+          81
         ],
         "name": "IEpoch",
-        "nameLocation": "69:6:11",
+        "nameLocation": "69:6:1",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "functionSelector": "900cf0cf",
-            "id": 5092,
+            "id": 75,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "epoch",
-            "nameLocation": "92:5:11",
+            "nameLocation": "92:5:1",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5088,
+              "id": 71,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "97:2:11"
+              "src": "97:2:1"
             },
             "returnParameters": {
-              "id": 5091,
+              "id": 74,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5090,
+                  "id": 73,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5092,
-                  "src": "123:7:11",
+                  "scope": 75,
+                  "src": "123:7:1",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -261,10 +261,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 5089,
+                    "id": 72,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "123:7:11",
+                    "src": "123:7:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -273,42 +273,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "122:9:11"
+              "src": "122:9:1"
             },
-            "scope": 5098,
-            "src": "83:49:11",
+            "scope": 81,
+            "src": "83:49:1",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           },
           {
             "functionSelector": "c5967c26",
-            "id": 5097,
+            "id": 80,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "nextEpochPoint",
-            "nameLocation": "147:14:11",
+            "nameLocation": "147:14:1",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5093,
+              "id": 76,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "161:2:11"
+              "src": "161:2:1"
             },
             "returnParameters": {
-              "id": 5096,
+              "id": 79,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5095,
+                  "id": 78,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5097,
-                  "src": "187:7:11",
+                  "scope": 80,
+                  "src": "187:7:1",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -316,10 +316,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 5094,
+                    "id": 77,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "187:7:11",
+                    "src": "187:7:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -328,21 +328,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "186:9:11"
+              "src": "186:9:1"
             },
-            "scope": 5098,
-            "src": "138:58:11",
+            "scope": 81,
+            "src": "138:58:1",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 5099,
-        "src": "59:140:11",
+        "scope": 82,
+        "src": "59:140:1",
         "usedErrors": []
       }
     ],
-    "src": "33:168:11"
+    "src": "33:168:1"
   },
   "compiler": {
     "name": "solc",
@@ -350,7 +350,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-06-23T14:42:39.941Z",
+  "updatedAt": "2021-06-30T17:35:00.176Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

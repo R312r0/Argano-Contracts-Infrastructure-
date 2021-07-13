@@ -18,16 +18,18 @@ const getDateAsText = (_date = new Date()) =>
 
 const appendZeroToLength = (_value, _length) => `${_value}`.padStart(_length, 0)
 
-module.exports.writeAddress = _instance => {
+module.exports.writeAddress = (_instance, _name) => {
     let prev = undefined
     try {prev = require('./lastDeployedAddresses.json')}catch (e) {prev = {}}
-    prev[_instance.constructor._json.contractName] = _instance.address
+    const name = _name || _instance.constructor._json.contractName
+    prev[name] = _instance.address
     require('fs').writeFileSync(`./lastDeployedAddresses.json`, JSON.stringify(prev, null, 4), () => console.log(`${_instance.constructor._json.contractName}@${_instance.address} stored!`))
     
     return _instance
 }
 
 module.exports.writeAddress_raw = (_address, _name) => {
+    console.log(`Saving ${_address}:${_name}`)
     let prev = undefined
     try {prev = require('./lastDeployedAddresses.json')}catch (e) {prev = {}}
     prev[_name] = _address

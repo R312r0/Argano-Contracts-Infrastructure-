@@ -1,25 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.4;
-pragma experimental ABIEncoderV2;
 
-import "./libraries/Address.sol";
-import "./libraries/SafeERC20.sol";
-import "./libraries/SafeMath.sol";
+import "@openzeppelin/contracts/utils/Address.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/utils/Context.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./interfaces/IOracle.sol";
 import "./interfaces/IEpoch.sol";
 import "./interfaces/ITreasury.sol";
-import "./interfaces/IERC20.sol";
-import "./utilityContracts/Context.sol";
-import "./utilityContracts/Ownable.sol";
-import "./utilityContracts/ERC20.sol";
-import "./utilityContracts/ReentrancyGuard.sol";
 import "./utilityContracts/ShareWrapper.sol";
 
 
 contract Foundry is ShareWrapper, ReentrancyGuard, Ownable {
     using SafeERC20 for IERC20;
     using Address for address;
-    using SafeMath for uint256;
 
     /* ========== DATA STRUCTURES ========== */
 
@@ -58,10 +54,6 @@ contract Foundry is ShareWrapper, ReentrancyGuard, Ownable {
     event RewardAdded(address indexed user, uint256 reward);
 
     /* ========== Modifiers =============== */
-    modifier blacksmithExists {
-        require(balanceOf(msg.sender) > 0, "Foundry: The blacksmith does not exist");
-        _;
-    }
 
     modifier updateReward(address blacksmith) {
         if (blacksmith != address(0)) {
@@ -123,7 +115,7 @@ contract Foundry is ShareWrapper, ReentrancyGuard, Ownable {
     // =========== Snapshot getters
 
     function latestSnapshotIndex() public view returns (uint256) {
-        return foundryHistory.length.sub(1);
+        return foundryHistory.length - (1);
     }
 
     function getLatestSnapshot() internal view returns (FoundrySnapshot memory) {
@@ -139,7 +131,7 @@ contract Foundry is ShareWrapper, ReentrancyGuard, Ownable {
     }
 
     function canWithdraw(address blacksmith) external view returns (bool) {
-        return blacksmiths[blacksmith].epochTimerStart.add(withdrawLockupEpochs) <= ITreasury(treasury).epoch();
+        return blacksmiths[blacksmith].epochTimerStart + (withdrawLockupEpochs) <= ITreasury(treasury).epoch();
     }
 
     function epoch() external view returns (uint256) {
@@ -160,7 +152,7 @@ contract Foundry is ShareWrapper, ReentrancyGuard, Ownable {
         uint256 latestRPS = getLatestSnapshot().rewardPerShare;
         uint256 storedRPS = getLastSnapshotOf(blacksmith).rewardPerShare;
 
-        return balanceOf(blacksmith).mul(latestRPS.sub(storedRPS)).div(1e18).add(blacksmiths[blacksmith].rewardEarned);
+        return balanceOf(blacksmith) * (latestRPS - (storedRPS)) / (1e18) + (blacksmiths[blacksmith].rewardEarned);
     }
 
     /* ========== MUTATIVE FUNCTIONS ========== */
@@ -172,9 +164,10 @@ contract Foundry is ShareWrapper, ReentrancyGuard, Ownable {
         emit Staked(msg.sender, amount);
     }
 
-    function withdraw(uint256 amount) public override nonReentrant blacksmithExists updateReward(msg.sender) {
+    function withdraw(uint256 amount) public override nonReentrant updateReward(msg.sender) {
+        require(balanceOf(msg.sender) > 0, "Foundry: The blacksmith does not exist");
         require(amount > 0, "Foundry: Cannot withdraw 0");
-        require(blacksmiths[msg.sender].epochTimerStart.add(withdrawLockupEpochs) <= ITreasury(treasury).epoch(), "Foundry: still in withdraw lockup");
+        require(blacksmiths[msg.sender].epochTimerStart + (withdrawLockupEpochs) <= ITreasury(treasury).epoch(), "Foundry: still in withdraw lockup");
         claimReward();
         super.withdraw(amount);
         emit Withdrawn(msg.sender, amount);
@@ -200,7 +193,7 @@ contract Foundry is ShareWrapper, ReentrancyGuard, Ownable {
 
         // Create & add new snapshot
         uint256 prevRPS = getLatestSnapshot().rewardPerShare;
-        uint256 nextRPS = prevRPS.add(amount.mul(1e18).div(totalSupply()));
+        uint256 nextRPS = prevRPS + (amount * (1e18) / totalSupply());
 
         FoundrySnapshot memory newSnapshot = FoundrySnapshot({time: block.number, rewardReceived: amount, rewardPerShare: nextRPS});
         foundryHistory.push(newSnapshot);

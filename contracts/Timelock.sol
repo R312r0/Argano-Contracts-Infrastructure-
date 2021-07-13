@@ -1,11 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.4;
 
-import "./libraries/SafeMath.sol";
-
 contract Timelock {
-    using SafeMath for uint256;
-
     event NewAdmin(address indexed newAdmin);
     event NewPendingAdmin(address indexed newPendingAdmin);
     event NewDelay(uint256 indexed newDelay);
@@ -109,7 +105,7 @@ contract Timelock {
             "Timelock::queueTransaction: Call must come from admin."
         );
         require(
-            eta >= getBlockTimestamp().add(delay),
+            eta >= getBlockTimestamp() + delay,
             "Timelock::queueTransaction: Estimated execution block must satisfy delay."
         );
 
@@ -163,7 +159,7 @@ contract Timelock {
             "Timelock::executeTransaction: Transaction hasn't surpassed time lock."
         );
         require(
-            getBlockTimestamp() <= eta.add(GRACE_PERIOD),
+            getBlockTimestamp() <= eta + GRACE_PERIOD,
             "Timelock::executeTransaction: Transaction is stale."
         );
 
