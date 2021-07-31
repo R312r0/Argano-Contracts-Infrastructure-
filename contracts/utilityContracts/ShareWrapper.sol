@@ -20,14 +20,16 @@ contract ShareWrapper {
     }
 
     function stake(uint256 amount) public virtual {
+        require(amount > 0, "Cannot stake 0");
         _totalSupply = _totalSupply + amount;
         _balances[msg.sender] = _balances[msg.sender] + amount;
         IERC20(share).safeTransferFrom(msg.sender, address(this), amount);
     }
 
     function withdraw(uint256 amount) public virtual {
+        require(amount > 0, "Cannot withdraw 0");
         uint256 blacksmithShare = _balances[msg.sender];
-        require(blacksmithShare >= amount, "Boardroom: withdraw request greater than staked amount");
+        require(blacksmithShare >= amount, "Withdraw request greater than staked amount");
         _totalSupply = _totalSupply - amount;
         _balances[msg.sender] = blacksmithShare - amount;
         IERC20(share).safeTransfer(msg.sender, amount);

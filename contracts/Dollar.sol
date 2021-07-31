@@ -1,68 +1,58 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.4;
 
-import "./interfaces/IDollar.sol";
-import "./interfaces/IEpoch.sol";
-import "./interfaces/ITreasury.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/utils/Context.sol";
-import "./utilityContracts/ERC20Custom.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "./interfaces/IDollar.sol";
+import "./interfaces/ITreasury.sol";
 
-contract Dollar is ERC20Custom, IDollar, Ownable {
-    // ERC20
-    string public  symbol;
-    string public  name;
-    uint8 public constant  decimals = 18;
-    uint256 public constant genesis_supply = 5000 ether; // 5000 will be mited at genesis for liq pool seeding
-
-    // CONTRACTS
+contract Dollar is ERC20, IDollar, Ownable {
     address public treasury;
-
-    // FLAGS
-    bool public initialized;
-
-    /* ========== MODIFIERS ========== */
+    bool private genesisSupplyMinted = false;
+    uint256 public genesisSupply;
 
     modifier onlyPools() {
         require(ITreasury(treasury).hasPool(msg.sender), "!pools");
         _;
     }
 
-    event DollarBurned(address indexed from, address indexed to, uint256 amount);// Track DOLLAR burned
-    event DollarMinted(address indexed from, address indexed to, uint256 amount);// Track DOLLAR minted
+    event DollarBurned(address indexed from, address indexed to, uint256 amount);
+    event DollarMinted(address indexed from, address indexed to, uint256 amount);
+    event NewTreasuryAddress(address treasury);
 
-
-    constructor(string memory _name,  string memory _symbol, address _treasury){
-        name = _name;
-        symbol = _symbol;
-        treasury = _treasury;
+    constructor(
+        string memory _name,  
+        string memory _symbol, 
+        address _treasury,
+        uint256 _genesisSupply
+    )
+        ERC20(_name, _symbol)
+    {
+        setTreasuryAddress(_treasury);
+        genesisSupply = _genesisSupply;
     }
-
-    function initialize() external onlyOwner {
-        require(!initialized, "alreadyInitialized");
-        initialized = true;
-        _mint(_msgSender(), genesis_supply);
-    }
-
-    /* ========== RESTRICTED FUNCTIONS ========== */
-
-    // Burn DOLLAR. Can be used by Pool only
-    function poolBurnFrom(address _address, uint256 _amount) external override onlyPools {
-        super._burnFrom(_address, _amount);
-        emit DollarBurned(_address, msg.sender, _amount);
-    }
-
-    // Mint DOLLAR. Can be used by Pool only
-    function poolMint(address _address, uint256 _amount) external override onlyPools {
-        super._mint(_address, _amount);
-        emit DollarMinted(msg.sender, _address, _amount);
+       
+    function mintGenesisSupply() external onlyOwner {
+        require(!genesisSupplyMinted, "genesisSupplyAlreadyMinted");
+        genesisSupplyMinted = true;
+        _mint(msg.sender, genesisSupply);
+        emit DollarMinted(address(this), msg.sender, genesisSupply);
     }
 
     function setTreasuryAddress(address _treasury) public onlyOwner {
         require(_treasury != address(0), 'Zero address passed');
         treasury = _treasury;
+        emit NewTreasuryAddress(treasury);
     }
 
+    function poolBurnFrom(address _address, uint256 _amount) external override onlyPools {
+        _burn(_address, _amount);
+        emit DollarBurned(_address, msg.sender, _amount);
+    }
 
+    // Mint DOLLAR. Can be used by Pool only
+    function poolMint(address _address, uint256 _amount) external override onlyPools {
+        _mint(_address, _amount);
+        emit DollarMinted(msg.sender, _address, _amount);
+    }
 }

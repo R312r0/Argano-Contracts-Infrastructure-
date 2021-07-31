@@ -30,4 +30,6 @@ interface ITreasury is IEpoch {
             uint256,
             uint256
         );
+        
+    function updateOracles() external;
 }

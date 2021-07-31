@@ -1,9 +1,0 @@
-// SPDX-License-Identifier: MIT
-
-pragma solidity 0.8.4;
-
-interface IShareDevFund {
-    function claimDevFundRewards(uint256 _amount) external;
-    function unclaimedDevFund() external view returns (uint256 _pending);
-    function setDevFund(address _devFund) external;
-}

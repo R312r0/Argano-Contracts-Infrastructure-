@@ -6,7 +6,11 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract ARGANO is ERC20, Ownable {
-    constructor() ERC20("Argano", "AGO") {
-        _mint(msg.sender, 65000000 ether);
+    constructor(
+        string memory _name, 
+        string memory _symbol,
+        uint256 _initialSupply
+    ) ERC20( _name, _symbol) {
+        _mint(msg.sender, _initialSupply);//manual distribution desired
     }
 }

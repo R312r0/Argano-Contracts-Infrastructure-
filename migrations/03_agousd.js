@@ -1,119 +1,230 @@
-const save      = require('../logToFile.js').writeAddress
-const save_raw  = require('../logToFile.js').writeAddress_raw
-const startTime = Math.floor(new Date('2021-04-21T09:00:00.000+00:00').getTime() / 1000)
+"use strict"
+const {writeAddress_raw} = require('../logToFile.js')
+const env = require('./projectSettings.json')
+const Big = require('big.js')
+Big.PE = 100
+const storage = './deployedAGOUSD.json'
 
+const Dollar            = artifacts.require('Dollar.sol')
+const Share             = artifacts.require('Share.sol')
+const Pool              = artifacts.require('Pool.sol')
+const Treasury          = artifacts.require('Treasury.sol')
+const Foundry           = artifacts.require('Foundry.sol')
+const CustomTokenOracle = artifacts.require('CustomTokenOracle.sol')
+const PairOracle        = artifacts.require('PairOracle.sol')
+const ChainLinkOracle   = artifacts.require('ChainLinkOracle.sol')
+const web3              = Dollar.interfaceAdapter.web3
 
-const BigNumber                     = require('ethers').BigNumber
-const _ONE_                         = BigNumber.from('1000000000000000000')
-const _ONE_THOUSAND_                = BigNumber.from('1000000000000000000000')
-const _ONE_HUNDRED_THOUSAND_        = BigNumber.from('100000000000000000000000')
+const govTokenAddress   = require('../lastDeployedAddresses.json').govToken
+if (!govTokenAddress) process.exit('no governance token installed')
+writeAddress_raw(govTokenAddress, 'govToken', storage)
 
-const poolCelling                   = _ONE_THOUSAND_.mul(5000000).toHexString()//pool celling 5m Dollar
-
-let a_usdt                          = '0xc2132D05D31c914a87C6611C10748AEb04B58e8F'
-let a_wmatic_usdt                   = '0x604229c960e5cacf2aaeac8be68ac07ba9df81c3'//quickswap pair
-let a_usdt_chainlinkAggregator      = '0x0A6513e40db6EB1b165753AD52E80663aeA50545'
-let a_usdt_oracle                   = '0x363C7b3Bf98193E3880A729E3c298A432708bcd2'
-let a_wmatic                        = '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270'
-let a_wmatic_chainlinkAggregator    = '0xAB594600376Ec9fD91F8e885dADF0CE036862dE0'
-let a_factory                       = '0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32'//poly/quickswap
-let a_router                        = '0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff'//poly/quickswap
-let a_ARGANO                        = require('../lastDeployedAddresses.json').ARGANO //|| console.log(e.r.r.o.r)//throw error
-
-const Dollar                        = artifacts.require('Dollar.sol')
-const Share                         = artifacts.require('Share.sol')
-const Pool                          = artifacts.require('Pool.sol')
-const Treasury                      = artifacts.require('Treasury.sol')
-const Foundry                       = artifacts.require('Foundry.sol')
-const DollarOracle                  = artifacts.require('DollarOracle.sol')
-const ShareOracle                   = artifacts.require('ShareOracle.sol')
-const DollarCollateralPairOracle    = artifacts.require('DollarCollateralPairOracle.sol')
-const ShareWCoinPairOracle          = artifacts.require('ShareWCoinPairOracle.sol')
-// const MATICOracle               = artifacts.require('MATICOracle.sol')
-
-const web3                          = Dollar.interfaceAdapter.web3
-const factory                       = new web3.eth.Contract(require('../factoryABI.json'),   a_factory)
-const router                        = new web3.eth.Contract(require('../routerABI.json'),    a_router)
-const usdt                          = new web3.eth.Contract(require('../usdtABI.json'),      a_usdt)
-const wmatic                        = new web3.eth.Contract(require('../wmaticABI.json'),    a_wmatic)
 
 module.exports = async (_deployer, _network, _accounts) => {
     const owner = _accounts[0]
 
-    let i_Treasury = undefined//bug in truffle require usage of callback during first deployment
-    await _deployer.deploy(Treasury).then(async i => {i_Treasury = save(i)})
-    await i_Treasury.setStrategist(owner)
-    await i_Treasury.setGovTokenAddress(a_ARGANO)
-    await sleep(20000)
+    let i_Treasury = undefined
+    await _deployer.deploy(Treasury, env.startTime, env.epochLength).then(i => i_Treasury = i)
 
-    const i_AGOUSD  = save(await _deployer.deploy(Dollar, 'Argano Dollar token',       'AGOUSD',   i_Treasury.address))
-    await i_Treasury.setDollarAddress(i_AGOUSD.address)
-    await i_AGOUSD.initialize()
-    await sleep(20000)
-    
-    const i_CNUSD   = save(await _deployer.deploy(Share,  'Catena Dollar share token', 'CNUSD',    i_Treasury.address))
-    await i_Treasury.setShareAddress(i_CNUSD.address)
-    await i_CNUSD.initialize(owner, owner, startTime)
-    await sleep(20000)
-
-
-    console.log(`USDT bal: ${await usdt.methods.balanceOf(owner)/1e6}`)
-    await i_AGOUSD.approve(a_router, _ONE_HUNDRED_THOUSAND_)
-    console.log('AGOUSD approved for router')
-    await usdt.methods.approve(a_router, _ONE_HUNDRED_THOUSAND_).send({from: owner})
-    console.log('USDT approved for router')
-    await router.methods.addLiquidity(i_AGOUSD.address, usdt._address, _ONE_.mul(2), 2000000, 0, 0, owner, Date.now() + 1000).send({from: owner})
-    console.log('liquidity added')
-    const a_agousdUsdtPair = save_raw(await factory.methods.getPair(i_AGOUSD.address, usdt._address).call(), "a_agousdUsdtPair")
-    console.log('new pair: ', a_agousdUsdtPair)
-    const i_AGOUSDUSDTPairOracle    = save(await _deployer.deploy(DollarCollateralPairOracle, a_agousdUsdtPair))
-    console.log('new pair oracle: ', i_AGOUSDUSDTPairOracle.address)
-    const i_AGOUSDOracle = save(await _deployer.deploy(DollarOracle, i_AGOUSD.address, i_AGOUSDUSDTPairOracle.address, a_usdt_chainlinkAggregator))
-    console.log('new dollar oracle: ', i_AGOUSDOracle.address)     
-
-    console.log(`WMATIC bal: ${await wmatic.methods.balanceOf(owner)/1e18}`)
-    await i_CNUSD.approve(a_router, _ONE_HUNDRED_THOUSAND_)
-    console.log('CNUSD approved for router')
-    await wmatic.methods.approve(a_router, _ONE_HUNDRED_THOUSAND_).send({from: owner})
-    console.log('WMATIC approved for router')
-    await router.methods.addLiquidity(i_CNUSD.address, wmatic._address, _ONE_.mul(2), _ONE_.mul(2), 0, 0, owner, Date.now() + 1000).send({from: owner})
-    console.log('liquidity added')
-    const a_cnusdWmaticPair = save_raw(await factory.methods.getPair(i_CNUSD.address, wmatic._address).call(),"a_cnusdWmaticPair")
-    console.log('new pair: ', a_cnusdWmaticPair)
-    const i_CNUSDWMATICPairOracle   = save(await _deployer.deploy(ShareWCoinPairOracle, a_cnusdWmaticPair))
-    console.log('new pair oracle: ', i_CNUSDWMATICPairOracle.address)
-    const i_CNUSDOracle  = save(await _deployer.deploy(ShareOracle,  i_CNUSD.address,  i_CNUSDWMATICPairOracle.address, a_wmatic_chainlinkAggregator))
-    console.log('new share oracle: ', i_CNUSDOracle.address)      
-
-    
-    const i_Foundry = save(await _deployer.deploy(Foundry))
-    await i_Foundry.initialize(a_usdt, i_CNUSD.address, i_Treasury.address)
-    await i_Foundry.setOracle(a_usdt_oracle)
-    await sleep(20000)
-
-
-    const i_Pool = save(await _deployer.deploy(Pool, 
-        i_AGOUSD.address,
-        i_CNUSD.address,
-        a_ARGANO,
-        a_usdt,
+    const i_Dollar = await _deployer.deploy(Dollar,
+        env.dollar.name,
+        env.dollar.symbol,
         i_Treasury.address,
-        poolCelling
-    ))
-    await i_Pool.setOracle(a_usdt_oracle)
-    await sleep(20000)
+        new Big(env.dollar.initialSupply).toString()
+    )
+    await i_Dollar.mintGenesisSupply()
+    console.log(`${new Big(env.dollar.initialSupply).toString()} ${env.dollar.symbol} minted to '${owner}'`)
+
+    const i_Share = await _deployer.deploy(Share,
+        env.share.name, 
+        env.share.symbol,
+        new Big(env.share.hardCap).toString(),
+        new Big(env.share.initialSupply).toString(),
+        new Big(env.share.communityRewardAllocation).toString(),
+        i_Treasury.address,
+        owner || "reward controller address"
+    )
+    await i_Share.mintGenesisSupply()
+    console.log(`${new Big(env.share.initialSupply).toString()} ${env.share.symbol} minted to '${owner}'`)
+
+    let dollar_collateral_pair = undefined
+    let share_wcoin_pair = undefined
+    let govToken_collateral_pair = undefined
+
+    let i_dollar_collateral_pairOracle = undefined
+    let i_dollar_customTokenOracle = undefined
+
+    let i_share_wcoin_pairOracle = undefined
+    let i_share_customTokenOracle = undefined
+
+    let i_govToken_collateral_pairOracle = undefined
+    let i_govToken_customTokenOracle = undefined
+
+    if (env.pairs.needToGenerate){
+        const router = new web3.eth.Contract(require('../abis/routerABI.json'), env.exchange.router)
+        const factory = new web3.eth.Contract(require('../abis/factoryABI.json'), env.exchange.factory)
+
+        const collateral = new web3.eth.Contract(require('../abis/collateral.json'), env.collateral.address)
+        const collateralDecimals = await collateral.methods.decimals().call()
+        const collateralSymbol = await collateral.methods.symbol().call()
+        const ownerCollateralBalance = await collateral.methods.balanceOf(owner).call()
+
+        const dollarDecimals = await i_Dollar.decimals()
+        const dollarSymbol = await i_Dollar.symbol()
+        const ownerDollarBalance = await i_Dollar.balanceOf(owner)
+
+        const wcoin = new web3.eth.Contract(require('../abis/wcoin.json'), env.wrappedCoin.address) 
+        const wcoinDecimals = await wcoin.methods.decimals().call()
+        const wcoinSymbol = await wcoin.methods.symbol().call()
+        const ownerWcoinBalance = await wcoin.methods.balanceOf(owner).call()
+
+        const shareDecimals = await i_Share.decimals()
+        const shareSymbol = await i_Share.symbol()
+        const ownerShareBalance = await i_Share.balanceOf(owner)
+
+        console.log(`\nbalance's of '${owner}':`)
+        console.log(`\t- ${((ownerCollateralBalance / 10**collateralDecimals).toFixed(collateralDecimals/3))} ${collateralSymbol}`)
+        console.log(`\t- ${((ownerDollarBalance / 10**dollarDecimals).toFixed(dollarDecimals/3))} ${dollarSymbol}`)
+        console.log(`\t- ${((ownerWcoinBalance / 10**wcoinDecimals).toFixed(wcoinDecimals/3))} ${wcoinSymbol}`)
+        console.log(`\t- ${((ownerShareBalance / 10**shareDecimals).toFixed(shareDecimals/3))} ${shareSymbol}`)
+
+        // here need to check requirenments
+        console.log(`\napproving for ${env.exchange.name}:`)
+
+        await collateral.methods.approve(env.exchange.router, new Big(ownerCollateralBalance).toString()).send({from: owner})
+        console.log(`\t+ ${collateralSymbol} for ${new Big(ownerCollateralBalance).toString()}`)
+
+        await i_Dollar.approve(env.exchange.router, new Big(ownerDollarBalance).toString())
+        console.log(`\t+ ${dollarSymbol} for ${new Big(ownerDollarBalance).toString()}`)
+
+        await wcoin.methods.approve(env.exchange.router, new Big(ownerWcoinBalance).toString()).send({from: owner})
+        console.log(`\t+ ${wcoinSymbol} for ${new Big(ownerWcoinBalance).toString()}`)
+
+        await i_Share.approve(env.exchange.router, new Big(ownerShareBalance).toString())
+        console.log(`\t+ ${shareSymbol} for ${new Big(ownerShareBalance).toString()}`)
+        
+        console.log(`\n${dollarSymbol}/${collateralSymbol} pair creating on ${env.exchange.name}:`)
+        await router.methods.addLiquidity(
+            i_Dollar.address, 
+            collateral._address,
+            new Big(env.pairs.defaultValues.dollar_amount).toString(), 
+            new Big(env.pairs.defaultValues.collateral_amount).toString(), 
+            0, 
+            0, 
+            owner, 
+            Date.now() + 1000
+        ).send({from: owner})
+        dollar_collateral_pair = await factory.methods.getPair(i_Dollar.address, collateral._address).call()
+        console.log(`\t+ [${dollarSymbol}${collateralSymbol}]@${dollar_collateral_pair}`)
+
+        console.log(`\n${shareSymbol}/${wcoinSymbol} pair creating on ${env.exchange.name}:`)
+        await router.methods.addLiquidity(
+            i_Share.address, 
+            wcoin._address,
+            new Big(env.pairs.defaultValues.share_amount).toString(),
+            new Big(env.pairs.defaultValues.wcoin_amount).toString(), 
+            0, 
+            0, 
+            owner, 
+            Date.now() + 1000
+        ).send({from: owner})
+        share_wcoin_pair = await factory.methods.getPair(i_Share.address, wcoin._address).call()
+        console.log(`\t+ [${shareSymbol}${wcoinSymbol}]@${share_wcoin_pair}`)
 
 
-    await i_Treasury.addPool(i_Pool.address)
-    await i_Treasury.setOracleDollar(i_AGOUSDOracle.address)
-    await i_Treasury.setOracleShare(i_CNUSDOracle.address)
-    await i_Treasury.setRebalancePool(i_Pool.address)
-    await i_Treasury.toggleEffectiveCollateralRatio()
-    await i_Treasury.toggleCollateralRatio()
-    await i_Treasury.refreshCollateralRatio()
-    await i_Treasury.setUniswapParams(a_router, a_cnusdWmaticPair, a_wmatic_usdt)
-    await i_Treasury.setFoundry(i_Foundry.address)
+        //=======ORACLES=======//
+        console.log(`\n${dollarSymbol}/${collateralSymbol} oracle's creating:`)
 
+        i_dollar_collateral_pairOracle = await _deployer.deploy(PairOracle, dollar_collateral_pair)
+        console.log(`\t+ [${dollarSymbol}/${collateralSymbol}_pairOracle]@${i_dollar_collateral_pairOracle.address}`)    
+        i_dollar_customTokenOracle = await _deployer.deploy(CustomTokenOracle,
+            i_Dollar.address, 
+            i_dollar_collateral_pairOracle.address, 
+            env.collateral.chainlinkAggregator
+        )
+        console.log(`\t+ [${dollarSymbol}_customTokenOracle]@${i_dollar_customTokenOracle.address}`)        
+
+        i_share_wcoin_pairOracle = await _deployer.deploy(PairOracle, share_wcoin_pair)
+        console.log(`\t+ [${shareSymbol}/${wcoinSymbol}_pairOracle]@${i_share_wcoin_pairOracle.address}`)    
+        i_share_customTokenOracle = await _deployer.deploy(CustomTokenOracle,
+            i_Share.address, 
+            i_share_wcoin_pairOracle.address, 
+            env.wrappedCoin.chainlinkAggregator
+        )
+        console.log(`\t+ [${shareSymbol}_customTokenOracle]@${i_share_customTokenOracle.address}`)
+
+        // i_govToken_collateral_pairOracle = await _deployer.deploy(PairOracle, dollar_collateral_pair)
+        // console.log(`\t+ [${dollarSymbol}/${collateralSymbol}_pairOracle]@${i_dollar_collateral_pairOracle.address}`)    
+        // i_dollar_customTokenOracle = await _deployer.deploy(CustomTokenOracle,
+        //     i_Dollar.address, 
+        //     i_dollar_collateral_pairOracle.address, 
+        //     env.collateral.chainlinkAggregator
+        // )
+        // console.log(`\t+ [${dollarSymbol}_customTokenOracle]@${i_dollar_customTokenOracle.address}`)    
+    }
+
+    console.log(`\ncreate chainlink oracles:`)
+    const i_Collateral_ChainLinkOracle = await _deployer.deploy(ChainLinkOracle, env.collateral.chainlinkAggregator, env.oraclePricePrescion)
+    console.log(`\t+ [collateral_ChainLinkOracle]@${i_Collateral_ChainLinkOracle.address}`)
+    const i_Wcoin_ChainLinkOracle = await _deployer.deploy(ChainLinkOracle, env.wrappedCoin.chainlinkAggregator, env.oraclePricePrescion)
+    console.log(`\t+ [wcoin_ChainLinkOracle]@${i_Wcoin_ChainLinkOracle.address}`)
+
+    const i_Foundry = await _deployer.deploy(Foundry,
+        env.collateral.address, 
+        i_Share.address, 
+        i_Treasury.address
+    )
+    
+    const i_Pool = await _deployer.deploy(Pool, 
+        i_Dollar.address,
+        i_Share.address,
+        env.collateral.address,
+        govTokenAddress,
+        i_Treasury.address,
+        new Big(env.poolCelling).toString()
+    )
+       
+    console.log(`\ninstalling other parameters:`) 
+    await i_Foundry.setOracle(i_Collateral_ChainLinkOracle.address);        console.log(`\t+ Foundry.setOracle`) 
+    await i_Pool.setOracle(i_Collateral_ChainLinkOracle.address);           console.log(`\t+ Pool.setOracle`)
+    await i_Treasury.addPool(i_Pool.address);                               console.log(`\t+ Treasury.addPool`)
+    await i_Treasury.setOracleDollar(i_dollar_customTokenOracle.address);   console.log(`\t+ Treasury.setOracleDollar`)
+    await i_Treasury.setOracleShare(i_share_customTokenOracle.address);     console.log(`\t+ Treasury.setOracleShare`)
+    // await i_Treasury.setOracleGovToken(i_govToken_customTokenOracle.address);console.log(`\t+ Treasury.setOracleGovToken`)
+    await i_Treasury.setRebalancePool(i_Pool.address);                      console.log(`\t+ Treasury.setRebalancePool`)
+    await i_Treasury.toggleCollateralRatio();                               console.log(`\t+ Treasury.toggleCollateralRatio`)
+    // await i_Treasury.refreshCollateralRatio();                              console.log(`\t+ Treasury.refreshCollateralRatio`)
+    await i_Treasury.setFoundry(i_Foundry.address);                         console.log(`\t+ Treasury.setFoundry`)
+    await i_Treasury.installTokens(
+        env.exchange.router,
+        govTokenAddress,
+        env.wrappedCoin.address,
+        env.collateral.address,
+        i_Share.address,
+        i_Dollar.address
+    );                                                                      console.log(`\t+ Treasury.installTokens`)
+
+
+    writeAddress_raw(i_Treasury.address,                        'treasury', storage)
+    writeAddress_raw(i_Dollar.address,                          'dollar', storage)
+    writeAddress_raw(i_Share.address,                           'share', storage)
+    writeAddress_raw(i_Foundry.address,                         'foundry', storage)
+    writeAddress_raw(i_Pool.address,                            'pool', storage)
+    
+    writeAddress_raw(dollar_collateral_pair,                    'dollar_collateral_pair', storage)
+    writeAddress_raw(share_wcoin_pair,                          'share_wcoin_pair', storage)
+    writeAddress_raw(i_dollar_collateral_pairOracle.address,    'dollar_collateral_pairOracle', storage)
+    writeAddress_raw(i_dollar_customTokenOracle.address,        'dollar_customTokenOracle', storage)
+    writeAddress_raw(i_share_wcoin_pairOracle.address,          'share_wcoin_pairOracle', storage)
+    writeAddress_raw(i_share_customTokenOracle.address,         'share_customTokenOracle', storage)
+    writeAddress_raw(i_Collateral_ChainLinkOracle.address,      'сollateral_ChainLinkOracle', storage)
+    writeAddress_raw(i_Wcoin_ChainLinkOracle.address,           'wcoin_ChainLinkOracle', storage)
+
+    console.log('You magnificent 💕!')
 }
 
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+const sleep = ms => {
+    console.log(`await for ${(ms/1e3).toFixed(0)}sec`)
+    new Promise(resolve => setTimeout(resolve, ms))
+}
+

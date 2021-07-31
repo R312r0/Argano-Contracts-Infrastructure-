@@ -13,9 +13,16 @@
       ],
       "stateMutability": "view",
       "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "updateIfRequired",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.4+commit.c7e474f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"consult\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IOracle.sol\":\"IOracle\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IOracle.sol\":{\"keccak256\":\"0x7d0e967335efab0d4dff17e241f9979db6f59a798688c1010cffdea7f5d42ef5\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a940dda611a1d615f17bdb5b3e8f3171ade7d4a39c27bcbf5131167c8168793f\",\"dweb:/ipfs/QmVypJG8UeYtHRvfDXm9vqWyoDsPtrrmim6SZv33WwCoog\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.4+commit.c7e474f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"consult\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"updateIfRequired\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IOracle.sol\":\"IOracle\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IOracle.sol\":{\"keccak256\":\"0x762587975183e8100ac2d17289553d3b2d4952c44ec407a672b5276943341153\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6ac59ddbfab239c5361b76927fb8e64b3c368c544af5c598e0140e46b5ec931f\",\"dweb:/ipfs/QmfPdRKN5BHQ3BdLKS5SjYddjE98vzhv7TyHGFdM55Stsv\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -23,38 +30,28 @@
   "deployedGeneratedSources": [],
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "// SPDX-License-Identifier: MIT\r\n\r\npragma solidity ^0.8.0;\r\npragma experimental ABIEncoderV2;\r\n\r\ninterface IOracle {\r\n    function consult() external view returns (uint256);\r\n}\r\n",
-  "sourcePath": "C:/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IOracle.sol",
+  "source": "// SPDX-License-Identifier: MIT\r\n\r\npragma solidity 0.8.4;\r\n\r\ninterface IOracle {\r\n    function consult() external view returns (uint256);\r\n    function updateIfRequired() external;\r\n}\r\n",
+  "sourcePath": "C:\\Users\\PaulMuller\\Documents\\projects\\project_AGO\\contracts\\interfaces\\IOracle.sol",
   "ast": {
     "absolutePath": "/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IOracle.sol",
     "exportedSymbols": {
       "IOracle": [
-        188
+        5854
       ]
     },
-    "id": 189,
+    "id": 5855,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 181,
+        "id": 5845,
         "literals": [
           "solidity",
-          "^",
           "0.8",
-          ".0"
+          ".4"
         ],
         "nodeType": "PragmaDirective",
-        "src": "35:23:4"
-      },
-      {
-        "id": 182,
-        "literals": [
-          "experimental",
-          "ABIEncoderV2"
-        ],
-        "nodeType": "PragmaDirective",
-        "src": "60:33:4"
+        "src": "35:22:24"
       },
       {
         "abstract": false,
@@ -62,42 +59,42 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 188,
+        "id": 5854,
         "linearizedBaseContracts": [
-          188
+          5854
         ],
         "name": "IOracle",
-        "nameLocation": "107:7:4",
+        "nameLocation": "71:7:24",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "functionSelector": "7eeda703",
-            "id": 187,
+            "id": 5850,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "consult",
-            "nameLocation": "131:7:4",
+            "nameLocation": "95:7:24",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 183,
+              "id": 5846,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "138:2:4"
+              "src": "102:2:24"
             },
             "returnParameters": {
-              "id": 186,
+              "id": 5849,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 185,
+                  "id": 5848,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 187,
-                  "src": "164:7:4",
+                  "scope": 5850,
+                  "src": "128:7:24",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -105,10 +102,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 184,
+                    "id": 5847,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "164:7:4",
+                    "src": "128:7:24",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -117,52 +114,69 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "163:9:4"
+              "src": "127:9:24"
             },
-            "scope": 188,
-            "src": "122:51:4",
+            "scope": 5854,
+            "src": "86:51:24",
             "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "f12fcaed",
+            "id": 5853,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "updateIfRequired",
+            "nameLocation": "152:16:24",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 5851,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "168:2:24"
+            },
+            "returnParameters": {
+              "id": 5852,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "179:0:24"
+            },
+            "scope": 5854,
+            "src": "143:37:24",
+            "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 189,
-        "src": "97:79:4",
+        "scope": 5855,
+        "src": "61:122:24",
         "usedErrors": []
       }
     ],
-    "src": "35:143:4"
+    "src": "35:150:24"
   },
   "legacyAST": {
     "absolutePath": "/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IOracle.sol",
     "exportedSymbols": {
       "IOracle": [
-        188
+        5854
       ]
     },
-    "id": 189,
+    "id": 5855,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 181,
+        "id": 5845,
         "literals": [
           "solidity",
-          "^",
           "0.8",
-          ".0"
+          ".4"
         ],
         "nodeType": "PragmaDirective",
-        "src": "35:23:4"
-      },
-      {
-        "id": 182,
-        "literals": [
-          "experimental",
-          "ABIEncoderV2"
-        ],
-        "nodeType": "PragmaDirective",
-        "src": "60:33:4"
+        "src": "35:22:24"
       },
       {
         "abstract": false,
@@ -170,42 +184,42 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 188,
+        "id": 5854,
         "linearizedBaseContracts": [
-          188
+          5854
         ],
         "name": "IOracle",
-        "nameLocation": "107:7:4",
+        "nameLocation": "71:7:24",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "functionSelector": "7eeda703",
-            "id": 187,
+            "id": 5850,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "consult",
-            "nameLocation": "131:7:4",
+            "nameLocation": "95:7:24",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 183,
+              "id": 5846,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "138:2:4"
+              "src": "102:2:24"
             },
             "returnParameters": {
-              "id": 186,
+              "id": 5849,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 185,
+                  "id": 5848,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 187,
-                  "src": "164:7:4",
+                  "scope": 5850,
+                  "src": "128:7:24",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -213,10 +227,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 184,
+                    "id": 5847,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "164:7:4",
+                    "src": "128:7:24",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -225,21 +239,48 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "163:9:4"
+              "src": "127:9:24"
             },
-            "scope": 188,
-            "src": "122:51:4",
+            "scope": 5854,
+            "src": "86:51:24",
             "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "f12fcaed",
+            "id": 5853,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "updateIfRequired",
+            "nameLocation": "152:16:24",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 5851,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "168:2:24"
+            },
+            "returnParameters": {
+              "id": 5852,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "179:0:24"
+            },
+            "scope": 5854,
+            "src": "143:37:24",
+            "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 189,
-        "src": "97:79:4",
+        "scope": 5855,
+        "src": "61:122:24",
         "usedErrors": []
       }
     ],
-    "src": "35:143:4"
+    "src": "35:150:24"
   },
   "compiler": {
     "name": "solc",
@@ -247,7 +288,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-06-30T17:23:32.351Z",
+  "updatedAt": "2021-07-29T13:52:16.260Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},
