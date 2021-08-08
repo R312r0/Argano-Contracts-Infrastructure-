@@ -1,0 +1,50 @@
+{
+    "govToken": {
+        "name": "Argano",
+        "symbol": "AGO",
+        "initialSupply": 65000000e18
+    },
+    "dollar": {
+        "name": "Argano Dollar token",
+        "symbol": "AGOUSD",
+        "initialSupply": 5000e18
+    },
+    "share":{
+        "name": "Catena Dollar share token",
+        "symbol": "CNUSD",
+        "initialSupply": 5000e18,
+        "hardCap": 80000000e18,
+        "communityRewardAllocation": 80000000e18
+    },
+    "collateral": {
+        "address":"0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
+        "chainlinkAggregator": "0x0A6513e40db6EB1b165753AD52E80663aeA50545"
+    },
+    "wrappedCoin": {
+        "address": "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
+        "chainlinkAggregator": "0xAB594600376Ec9fD91F8e885dADF0CE036862dE0"
+    },
+
+    "startTime": 1628429196,
+    "epochLength": 43200,
+    "pairs": {
+        "needToGenerate": true,
+        "defaultValues": {
+            "dollar_amount": 1e17,
+            "collateral_amount": 1e5,
+            "share_amount": 1e17,
+            "wcoin_amount": 1e17,
+            "gov_token_amount": 1e17,
+            "gov_token_collateral_amount": 1e17
+        },
+        "deployedPairs": {}
+    },
+    "oraclePricePrescion": 1e6,
+    "poolCelling": 5000000e18,
+
+    "exchange": {
+        "name": "QuickSwap",
+        "factory": "0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32",
+        "router": "0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff"
+    }
+}

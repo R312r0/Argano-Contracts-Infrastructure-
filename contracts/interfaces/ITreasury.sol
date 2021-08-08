@@ -1,17 +1,16 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
-pragma experimental ABIEncoderV2;
+pragma solidity 0.8.4;
+
 import "./IEpoch.sol";
 
 interface ITreasury is IEpoch {
     function hasPool(address _address) external view returns (bool);
 
-    function info()
+    function info(address _caller)
         external
         view
         returns (
-            uint256,
             uint256,
             uint256,
             uint256,
@@ -30,4 +29,6 @@ interface ITreasury is IEpoch {
             uint256,
             uint256
         );
+        
+    function updateOracles() external;
 }
