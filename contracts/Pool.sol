@@ -140,7 +140,7 @@ contract Pool is Ownable, ReentrancyGuard, IPool {
     ) external notMigrated {
         require(mint_paused == false, "Minting is paused");
         ITreasury(treasury).updateOracles();
-        (, uint256 _share_price, , uint256 _target_collateral_ratio, , , uint256 _minting_fee, ) = ITreasury(treasury).info();
+        (, uint256 _share_price, uint256 _target_collateral_ratio, , , uint256 _minting_fee, ) = ITreasury(treasury).info(msg.sender);
         require(ERC20(collateral).balanceOf(address(this)) - unclaimed_pool_collateral + _collateral_amount <= pool_ceiling, ">poolCeiling");
         uint256 _price_collateral = getCollateralPrice();
         uint256 _total_dollar_value = 0;
@@ -176,7 +176,7 @@ contract Pool is Ownable, ReentrancyGuard, IPool {
         require(redeem_paused == false, "Redeeming is paused");
         require((last_redeemed[msg.sender] + (redemption_delay)) <= block.number, "<redemption_delay");
         ITreasury(treasury).updateOracles();
-        (, uint256 _share_price, , , uint256 _effective_collateral_ratio, , , uint256 _redemption_fee) = ITreasury(treasury).info();
+        (, uint256 _share_price, , uint256 _effective_collateral_ratio, , , uint256 _redemption_fee) = ITreasury(treasury).info(msg.sender);
         uint256 _collateral_price = getCollateralPrice();
         uint256 _dollar_amount_post_fee = _dollar_amount - (_dollar_amount * _redemption_fee / PRICE_PRECISION);
         uint256 _collateral_output_amount = 0;

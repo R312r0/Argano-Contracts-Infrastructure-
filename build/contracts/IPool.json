@@ -81,22 +81,22 @@
     "absolutePath": "/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IPool.sol",
     "exportedSymbols": {
       "IPool": [
-        5900
+        6176
       ]
     },
-    "id": 5901,
+    "id": 6177,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 5874,
+        "id": 6150,
         "literals": [
           "solidity",
           "0.8",
           ".4"
         ],
         "nodeType": "PragmaDirective",
-        "src": "35:22:26"
+        "src": "35:22:37"
       },
       {
         "abstract": false,
@@ -104,42 +104,42 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 5900,
+        "id": 6176,
         "linearizedBaseContracts": [
-          5900
+          6176
         ],
         "name": "IPool",
-        "nameLocation": "73:5:26",
+        "nameLocation": "73:5:37",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "functionSelector": "9c84d0f5",
-            "id": 5879,
+            "id": 6155,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "collateralDollarBalance",
-            "nameLocation": "95:23:26",
+            "nameLocation": "95:23:37",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5875,
+              "id": 6151,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "118:2:26"
+              "src": "118:2:37"
             },
             "returnParameters": {
-              "id": 5878,
+              "id": 6154,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5877,
+                  "id": 6153,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5879,
-                  "src": "144:7:26",
+                  "scope": 6155,
+                  "src": "144:7:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -147,10 +147,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 5876,
+                    "id": 6152,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "144:7:26",
+                    "src": "144:7:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -159,36 +159,36 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "143:9:26"
+              "src": "143:9:37"
             },
-            "scope": 5900,
-            "src": "86:67:26",
+            "scope": 6176,
+            "src": "86:67:37",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           },
           {
             "functionSelector": "ce5494bb",
-            "id": 5884,
+            "id": 6160,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "migrate",
-            "nameLocation": "170:7:26",
+            "nameLocation": "170:7:37",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5882,
+              "id": 6158,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5881,
+                  "id": 6157,
                   "mutability": "mutable",
                   "name": "_new_pool",
-                  "nameLocation": "186:9:26",
+                  "nameLocation": "186:9:37",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5884,
-                  "src": "178:17:26",
+                  "scope": 6160,
+                  "src": "178:17:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -196,10 +196,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 5880,
+                    "id": 6156,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "178:7:26",
+                    "src": "178:7:37",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -209,42 +209,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "177:19:26"
+              "src": "177:19:37"
             },
             "returnParameters": {
-              "id": 5883,
+              "id": 6159,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "205:0:26"
+              "src": "205:0:37"
             },
-            "scope": 5900,
-            "src": "161:45:26",
+            "scope": 6176,
+            "src": "161:45:37",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
             "functionSelector": "378f3576",
-            "id": 5889,
+            "id": 6165,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "transferCollateralToTreasury",
-            "nameLocation": "223:28:26",
+            "nameLocation": "223:28:37",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5887,
+              "id": 6163,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5886,
+                  "id": 6162,
                   "mutability": "mutable",
                   "name": "amount",
-                  "nameLocation": "260:6:26",
+                  "nameLocation": "260:6:37",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5889,
-                  "src": "252:14:26",
+                  "scope": 6165,
+                  "src": "252:14:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -252,10 +252,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 5885,
+                    "id": 6161,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "252:7:26",
+                    "src": "252:7:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -264,48 +264,48 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "251:16:26"
+              "src": "251:16:37"
             },
             "returnParameters": {
-              "id": 5888,
+              "id": 6164,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "276:0:26"
+              "src": "276:0:37"
             },
-            "scope": 5900,
-            "src": "214:63:26",
+            "scope": 6176,
+            "src": "214:63:37",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
             "functionSelector": "f7683bbc",
-            "id": 5894,
+            "id": 6170,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getCollateralPrice",
-            "nameLocation": "294:18:26",
+            "nameLocation": "294:18:37",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5890,
+              "id": 6166,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "312:2:26"
+              "src": "312:2:37"
             },
             "returnParameters": {
-              "id": 5893,
+              "id": 6169,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5892,
+                  "id": 6168,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5894,
-                  "src": "338:7:26",
+                  "scope": 6170,
+                  "src": "338:7:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -313,10 +313,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 5891,
+                    "id": 6167,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "338:7:26",
+                    "src": "338:7:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -325,42 +325,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "337:9:26"
+              "src": "337:9:37"
             },
-            "scope": 5900,
-            "src": "285:62:26",
+            "scope": 6176,
+            "src": "285:62:37",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           },
           {
             "functionSelector": "96423663",
-            "id": 5899,
+            "id": 6175,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getCollateralToken",
-            "nameLocation": "364:18:26",
+            "nameLocation": "364:18:37",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5895,
+              "id": 6171,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "382:2:26"
+              "src": "382:2:37"
             },
             "returnParameters": {
-              "id": 5898,
+              "id": 6174,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5897,
+                  "id": 6173,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5899,
-                  "src": "408:7:26",
+                  "scope": 6175,
+                  "src": "408:7:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -368,10 +368,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 5896,
+                    "id": 6172,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "408:7:26",
+                    "src": "408:7:37",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -381,42 +381,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "407:9:26"
+              "src": "407:9:37"
             },
-            "scope": 5900,
-            "src": "355:62:26",
+            "scope": 6176,
+            "src": "355:62:37",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 5901,
-        "src": "63:357:26",
+        "scope": 6177,
+        "src": "63:357:37",
         "usedErrors": []
       }
     ],
-    "src": "35:387:26"
+    "src": "35:387:37"
   },
   "legacyAST": {
     "absolutePath": "/C/Users/PaulMuller/Documents/projects/project_AGO/contracts/interfaces/IPool.sol",
     "exportedSymbols": {
       "IPool": [
-        5900
+        6176
       ]
     },
-    "id": 5901,
+    "id": 6177,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 5874,
+        "id": 6150,
         "literals": [
           "solidity",
           "0.8",
           ".4"
         ],
         "nodeType": "PragmaDirective",
-        "src": "35:22:26"
+        "src": "35:22:37"
       },
       {
         "abstract": false,
@@ -424,42 +424,42 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 5900,
+        "id": 6176,
         "linearizedBaseContracts": [
-          5900
+          6176
         ],
         "name": "IPool",
-        "nameLocation": "73:5:26",
+        "nameLocation": "73:5:37",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "functionSelector": "9c84d0f5",
-            "id": 5879,
+            "id": 6155,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "collateralDollarBalance",
-            "nameLocation": "95:23:26",
+            "nameLocation": "95:23:37",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5875,
+              "id": 6151,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "118:2:26"
+              "src": "118:2:37"
             },
             "returnParameters": {
-              "id": 5878,
+              "id": 6154,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5877,
+                  "id": 6153,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5879,
-                  "src": "144:7:26",
+                  "scope": 6155,
+                  "src": "144:7:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -467,10 +467,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 5876,
+                    "id": 6152,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "144:7:26",
+                    "src": "144:7:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -479,36 +479,36 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "143:9:26"
+              "src": "143:9:37"
             },
-            "scope": 5900,
-            "src": "86:67:26",
+            "scope": 6176,
+            "src": "86:67:37",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           },
           {
             "functionSelector": "ce5494bb",
-            "id": 5884,
+            "id": 6160,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "migrate",
-            "nameLocation": "170:7:26",
+            "nameLocation": "170:7:37",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5882,
+              "id": 6158,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5881,
+                  "id": 6157,
                   "mutability": "mutable",
                   "name": "_new_pool",
-                  "nameLocation": "186:9:26",
+                  "nameLocation": "186:9:37",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5884,
-                  "src": "178:17:26",
+                  "scope": 6160,
+                  "src": "178:17:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -516,10 +516,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 5880,
+                    "id": 6156,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "178:7:26",
+                    "src": "178:7:37",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -529,42 +529,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "177:19:26"
+              "src": "177:19:37"
             },
             "returnParameters": {
-              "id": 5883,
+              "id": 6159,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "205:0:26"
+              "src": "205:0:37"
             },
-            "scope": 5900,
-            "src": "161:45:26",
+            "scope": 6176,
+            "src": "161:45:37",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
             "functionSelector": "378f3576",
-            "id": 5889,
+            "id": 6165,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "transferCollateralToTreasury",
-            "nameLocation": "223:28:26",
+            "nameLocation": "223:28:37",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5887,
+              "id": 6163,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5886,
+                  "id": 6162,
                   "mutability": "mutable",
                   "name": "amount",
-                  "nameLocation": "260:6:26",
+                  "nameLocation": "260:6:37",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5889,
-                  "src": "252:14:26",
+                  "scope": 6165,
+                  "src": "252:14:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -572,10 +572,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 5885,
+                    "id": 6161,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "252:7:26",
+                    "src": "252:7:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -584,48 +584,48 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "251:16:26"
+              "src": "251:16:37"
             },
             "returnParameters": {
-              "id": 5888,
+              "id": 6164,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "276:0:26"
+              "src": "276:0:37"
             },
-            "scope": 5900,
-            "src": "214:63:26",
+            "scope": 6176,
+            "src": "214:63:37",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
             "functionSelector": "f7683bbc",
-            "id": 5894,
+            "id": 6170,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getCollateralPrice",
-            "nameLocation": "294:18:26",
+            "nameLocation": "294:18:37",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5890,
+              "id": 6166,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "312:2:26"
+              "src": "312:2:37"
             },
             "returnParameters": {
-              "id": 5893,
+              "id": 6169,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5892,
+                  "id": 6168,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5894,
-                  "src": "338:7:26",
+                  "scope": 6170,
+                  "src": "338:7:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -633,10 +633,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 5891,
+                    "id": 6167,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "338:7:26",
+                    "src": "338:7:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -645,42 +645,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "337:9:26"
+              "src": "337:9:37"
             },
-            "scope": 5900,
-            "src": "285:62:26",
+            "scope": 6176,
+            "src": "285:62:37",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           },
           {
             "functionSelector": "96423663",
-            "id": 5899,
+            "id": 6175,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getCollateralToken",
-            "nameLocation": "364:18:26",
+            "nameLocation": "364:18:37",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5895,
+              "id": 6171,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "382:2:26"
+              "src": "382:2:37"
             },
             "returnParameters": {
-              "id": 5898,
+              "id": 6174,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5897,
+                  "id": 6173,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5899,
-                  "src": "408:7:26",
+                  "scope": 6175,
+                  "src": "408:7:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -688,10 +688,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 5896,
+                    "id": 6172,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "408:7:26",
+                    "src": "408:7:37",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -701,21 +701,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "407:9:26"
+              "src": "407:9:37"
             },
-            "scope": 5900,
-            "src": "355:62:26",
+            "scope": 6176,
+            "src": "355:62:37",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 5901,
-        "src": "63:357:26",
+        "scope": 6177,
+        "src": "63:357:37",
         "usedErrors": []
       }
     ],
-    "src": "35:387:26"
+    "src": "35:387:37"
   },
   "compiler": {
     "name": "solc",
@@ -723,7 +723,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-07-29T13:52:16.261Z",
+  "updatedAt": "2021-08-08T11:17:19.687Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

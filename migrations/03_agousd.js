@@ -1,9 +1,9 @@
 "use strict"
 const {writeAddress_raw} = require('../logToFile.js')
 const env = require('./projectSettings.json')
+const storage = './deployedAGOUSD.json'
 const Big = require('big.js')
 Big.PE = 100
-const storage = './deployedAGOUSD.json'
 
 const Dollar            = artifacts.require('Dollar.sol')
 const Share             = artifacts.require('Share.sol')
@@ -15,9 +15,15 @@ const PairOracle        = artifacts.require('PairOracle.sol')
 const ChainLinkOracle   = artifacts.require('ChainLinkOracle.sol')
 const web3              = Dollar.interfaceAdapter.web3
 
-const govTokenAddress   = require('../lastDeployedAddresses.json').govToken
+const govTokenAddress       = require('../lastDeployedAddresses.json').govToken
 if (!govTokenAddress) process.exit('no governance token installed')
 writeAddress_raw(govTokenAddress, 'govToken', storage)
+
+const gov_token_wcoin_pair_address  = require('../lastDeployedAddresses.json').gov_token_wcoin_pair
+console.log(gov_token_wcoin_pair_address)
+if (!gov_token_wcoin_pair_address) process.exit('no governance token/wcoin pair installed')
+writeAddress_raw(gov_token_wcoin_pair_address, 'gov_token_wcoin_pair_address', storage)
+
 
 
 module.exports = async (_deployer, _network, _accounts) => {
@@ -49,7 +55,7 @@ module.exports = async (_deployer, _network, _accounts) => {
 
     let dollar_collateral_pair = undefined
     let share_wcoin_pair = undefined
-    let govToken_collateral_pair = undefined
+    let govToken_wcoin_pair = undefined
 
     let i_dollar_collateral_pairOracle = undefined
     let i_dollar_customTokenOracle = undefined
@@ -57,7 +63,7 @@ module.exports = async (_deployer, _network, _accounts) => {
     let i_share_wcoin_pairOracle = undefined
     let i_share_customTokenOracle = undefined
 
-    let i_govToken_collateral_pairOracle = undefined
+    let i_govToken_wcoin_pairOracle = undefined
     let i_govToken_customTokenOracle = undefined
 
     if (env.pairs.needToGenerate){
@@ -78,11 +84,17 @@ module.exports = async (_deployer, _network, _accounts) => {
         const wcoinSymbol = await wcoin.methods.symbol().call()
         const ownerWcoinBalance = await wcoin.methods.balanceOf(owner).call()
 
+        
         const shareDecimals = await i_Share.decimals()
         const shareSymbol = await i_Share.symbol()
         const ownerShareBalance = await i_Share.balanceOf(owner)
+        
+        const govToken = new web3.eth.Contract(require('../abis/tokenABI.json'), govTokenAddress) 
+        const govTokenDecimals = await govToken.methods.decimals().call()
+        const govTokenSymbol = await govToken.methods.symbol().call()
+        const govTokenBalance = await govToken.methods.balanceOf(owner).call()
 
-        console.log(`\nbalance's of '${owner}':`)
+        console.log(`\nbalance's of '${owner}':`)``
         console.log(`\t- ${((ownerCollateralBalance / 10**collateralDecimals).toFixed(collateralDecimals/3))} ${collateralSymbol}`)
         console.log(`\t- ${((ownerDollarBalance / 10**dollarDecimals).toFixed(dollarDecimals/3))} ${dollarSymbol}`)
         console.log(`\t- ${((ownerWcoinBalance / 10**wcoinDecimals).toFixed(wcoinDecimals/3))} ${wcoinSymbol}`)
@@ -130,6 +142,8 @@ module.exports = async (_deployer, _network, _accounts) => {
         ).send({from: owner})
         share_wcoin_pair = await factory.methods.getPair(i_Share.address, wcoin._address).call()
         console.log(`\t+ [${shareSymbol}${wcoinSymbol}]@${share_wcoin_pair}`)
+        
+
 
 
         //=======ORACLES=======//
@@ -153,14 +167,14 @@ module.exports = async (_deployer, _network, _accounts) => {
         )
         console.log(`\t+ [${shareSymbol}_customTokenOracle]@${i_share_customTokenOracle.address}`)
 
-        // i_govToken_collateral_pairOracle = await _deployer.deploy(PairOracle, dollar_collateral_pair)
-        // console.log(`\t+ [${dollarSymbol}/${collateralSymbol}_pairOracle]@${i_dollar_collateral_pairOracle.address}`)    
-        // i_dollar_customTokenOracle = await _deployer.deploy(CustomTokenOracle,
-        //     i_Dollar.address, 
-        //     i_dollar_collateral_pairOracle.address, 
-        //     env.collateral.chainlinkAggregator
-        // )
-        // console.log(`\t+ [${dollarSymbol}_customTokenOracle]@${i_dollar_customTokenOracle.address}`)    
+        i_govToken_wcoin_pairOracle = await _deployer.deploy(PairOracle, gov_token_wcoin_pair_address)
+        console.log(`\t+ [${govTokenSymbol}/${wcoinSymbol}_pairOracle]@${govToken_wcoin_pair.address}`)    
+        i_govToken_customTokenOracle = await _deployer.deploy(CustomTokenOracle,
+            govTokenAddress, 
+            gov_token_wcoin_pair_address, 
+            env.wrappedCoin.chainlinkAggregator
+        )
+        console.log(`\t+ [${govTokenSymbol}_customTokenOracle]@${i_dollar_customTokenOracle.address}`)    
     }
 
     console.log(`\ncreate chainlink oracles:`)
@@ -190,7 +204,7 @@ module.exports = async (_deployer, _network, _accounts) => {
     await i_Treasury.addPool(i_Pool.address);                               console.log(`\t+ Treasury.addPool`)
     await i_Treasury.setOracleDollar(i_dollar_customTokenOracle.address);   console.log(`\t+ Treasury.setOracleDollar`)
     await i_Treasury.setOracleShare(i_share_customTokenOracle.address);     console.log(`\t+ Treasury.setOracleShare`)
-    // await i_Treasury.setOracleGovToken(i_govToken_customTokenOracle.address);console.log(`\t+ Treasury.setOracleGovToken`)
+    await i_Treasury.setOracleGovToken(i_share_customTokenOracle.address);  console.log(`\t+ Treasury.setOracleGovToken`)
     await i_Treasury.setRebalancePool(i_Pool.address);                      console.log(`\t+ Treasury.setRebalancePool`)
     await i_Treasury.toggleCollateralRatio();                               console.log(`\t+ Treasury.toggleCollateralRatio`)
     // await i_Treasury.refreshCollateralRatio();                              console.log(`\t+ Treasury.refreshCollateralRatio`)
@@ -210,7 +224,6 @@ module.exports = async (_deployer, _network, _accounts) => {
     writeAddress_raw(i_Share.address,                           'share', storage)
     writeAddress_raw(i_Foundry.address,                         'foundry', storage)
     writeAddress_raw(i_Pool.address,                            'pool', storage)
-    
     writeAddress_raw(dollar_collateral_pair,                    'dollar_collateral_pair', storage)
     writeAddress_raw(share_wcoin_pair,                          'share_wcoin_pair', storage)
     writeAddress_raw(i_dollar_collateral_pairOracle.address,    'dollar_collateral_pairOracle', storage)

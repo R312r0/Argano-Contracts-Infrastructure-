@@ -69,8 +69,8 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
     uint256 public epoch_length;
     uint256 private _epoch = 0;
 
+
     /* ========== MODIFIERS ========== */
-    
     modifier withOracleUpdates(){
         if (oracleDollar != address(0)) IOracle(oracleDollar).updateIfRequired();//custom token oracle
         if (oracleShare != address(0)) IOracle(oracleShare).updateIfRequired();//custom token oracle
@@ -104,16 +104,45 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
         _epoch = _epoch + 1;
     }
 
+    modifier onlyStrategist{
+        require(msg.sender == strategist, "!strategist");
+        _;
+    }
+    
+    modifier nonZeroAddress(address addr){
+        require(addr != address(0), "received zero address");
+        _;
+    }
+
+
     /* ========== EVENTS ============= */
-    event TransactionExecuted(address indexed target, uint256 value, string signature, bytes data);
     event BoughtBack(uint256 collateral_value, uint256 collateral_amount, uint256 output_share_amount);
     event Recollateralized(uint256 share_amount, uint256 output_collateral_amount, uint256 output_collateral_value);
+    event New_GovTokenValueForDiscount(uint256 value);
+    event New_RedemptionFee(uint256 _redemption_fee);
+    event New_MintingFee(uint256 _minting_fee);
+    event New_RatioStep(uint256 _ratio_step);
+    event New_PriceTarget(uint256 _price_target);
+    event New_RefreshCooldown(uint256 _refresh_cooldown);
+    event New_PriceBand(uint256 _price_band);
+    event New_OracleDollar(address _oracle);
+    event New_OracleShare(address _oracle);
+    event New_OracleGovToken(address _oracle);
+    event New_Foundry(address _foundry);
+    event New_EpochLength(uint256 _epoch_length);
+    event New_RebalanceCooldown(uint256 _cooldown);
+    event New_ExcessDistributionRatio(uint256 _ratio);
+    event New_Strategist(address _strategist);
+    event New_Tokens(address _uniswap_router,address _governanceToken,address _wcoin,address _collateral,address _share,address _dollar);
+    event New_RebalancePool(address _rebalance_pool);
+    
 
     constructor (uint256 _startTime, uint256 _epoch_length){
         require(_startTime >= block.timestamp, "Start time initialized to the past");
         startTime = _startTime;
         epoch_length = _epoch_length;
         lastEpochTime = _startTime - epoch_length;
+        setStrategist(msg.sender);
     }
 
     /*=========== VIEWS ===========*/
@@ -124,9 +153,9 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
     function nextEpochPoint() public view override returns (uint256) {return lastEpochTime + epoch_length;}
     function epoch() public view override returns (uint256) {return _epoch;}
 
-    function redemption_fee_adjusted() public view returns (uint256 redemptionFee) {
+    function redemption_fee_adjusted(address _caller) public view returns (uint256 redemptionFee) {
         if (governanceToken == address(0)) return redemption_fee;
-        if (IERC20(governanceToken).balanceOf(tx.origin) > discount_requirenment() ) return redemption_fee / 2;
+        if (IERC20(governanceToken).balanceOf(_caller) >= discount_requirenment()) return redemption_fee / 2;
         return redemption_fee;
     }
 
@@ -137,8 +166,7 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
         return  gov_token_value_for_discount * PRICE_PRECISION * 10**decimals / govTokenPrice;
     }
 
-    function info() external view override returns (
-        uint256,
+    function info(address _caller) external view override returns (
         uint256,
         uint256,
         uint256,
@@ -150,12 +178,11 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
         return (
             dollarPrice(), 
             sharePrice(), 
-            IERC20(dollar).totalSupply(), 
             target_collateral_ratio, 
             effective_collateral_ratio, 
             globalCollateralValue(),    
             minting_fee, 
-            redemption_fee_adjusted()
+            redemption_fee_adjusted(_caller)
         );
     }
 
@@ -191,7 +218,6 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
         if (ecr > COLLATERAL_RATIO_MAX) return COLLATERAL_RATIO_MAX;
         return ecr;
     }
-
 
     function refreshCollateralRatio() public withOracleUpdates{
         require(collateral_ratio_paused == false, "Collateral Ratio has been paused");
@@ -234,11 +260,7 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
     /* -========= INTERNAL FUNCTIONS ============ */
 
     // SWAP tokens using quickswap
-    function _swap(
-        address _input_token,
-        uint256 _input_amount,
-        uint256 _min_output_amount
-    ) internal returns (uint256) {
+    function _swap(address _input_token, uint256 _input_amount, uint256 _min_output_amount) internal returns (uint256) {
         require(
             (_input_token == collateral || _input_token == share) &&
             uniswap_router != address(0) && 
@@ -286,9 +308,7 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
         }
     }
 
-    // SINGLE POOL STRATEGY
-    // With Treasury v1, we will only utilize collateral from a single pool to do rebalancing
-    function buyback(uint256 _collateral_value, uint256 _min_share_amount) external onlyOwner withOracleUpdates notMigrated hasRebalancePool checkRebalanceCooldown {
+    function buyback(uint256 _collateral_value, uint256 _min_share_amount) external onlyStrategist withOracleUpdates notMigrated hasRebalancePool checkRebalanceCooldown {
         (uint256 _excess_collateral_value, bool _exceeded) = calcCollateralBalance();
         require(_exceeded && _excess_collateral_value > 0, "!exceeded");
         require(_collateral_value > 0 && _collateral_value < _excess_collateral_value, "invalidCollateralAmount");
@@ -300,9 +320,7 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
         emit BoughtBack(_collateral_value, _collateral_amount_sell, out_share_amount);
     }
 
-    // SINGLE POOL STRATEGY
-    // With Treasury v1, we will only utilize collateral from a single pool to do rebalancing
-    function recollateralize(uint256 _share_amount, uint256 _min_collateral_amount) external onlyOwner withOracleUpdates notMigrated hasRebalancePool checkRebalanceCooldown {
+    function recollateralize(uint256 _share_amount, uint256 _min_collateral_amount) external onlyStrategist withOracleUpdates notMigrated hasRebalancePool checkRebalanceCooldown {
         (uint256 _deficit_collateral_value, bool _exceeded) = calcCollateralBalance();
         require(!_exceeded && _deficit_collateral_value > 0, "exceeded");
         require(_min_collateral_amount <= _deficit_collateral_value, ">deficit");
@@ -348,24 +366,89 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
         }
     }
 
-    function setGovTokenValueForDiscount(uint256 value) public onlyOwner {gov_token_value_for_discount = value;}
-    function setRedemptionFee(uint256 _redemption_fee) public onlyOwner {redemption_fee = _redemption_fee;}
-    function setMintingFee(uint256 _minting_fee) public onlyOwner {minting_fee = _minting_fee;}
-    function setRatioStep(uint256 _ratio_step) public onlyOwner {ratio_step = _ratio_step;}
-    function setPriceTarget(uint256 _price_target) public onlyOwner {price_target = _price_target;}
-    function setRefreshCooldown(uint256 _refresh_cooldown) public onlyOwner {refresh_cooldown = _refresh_cooldown;}
-    function setPriceBand(uint256 _price_band) external onlyOwner {price_band = _price_band;}
-    function toggleCollateralRatio() public onlyOwner {collateral_ratio_paused = !collateral_ratio_paused;}
-    function setOracleDollar(address _oracle) public onlyOwner {oracleDollar = _oracle;}
-    function setOracleShare(address _oracle) public onlyOwner {oracleShare = _oracle;}
-    function setOracleGovToken(address _oracle) public onlyOwner {oracleGovToken = _oracle;}
-    function setStrategist(address _strategist) external onlyOwner {strategist = _strategist;}
-    function setFoundry(address _foundry) public onlyOwner {foundry = _foundry;}
-    function setEpochLength(uint256 _epoch_length) public onlyOwner {epoch_length = _epoch_length;}
-    function setRebalanceCooldown(uint256 cooldown) public onlyOwner {rebalance_cooldown = cooldown;}
-    function setExcessDistributionRatio(uint256 ratio) public onlyOwner {excess_collateral_distributed_ratio = ratio;}
+    //setters
+    function setGovTokenValueForDiscount(uint256 value) public onlyOwner {
+        gov_token_value_for_discount = value;
+        emit New_GovTokenValueForDiscount(gov_token_value_for_discount);
+    }
+    
+    function setRedemptionFee(uint256 _redemption_fee) public onlyOwner {
+        redemption_fee = _redemption_fee;
+        emit New_RedemptionFee(redemption_fee);
+    }
+    
+    function setMintingFee(uint256 _minting_fee) public onlyOwner {
+        minting_fee = _minting_fee;
+        emit New_MintingFee(minting_fee);
+    }
+    
+    function setRatioStep(uint256 _ratio_step) public onlyOwner {
+        ratio_step = _ratio_step;
+        emit New_RatioStep(ratio_step);
+    }
+
+    function setPriceTarget(uint256 _price_target) public onlyOwner {
+        price_target = _price_target;
+        emit New_PriceTarget(price_target);
+    }
+    
+    function setRefreshCooldown(uint256 _refresh_cooldown) public onlyOwner {
+        refresh_cooldown = _refresh_cooldown;
+        emit New_RefreshCooldown(refresh_cooldown);
+    }
+    
+    function setPriceBand(uint256 _price_band) external onlyOwner {
+        price_band = _price_band;
+        emit New_PriceBand(price_band);
+    }
+    
+    function unpauseCollateralRatio() public onlyOwner {
+        require(collateral_ratio_paused, "already unpaused");
+        collateral_ratio_paused = false;
+    }
+    
+    function setOracleDollar(address _oracle) public onlyOwner nonZeroAddress(_oracle) {
+        oracleDollar = _oracle;
+        emit New_OracleDollar(oracleDollar);
+    }
+    
+    function setOracleShare(address _oracle) public onlyOwner nonZeroAddress(_oracle) {
+        oracleShare = _oracle;
+        emit New_OracleShare(oracleShare);
+    }
+    
+    function setOracleGovToken(address _oracle) public onlyOwner nonZeroAddress(_oracle) {
+        oracleGovToken = _oracle;
+        emit New_OracleGovToken(oracleGovToken);
+    }
+    
+    function setFoundry(address _foundry) public onlyOwner nonZeroAddress(_foundry){
+        foundry = _foundry; 
+        emit New_Foundry(foundry);
+    }
+    
+    function setEpochLength(uint256 _epoch_length) public onlyOwner {
+        epoch_length = _epoch_length;
+        emit New_EpochLength(epoch_length);
+    }
+    
+    function setRebalanceCooldown(uint256 _cooldown) public onlyOwner {
+        rebalance_cooldown = _cooldown;
+        emit New_RebalanceCooldown(rebalance_cooldown);
+    }
+    
+    function setExcessDistributionRatio(uint256 _ratio) public onlyOwner {
+        excess_collateral_distributed_ratio = _ratio;
+        emit New_ExcessDistributionRatio(excess_collateral_distributed_ratio);
+    }
+
     function updateOracles() public override withOracleUpdates {/*empty, used only for modifier*/}
-        
+    
+    function setStrategist(address _strategist) public onlyOwner {
+        strategist = _strategist; 
+        emit New_Strategist(strategist);
+    }
+    
     function installTokens(
         address _uniswap_router,
         address _governanceToken,
@@ -374,12 +457,22 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
         address _share,
         address _dollar
     ) public onlyOwner {
+        
         uniswap_router  = _uniswap_router;
         governanceToken = _governanceToken;
         wcoin           = _wcoin;
         collateral      = _collateral;
         share           = _share;
         dollar          = _dollar;
+        
+        emit New_Tokens(
+            uniswap_router,
+            governanceToken,
+            wcoin,
+            collateral,
+            share,
+            dollar
+        );
     }
 
     function setRebalancePool(address _rebalance_pool) public onlyOwner  {
@@ -387,8 +480,9 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
         require(IPool(_rebalance_pool).getCollateralToken() != address(0), "!poolCollateralToken");
         rebalancing_pool = _rebalance_pool;
         rebalancing_pool_collateral = IPool(_rebalance_pool).getCollateralToken();
+        emit New_RebalancePool(rebalancing_pool);
     }
-
+    
     function resetStartTime(uint256 _startTime) external onlyOwner {
         require(_epoch == 0, "already started");
         startTime = _startTime;
