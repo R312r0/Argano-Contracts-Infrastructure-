@@ -94,7 +94,7 @@ module.exports = async (_deployer, _network, _accounts) => {
         const govTokenSymbol = await govToken.methods.symbol().call()
         const govTokenBalance = await govToken.methods.balanceOf(owner).call()
 
-        console.log(`\nbalance's of '${owner}':`)``
+        console.log(`\nbalance's of '${owner}':`)
         console.log(`\t- ${((ownerCollateralBalance / 10**collateralDecimals).toFixed(collateralDecimals/3))} ${collateralSymbol}`)
         console.log(`\t- ${((ownerDollarBalance / 10**dollarDecimals).toFixed(dollarDecimals/3))} ${dollarSymbol}`)
         console.log(`\t- ${((ownerWcoinBalance / 10**wcoinDecimals).toFixed(wcoinDecimals/3))} ${wcoinSymbol}`)
