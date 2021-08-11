@@ -340,16 +340,14 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
         require(!migrated, "Treasury: migrated");
         require(block.timestamp >= startTime, "Treasury: not started yet");
         (uint256 _excess_collateral_value, bool _exceeded) = calcCollateralBalance();
-        uint256 _allocation_value = 0;
-        if (_exceeded) {
-            _allocation_value = _excess_collateral_value * excess_collateral_distributed_ratio / RATIO_PRECISION;
-            uint256 collateral_price = IPool(rebalancing_pool).getCollateralPrice();
-            uint256 _allocation_amount = _allocation_value * PRICE_PRECISION / collateral_price;
-            IPool(rebalancing_pool).transferCollateralToTreasury(_allocation_amount); // Transfer collateral from pool to treasury
-            IERC20(rebalancing_pool_collateral).safeApprove(foundry, 0);
-            IERC20(rebalancing_pool_collateral).safeApprove(foundry, _allocation_amount);
-            IFoundry(foundry).allocateSeigniorage(_allocation_amount);
-        }
+        require(_exceeded && _excess_collateral_value > 0, "!exceeded");
+        uint256 _collateral_price = IPool(rebalancing_pool).getCollateralPrice();
+        uint256 missing_decimals = IPool(rebalancing_pool).getMissing_decimals();
+        uint256 _collateral_amount_allocate = (_excess_collateral_value * PRICE_PRECISION / _collateral_price) / missing_decimals;
+        IPool(rebalancing_pool).transferCollateralToTreasury(_collateral_amount_allocate); // Transfer collateral from pool to treasury
+        IERC20(rebalancing_pool_collateral).safeApprove(foundry, 0);
+        IERC20(rebalancing_pool_collateral).safeApprove(foundry, _collateral_amount_allocate);// div for 18 - decimals
+        IFoundry(foundry).allocateSeigniorage(_collateral_amount_allocate);
     }
 
     function migrate(address _new_treasury) external onlyOwner notMigrated {

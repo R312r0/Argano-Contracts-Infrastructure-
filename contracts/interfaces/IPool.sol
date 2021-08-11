@@ -13,4 +13,6 @@ interface IPool {
     function getCollateralPrice() external view returns (uint256);
 
     function getCollateralToken() external view returns (address);
+
+    function getMissing_decimals() external view returns (uint256);
 }

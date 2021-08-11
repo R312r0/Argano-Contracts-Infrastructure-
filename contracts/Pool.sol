@@ -132,6 +132,10 @@ contract Pool is Ownable, ReentrancyGuard, IPool {
     function getCollateralToken() external view override returns (address) {
         return collateral;
     }
+    
+    function getMissing_decimals() external view override returns (uint256) {
+        return missing_decimals;
+    }
 
     function mint(
         uint256 _collateral_amount,
