@@ -19,7 +19,7 @@ const govTokenAddress       = require('../lastDeployedAddresses.json').govToken
 if (!govTokenAddress) process.exit('no governance token installed')
 writeAddress_raw(govTokenAddress, 'govToken', storage)
 
-const gov_token_wcoin_pair_address  = require('../lastDeployedAddresses.json').gov_token_wcoin_pair
+const gov_token_wcoin_pair_address  = require('../lastDeployedAddresses.json').gov_token_wcoin_pair_address
 console.log(gov_token_wcoin_pair_address)
 if (!gov_token_wcoin_pair_address) process.exit('no governance token/wcoin pair installed')
 writeAddress_raw(gov_token_wcoin_pair_address, 'gov_token_wcoin_pair_address', storage)
@@ -135,9 +135,9 @@ module.exports = async (_deployer, _network, _accounts) => {
             wcoin._address,
             new Big(env.pairs.defaultValues.share_amount).toString(),
             new Big(env.pairs.defaultValues.wcoin_amount).toString(), 
-            0, 
-            0, 
-            owner, 
+            0,
+            0,
+            owner,
             Date.now() + 1000
         ).send({from: owner})
         share_wcoin_pair = await factory.methods.getPair(i_Share.address, wcoin._address).call()
@@ -167,14 +167,15 @@ module.exports = async (_deployer, _network, _accounts) => {
         )
         console.log(`\t+ [${shareSymbol}_customTokenOracle]@${i_share_customTokenOracle.address}`)
 
+
         i_govToken_wcoin_pairOracle = await _deployer.deploy(PairOracle, gov_token_wcoin_pair_address)
-        console.log(`\t+ [${govTokenSymbol}/${wcoinSymbol}_pairOracle]@${govToken_wcoin_pair.address}`)    
+        console.log(`\t+ [${govTokenSymbol}/${wcoinSymbol}_pairOracle]@${i_govToken_wcoin_pairOracle.address}`)    
         i_govToken_customTokenOracle = await _deployer.deploy(CustomTokenOracle,
             govTokenAddress, 
             gov_token_wcoin_pair_address, 
             env.wrappedCoin.chainlinkAggregator
         )
-        console.log(`\t+ [${govTokenSymbol}_customTokenOracle]@${i_dollar_customTokenOracle.address}`)    
+        console.log(`\t+ [${govTokenSymbol}_customTokenOracle]@${i_govToken_customTokenOracle.address}`)    
     }
 
     console.log(`\ncreate chainlink oracles:`)
@@ -206,7 +207,7 @@ module.exports = async (_deployer, _network, _accounts) => {
     await i_Treasury.setOracleShare(i_share_customTokenOracle.address);     console.log(`\t+ Treasury.setOracleShare`)
     await i_Treasury.setOracleGovToken(i_share_customTokenOracle.address);  console.log(`\t+ Treasury.setOracleGovToken`)
     await i_Treasury.setRebalancePool(i_Pool.address);                      console.log(`\t+ Treasury.setRebalancePool`)
-    await i_Treasury.toggleCollateralRatio();                               console.log(`\t+ Treasury.toggleCollateralRatio`)
+    await i_Treasury.unpauseCollateralRatio();                               console.log(`\t+ Treasury.unpauseCollateralRatio`)
     // await i_Treasury.refreshCollateralRatio();                              console.log(`\t+ Treasury.refreshCollateralRatio`)
     await i_Treasury.setFoundry(i_Foundry.address);                         console.log(`\t+ Treasury.setFoundry`)
     await i_Treasury.installTokens(

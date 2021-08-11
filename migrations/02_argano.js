@@ -43,7 +43,7 @@ module.exports = async (_deployer, _network, _accounts) => {
     gov_token_wcoin_pair = await factory.methods.getPair(I_GovToken.address, wcoin._address).call()
     console.log(`\t+ [${env.govToken.symbol}${wcoinSymbol}]@${gov_token_wcoin_pair}`)    
 
-    save(gov_token_wcoin_pair, 'gov_token_wcoin_pair', storage)
+    save(gov_token_wcoin_pair, 'gov_token_wcoin_pair_address', storage)
 
         
     

@@ -35,12 +35,12 @@ module.exports = {
         polygon: {
             provider: new HDWalletProvider(
                 process.env.PRIVATE_KEY,
-                'https://rpc-mainnet.maticvigil.com/v1/64b99315d4c64be57564944e982966a4e5a17d17'
+                'https://rpc-mainnet.maticvigil.com/'//'https://rpc-mainnet.maticvigil.com/v1/4181362d3093eaa75d8aa60388f645f7740c6fa7'
             ),
             network_id: 137,
             skipDryRun: true,
             networkCheckTimeout: 15000,
-            gasPrice: 10e9,
+            gasPrice: 40e9,
             gas: 15e6
         },
         mumbai: {
